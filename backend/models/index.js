@@ -1,6 +1,6 @@
-import db from "../config/db.js";
+import sequelize from "../config/db.js";
 import initModels from "./init-models.js";
 
-const models = initModels(db);
+const models = initModels(sequelize);
 
 export default models;

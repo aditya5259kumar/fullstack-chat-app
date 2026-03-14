@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const db = new Sequelize(
+const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASSWORD,
@@ -21,11 +21,11 @@ const db = new Sequelize(
 
 export const connectDB = async () => {
   try {
-    await db.authenticate();
+    await sequelize.authenticate();
     console.log("mysql connected successfully");
   } catch (error) {
     console.error("failed to connect to mysql:", error);
   }
 };
 
-export default db;
+export default sequelize;
