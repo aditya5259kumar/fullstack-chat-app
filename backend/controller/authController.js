@@ -2,7 +2,6 @@ import models from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 const userModel = models.users;
-import { Op } from "sequelize";
 
 const authController = {
   //--------signUp---------

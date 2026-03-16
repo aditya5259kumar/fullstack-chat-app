@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 
 import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__fileName);
@@ -20,7 +21,7 @@ const port = process.env.PORT;
 
 const server = http.createServer(app);
 
-connectDB()
+connectDB();
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -38,6 +39,7 @@ app.use(
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("<h1>heyy from express.</h1>");
