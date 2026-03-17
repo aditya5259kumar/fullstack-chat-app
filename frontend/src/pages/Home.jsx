@@ -1,23 +1,21 @@
 import React, { useEffect } from "react";
-import { userLogout } from "../redux/slices/authSlice";
+// import { userLogout } from "../redux/slices/authSlice";
 import { myProfile } from "../redux/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
+import AllChats from "./AllChats";
 
 const Home = () => {
-  const {
-    data,
-    loading,
-  } = useSelector((state) => state.user);
+  const { data, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   console.log("data---------------------", data);
 
-  function logOutHandler() {
-    dispatch(userLogout());
-    navigate("/login");
-  }
+  // function logOutHandler() {
+  //   dispatch(userLogout());
+  //   navigate("/login");
+  // }
 
   useEffect(() => {
     dispatch(myProfile());
@@ -28,8 +26,8 @@ const Home = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h1 className="py-10 text-center text-6xl font-semibold">
+    <div className="">
+      {/* <h1 className="py-10 text-center text-6xl font-semibold">
         welcome to home page
       </h1>
       <div className="text-center mb-8">
@@ -46,7 +44,9 @@ const Home = () => {
         className="bg-black text-white px-6 py-3 rounded-md mx-auto"
       >
         Logout
-      </button>
+      </button> */}
+
+      <AllChats />
     </div>
   );
 };
