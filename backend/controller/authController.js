@@ -2,6 +2,7 @@ import models from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 const userModel = models.users;
+import sendEmail from "../utils/sendEmail.js";
 
 const authController = {
   //--------signUp---------
@@ -48,6 +49,20 @@ const authController = {
         {
           expiresIn: "7d",
         },
+      );
+
+      await sendEmail(
+        email,
+        "Welcome to Our App 🚀",
+        `Hi ${name},
+
+Thanks for signing up!
+
+You can now log in and start using the app.
+If you didn’t create this account, please ignore this email.
+Enjoy your journey with us 😄
+
+— LinkUp`,
       );
 
       res.status(201).json({
