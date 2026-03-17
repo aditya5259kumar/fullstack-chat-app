@@ -1,5 +1,12 @@
 import React, { useState } from "react";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
+import {
+  HiMiniChatBubbleLeftEllipsis,
+  HiOutlineEnvelope,
+  HiMiniLockClosed,
+  HiUser,
+  HiMiniItalic,
+} from "react-icons/hi2";
 import { Link, useNavigate } from "react-router";
 import { userSignUp } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -79,81 +86,107 @@ const SignUp = () => {
   }
 
   return (
-    <div className="">
-      <div className="container px-8 md:px-20 py-4 mx-auto my-20">
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          <div className="rounded-t-xl md:rounded-l-2xl md:rounded-none py-10 flex items-center justify-center flex-col bg-linear-to-r from-gray-900 to-gray-600 text-white">
-            <h1 className="text-3xl font-bold">Welcome Back!</h1>
-            <p className="py-6 px-10 text-center text-sm">
-              To keep connected with us please login with your personal info
-            </p>
-            <Link to="/login">
-              <button className="bg-white text-black border border-white hover:bg-transparent hover:text-white px-7 py-4 rounded-lg text-sm font-medium transition-all ease-in-out">
-                Log In
-              </button>
-            </Link>
-          </div>
+    <div className="bg-(--wa-bg-chat) min-h-screen flex items-center justify-center">
+      <div className="container w-full max-w-md md:max-w-md lg:max-w-lg mx-auto flex flex-col px-4">
+        <div className="flex items-center gap-2 justify-center mb-8">
+          <span className="text-4xl text-(--wa-green-secondary)">
+            <HiMiniChatBubbleLeftEllipsis />
+          </span>
+          <h4 className="text-3xl font-bold">LinkUp</h4>
+        </div>
 
-          <div className="bg-gray-50 rounded-b-xl md:rounded-r-2xl md:rounded-none py-10 shadow-2xl text-center">
-            <h1 className="text-3xl font-bold">Create Account</h1>
+        <div className="px-6 md:px-8 lg:px-10 shadow-sm bg-white rounded-md py-8 text-center">
+          <h1 className="text-2xl font-semibold mb-2">Sign Up</h1>
+          <p className="mb-8 text-gray-500">Get your LinkUp account now.</p>
 
-            <form action="" onSubmit={submitHandler}>
-              <div className="px-10 md:px-8 lg:px-20 mt-8">
-                {error.name && (
-                  <p className="mb-1.5 ml-1 text-xs text-red-700 text-start">
-                    {error.name}
-                  </p>
-                )}
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleOnChange}
-                  placeholder="Enter Your Full Name"
-                  className=" bg-white border text-sm border-gray-300 w-full px-6 py-4 focus:border-gray-600 focus:outline-none rounded-lg mb-6 "
-                />
-                {error.username && (
-                  <p className="mb-1.5 ml-1 text-xs text-red-700 text-start">
-                    {error.username}
-                  </p>
-                )}
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleOnChange}
-                  placeholder="Enter Your username"
-                  className=" bg-white border text-sm border-gray-300 w-full px-6 py-4 focus:border-gray-600 focus:outline-none rounded-lg mb-6 "
-                />
-                {error.email && (
-                  <p className="mb-1.5 ml-1 text-xs text-red-700 text-start">
-                    {error.email}
-                  </p>
-                )}
+          <form action="" onSubmit={submitHandler}>
+            <div className="mb-4">
+              <div className="flex gap-4 items-start">
+                <div className="mb-1">
+                  <p className="text-start mb-1">Name</p>
+                  <div className="flex items-center border text-sm border-gray-200 rounded-md overflow-hidden">
+                    <span className="bg-gray-100 px-3.5 py-3 text-base border-r border-gray-200">
+                      <HiMiniItalic />
+                    </span>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleOnChange}
+                      placeholder="Full Name"
+                      className="text-sm w-full px-4 py-2.5 focus:border-none focus:outline-none "
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-1">
+                  <p className="text-start mb-1">Username</p>
+                  <div className="flex items-center border text-sm border-gray-200 rounded-md overflow-hidden">
+                    <span className="bg-gray-100 px-3.5 py-3 text-base border-r border-gray-200">
+                      <HiUser />
+                    </span>
+                    <input
+                      type="text"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleOnChange}
+                      placeholder="Username"
+                      className="text-sm w-full px-4 py-2.5 focus:border-none focus:outline-none "
+                    />
+                  </div>
+                </div>
+              </div>
+              {error.name && (
+                <p className="ml-1 text-xs text-red-700 text-start">
+                  {error.name}
+                </p>
+              )}
+              {error.username && (
+                <p className="ml-1 text-xs text-red-700 text-start">
+                  {error.username}
+                </p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <p className="text-start mb-1 ">Email</p>
+              <div className="flex items-center border text-sm border-gray-200 rounded-md overflow-hidden">
+                <span className="bg-gray-100 px-3.5 py-3 text-base border-r border-gray-200">
+                  <HiOutlineEnvelope />
+                </span>
                 <input
                   type="text"
                   name="email"
                   value={formData.email}
                   onChange={handleOnChange}
                   placeholder="Enter Your Email"
-                  className=" bg-white border text-sm border-gray-300 w-full px-6 py-4 focus:border-gray-600 focus:outline-none rounded-lg mb-6 "
+                  className="text-sm w-full px-4 py-2.5 focus:border-none focus:outline-none "
                 />
-                {error.password && (
-                  <p className="mb-1.5 ml-1 text-xs text-red-700 text-start">
-                    {error.password}
-                  </p>
-                )}
-                <div className=" bg-white flex w-full items-center justify-center border border-gray-300 focus-within:border-gray-600 rounded-lg mb-6">
+              </div>
+              {error.email && (
+                <p className="mt-1 ml-1 text-xs text-red-700 text-start">
+                  {error.email}
+                </p>
+              )}
+            </div>
+
+            <div className="mb-6">
+              <p className="text-start mb-1">Password</p>
+              <div className=" flex w-full items-center border border-gray-200 rounded-md">
+                <span className="bg-gray-100 px-3.5 p-3 text-base border-r border-gray-200">
+                  <HiMiniLockClosed />
+                </span>
+                <div className="flex items-center w-full">
                   <input
                     type={passwordShow ? "text" : "password"}
                     name="password"
                     value={formData.password}
                     onChange={handleOnChange}
                     placeholder="Enter Your Password"
-                    className="text-sm w-full pl-6 py-4 focus:outline-none "
+                    className="text-sm w-full pl-4 py-2.5 focus:outline-none "
                   />
                   <span
-                    className="text-xl text-gray-500 mx-5"
+                    className="text-md text-gray-500 py-2.5 px-3"
                     onClick={handleShowPassword}
                   >
                     {passwordShow ? (
@@ -164,18 +197,29 @@ const SignUp = () => {
                   </span>
                 </div>
               </div>
-
-              {authError && (
-                <p className="text-sm text-center text-red-700 mb-4">
-                  {authError}
+              {error.password && (
+                <p className="mt-1 ml-1 text-xs text-red-700 text-start">
+                  {error.password}
                 </p>
               )}
-              <button className="mb-4 bg-gray-700 border border-gray-700 hover:bg-transparent text-white hover:text-black px-7 py-4 rounded-lg text-sm font-medium transition-all ease-in-out">
-                {loading ? "Loading..." : "Sign Up"}
-              </button>
-            </form>
-          </div>
+            </div>
+
+            {authError && (
+              <p className="text-sm py-3 border border-red-700 rounded-md bg-red-100 text-center text-red-700 mb-4">
+                {authError}
+              </p>
+            )}
+            <button className="w-full mb-4 bg-(--wa-green-secondary) border-(--wa-green-dark) hover:bg-(--wa-green-dark) text-white py-4 rounded-md text-sm font-medium transition-all ease-in-out">
+              {loading ? "Loading..." : "Sign Up"}
+            </button>
+          </form>
         </div>
+        <p className="mt-8 text-center">
+          Already have an account ?{" "}
+          <Link to="/login" className="text-(--wa-green-secondary) font-bold">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );
