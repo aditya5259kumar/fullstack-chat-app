@@ -38,6 +38,32 @@ const AllChats = () => {
         <UserChatMsg />
         <UserChatMsg />
         <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
+        <UserChatMsg />
       </div>
     </div>
   );
