@@ -6,6 +6,7 @@
 import Navbar from "../components/Navbar";
 import AllChats from "./AllChats";
 import UserChats from "./UserChats";
+import BottomNavbar from "../components/BottomNavbar";
 
 const Home = () => {
   // const { data, loading } = useSelector((state) => state.user);
@@ -50,7 +51,8 @@ const Home = () => {
 
       <Navbar />
       <AllChats />
-      <UserChats/>
+      <UserChats />
+      {/* <BottomNavbar /> */}
     </div>
   );
 };

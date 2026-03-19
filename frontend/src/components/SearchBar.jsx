@@ -11,8 +11,8 @@ const SearchBar = () => {
   //   console.log("searchText-----------", searchText);
 
   return (
-    <div className="w-full">
-      <div className="flex items-center px-1 bg-gray-100 w-full rounded-md">
+    <div className="w-full my-1 md:my-2 px-2 md:px-4">
+      <div className="flex items-center px-1 bg-gray-100 w-full rounded-4xl">
         <span className="text-xl p-2.5 text-gray-500">
           <HiMiniMagnifyingGlass />
         </span>
