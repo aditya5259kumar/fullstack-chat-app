@@ -115,6 +115,10 @@ Enjoy your journey with us 😄
       res.status(200).json({
         message: "user logged-in successfully",
         token,
+        user: {
+          id: user.id,
+          email: user.email,
+        },
       });
     } catch (error) {
       return res.status(400).json({

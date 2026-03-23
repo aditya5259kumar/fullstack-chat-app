@@ -9,6 +9,7 @@ import {
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../redux/slices/authSlice";
+import { connectSocket } from "../socket/socket";
 
 const LogIn = () => {
   const [passwordShow, setPasswordShow] = useState(false);
@@ -55,12 +56,14 @@ const LogIn = () => {
 
     const result = await dispatch(userLogin(formData));
 
-    console.log("API RESULT:", result);
-    console.log("ERROR PAYLOAD:", result.payload);
+    console.log("API RESULT----------------:", result);
+    console.log("ERROR PAYLOAD---------------:", result.payload);
 
     if (result.meta.requestStatus === "fulfilled") {
+      connectSocket(result.payload.user.id); 
       navigate("/");
     }
+    console.log("FINAL PAYLOAD----------------------:", result.payload);
   }
 
   return (

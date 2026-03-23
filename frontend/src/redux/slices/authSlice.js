@@ -19,7 +19,7 @@ export const userSignUp = createAsyncThunk(
 
       localStorage.setItem("token", token);
 
-      return token;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "failed to signup",
@@ -38,15 +38,16 @@ export const userLogin = createAsyncThunk(
         userData,
       );
 
-      console.log("response.data=========", response.data);
+      // console.log("response.data=========", response.data);
 
-      const token = response.data.token;
+      // const token = response.data.token;
 
-      console.log("token=========", token);
+      console.log("token=========", response.data.token);
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", response.data.token);
 
-      return token;
+      // return token;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "falied to login",
@@ -88,7 +89,7 @@ const authSlice = createSlice({
     });
     builder.addCase(userLogin.fulfilled, (state, action) => {
       state.loading = false;
-      state.token = action.payload;
+      state.token = action.payload.token;
     });
     builder.addCase(userLogin.rejected, (state, action) => {
       state.loading = false;

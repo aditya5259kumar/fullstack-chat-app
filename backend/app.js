@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import { Server } from "socket.io";
 import dotenv from "dotenv";
 
 import { connectDB } from "./config/db.js";
@@ -20,6 +21,48 @@ dotenv.config();
 const port = process.env.PORT;
 
 const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST"],
+  },
+});
+
+const onlineUsers = new Map();
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  // register user
+  socket.on("register", (userId) => {
+    onlineUsers.set(userId, socket.id);
+    console.log("Online users:", onlineUsers);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+
+    // remove user from map
+    for (let [userId, socketId] of onlineUsers.entries()) {
+      if (socketId === socket.id) {
+        onlineUsers.delete(userId);
+        break;
+      }
+    }
+  });
+
+  socket.on("send_message", ({ senderId, receiverId, message }) => {
+    const receiverSocketId = onlineUsers.get(receiverId);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("receive_message", {
+        senderId,
+        message,
+      });
+    }
+  });
+});
 
 connectDB();
 

@@ -2,7 +2,7 @@ import React from "react";
 import { HiChevronRight } from "react-icons/hi2";
 
 const SettingRow = ({
-  icon: Icon,
+  // icon: Icon,
   label,
   description,
   children,
