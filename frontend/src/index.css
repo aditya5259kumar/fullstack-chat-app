@@ -2,9 +2,10 @@
 @import "tailwindcss";
 
 :root {
-  --wa-green-prim : #25d366;
+  --wa-green-prim: #25d366;
   --wa-green-dark: #075e54;
   --wa-green-secondary: #128c7e;
+  --wa-hover: #e8f5e9;
   --wa-bg-chat: #ece5dd;
   --wa-msg-out: #dcf8c6;
   --wa-blue-accent: #34b7f1;
