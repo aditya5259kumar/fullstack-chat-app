@@ -30,7 +30,7 @@ export default function (sequelize, DataTypes) {
     {
       sequelize,
       tableName: "participants",
-      timestamps: true,
+      timestamps: false,
       indexes: [
         {
           name: "PRIMARY",

@@ -18,7 +18,7 @@ export default function (sequelize, DataTypes) {
     {
       sequelize,
       tableName: "conversations",
-      timestamps: true,
+      timestamps: false,
       indexes: [
         {
           name: "PRIMARY",

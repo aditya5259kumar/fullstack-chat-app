@@ -37,24 +37,19 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import { Route, Routes, Navigate } from "react-router";
 import { useSelector } from "react-redux";
+import FindUser from "./pages/FindUser";
 
 const App = () => {
   const { token } = useSelector((state) => state.auth);
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={token ? <Home /> : <Navigate to="/login" />}
-      />
+      <Route path="/" element={token ? <Home /> : <Navigate to="/login" />} />
       <Route
         path="/chat/:chatId"
         element={token ? <Home /> : <Navigate to="/login" />}
       />
-      <Route
-        path="/login"
-        element={!token ? <LogIn /> : <Navigate to="/" />}
-      />
+      <Route path="/login" element={!token ? <LogIn /> : <Navigate to="/" />} />
       <Route
         path="/signup"
         element={!token ? <SignUp /> : <Navigate to="/" />}
@@ -66,6 +61,10 @@ const App = () => {
       <Route
         path="/settings"
         element={token ? <Settings /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/find"
+        element={token ? <FindUser /> : <Navigate to="/login" />}
       />
     </Routes>
   );

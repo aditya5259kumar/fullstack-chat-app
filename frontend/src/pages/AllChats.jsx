@@ -1,137 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchBar from "../components/search_bar/SearchBar";
 import { HiUserPlus } from "react-icons/hi2";
 import ActiveUsers from "../components/active_floating_users/ActiveUsers";
 import UserChatMsg from "../components/user_chats/UserChatMsg";
-import { useNavigate, useParams } from "react-router";
-import avatar from "../assets/avatar.webp";
-import avatar2 from "../assets/avatar2.jpg";
+import { Link, useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 
-// Fake chats data
-export const FAKE_CHATS = [
-  {
-    id: 1,
-    name: "Khushi Singh",
-    avatar: avatar2,
-    lastMsg: "Hey! Are you free tonight? 😊",
-    time: "09:55 PM",
-    unreadCount: 3,
-    pinned: true,
-    online: true,
-    seen: false,
-    isSentByMe: false,
-  },
-  {
-    id: 2,
-    name: "Rahul Sharma",
-    avatar: avatar,
-    lastMsg: "Sure, let's catch up tomorrow morning!",
-    time: "08:30 PM",
-    unreadCount: 0,
-    pinned: false,
-    online: false,
-    seen: true,
-    isSentByMe: true,
-  },
-  {
-    id: 3,
-    name: "Anjali Verma",
-    avatar: avatar,
-    lastMsg: "Did you check the assignment? 📚",
-    time: "07:12 PM",
-    unreadCount: 12,
-    pinned: false,
-    online: true,
-    seen: false,
-    isSentByMe: false,
-  },
-  {
-    id: 4,
-    name: "Vikram Patel",
-    avatar: avatar2,
-    lastMsg: "The meeting is rescheduled to 4 PM.",
-    time: "05:45 PM",
-    unreadCount: 0,
-    pinned: true,
-    online: false,
-    seen: true,
-    isSentByMe: false,
-  },
-  {
-    id: 5,
-    name: "Priya Mehta",
-    avatar: avatar,
-    lastMsg: "Lol 😂 that was so funny!",
-    time: "03:20 PM",
-    unreadCount: 1,
-    pinned: false,
-    online: true,
-    seen: false,
-    isSentByMe: false,
-  },
-  {
-    id: 6,
-    name: "Dev Kumar",
-    avatar: avatar2,
-    lastMsg: "Can you send me the project files?",
-    time: "Yesterday",
-    unreadCount: 0,
-    pinned: false,
-    online: false,
-    seen: true,
-    isSentByMe: true,
-  },
-  {
-    id: 7,
-    name: "Simran Kaur",
-    avatar: avatar,
-    lastMsg: "Thanks for the help! Really appreciate it 🙏",
-    time: "Yesterday",
-    unreadCount: 0,
-    pinned: false,
-    online: false,
-    seen: true,
-    isSentByMe: false,
-  },
-  {
-    id: 8,
-    name: "Arjun Nair",
-    avatar: avatar2,
-    lastMsg: "Are we still on for the trip next week?",
-    time: "Mon",
-    unreadCount: 0,
-    pinned: false,
-    online: false,
-    seen: false,
-    isSentByMe: false,
-  },
-  {
-    id: 9,
-    name: "Neha Gupta",
-    avatar: avatar,
-    lastMsg: "I sent the docs over email.",
-    time: "Sun",
-    unreadCount: 0,
-    pinned: false,
-    online: false,
-    seen: true,
-    isSentByMe: true,
-  },
-  {
-    id: 10,
-    name: "Kabir Singh",
-    avatar: avatar2,
-    lastMsg: "Okay, talk later!",
-    time: "Sat",
-    unreadCount: 0,
-    pinned: false,
-    online: false,
-    seen: true,
-    isSentByMe: false,
-  },
-];
+import { userConversation } from "../redux/slices/userConvoSlice";
+import Navbar from "../components/navbar/Navbar";
 
-const AllChats = ({ activeChatId, onSelectChat, isMobileView }) => {
+const AllChats = ({ activeChatId, onSelectChat }) => {
   const [searchQuery, setSearchQuery] = useState("");
   // const [activeFilter, setActiveFilter] = useState("all");
   const navigate = useNavigate();
@@ -147,15 +25,24 @@ const AllChats = ({ activeChatId, onSelectChat, isMobileView }) => {
   // const pinnedChats = filteredChats.filter((c) => c.pinned);
   // const unpinnedChats = filteredChats.filter((c) => !c.pinned);
 
-  function handleChatSelect(chat) {
-    if (onSelectChat) onSelectChat(chat);
-    navigate(`/chat/${chat.id}`);
+  function handleChatSelect(id) {
+    // if (onSelectChat) onSelectChat(chat);
+    navigate(`/chat/${id}`);
   }
+
+  const dispatch = useDispatch();
+  const { inboxData } = useSelector((state) => state.convo);
+
+  // console.log("userConversation inboxData-----------------", inboxData);
+
+  useEffect(() => {
+    dispatch(userConversation());
+  }, [dispatch]);
 
   return (
     <div
       className={`h-screen bg-white  flex flex-col overflow-hidden
-        w-full md:w-80 lg:w-110`}
+        w-full md:w-80 lg:w-110 shadow-xl`}
     >
       {/* Header */}
       <div className="px-3 md:px-4 pt-4 pb-3 flex justify-between items-center">
@@ -164,14 +51,16 @@ const AllChats = ({ activeChatId, onSelectChat, isMobileView }) => {
           {/* <button className="p-2 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors">
             <HiOutlineAdjustmentsHorizontal className="text-lg" />
           </button> */}
-          <button className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors">
+          <Link to="/find" className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors">
             <HiUserPlus className="text-xl md:text-2xl" />
-          </button>
+          </Link>
         </div>
       </div>
 
       {/* Search */}
+      <div className="px-3 md:px-4 mb-3">
       <SearchBar onSearch={setSearchQuery} />
+      </div>
 
       {/* Filter Tabs */}
       {/* <div className="flex gap-2 px-3 md:px-4 mb-3">
@@ -218,12 +107,12 @@ const AllChats = ({ activeChatId, onSelectChat, isMobileView }) => {
                 All Chats
               </p>
             )} */}
-        {FAKE_CHATS.map((chat) => (
+        {inboxData?.map((chat) => (
           <UserChatMsg
-            key={chat.id}
+            key={chat.conversation_id}
             chat={chat}
-            isActive={activeChatId === chat.id}
-            onClick={() => handleChatSelect(chat)}
+           isActive={activeChatId === chat.conversation_id}
+            onClick={() => handleChatSelect(chat?.conversation_id)}
           />
         ))}
         {/* </> */}

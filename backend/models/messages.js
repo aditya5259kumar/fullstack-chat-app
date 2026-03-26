@@ -30,11 +30,16 @@ export default function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
+      },
     },
     {
       sequelize,
       tableName: "messages",
-      timestamps: true,
+      timestamps: false,
       indexes: [
         {
           name: "PRIMARY",

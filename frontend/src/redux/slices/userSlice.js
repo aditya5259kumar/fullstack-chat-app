@@ -11,7 +11,7 @@ export const myProfile = createAsyncThunk("myProfile", async (_, thunkAPI) => {
       },
     });
 
-    console.log("response.data--------------", response.data);
+    // console.log("response.data--------------", response.data);
 
     return response.data.user;
   } catch (error) {
@@ -24,18 +24,20 @@ export const myProfile = createAsyncThunk("myProfile", async (_, thunkAPI) => {
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    data: null,
+    profileData: null,
+    conversations: [],
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
+    // my profile
     builder.addCase(myProfile.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(myProfile.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      state.profileData = action.payload;
     });
     builder.addCase(myProfile.rejected, (state, action) => {
       state.loading = false;

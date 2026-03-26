@@ -9,71 +9,11 @@ import {
 import { IoMdSend } from "react-icons/io";
 import { MdAttachFile } from "react-icons/md";
 import lightChatBg from "../assets/chat-bg-light.png";
-import avatar2 from "../assets/avatar2.jpg";
 import NoChatSelected from "../components/user_chats/NoChatSelected";
 import MessageBubble from "../components/user_chats/MessageBubble";
+import { useDispatch, useSelector } from "react-redux";
 
-// Fake messages data
-const FAKE_MESSAGES = [
-  {
-    id: 1,
-    text: "Hey! How are you doing? 😊",
-    time: "09:30 AM",
-    isMine: false,
-  },
-  {
-    id: 2,
-    text: "I'm doing great, thanks for asking! Just finished a project.",
-    time: "09:31 AM",
-    isMine: true,
-    seen: true,
-  },
-  {
-    id: 3,
-    text: "Oh wow, that's amazing! Which project was it?",
-    time: "09:32 AM",
-    isMine: false,
-  },
-  {
-    id: 4,
-    text: "It was the LinkUp chat app. Built with React, Node.js and WebSockets!",
-    time: "09:33 AM",
-    isMine: true,
-    seen: true,
-  },
-  {
-    id: 5,
-    text: "That sounds so cool! Can I see it sometime? 👀",
-    time: "09:35 AM",
-    isMine: false,
-  },
-  {
-    id: 6,
-    text: "Of course! I'll share the link once it's deployed.",
-    time: "09:36 AM",
-    isMine: true,
-    seen: true,
-  },
-  {
-    id: 7,
-    text: "Are you free tonight? We could catch up over a call 📞",
-    time: "09:50 AM",
-    isMine: false,
-  },
-  {
-    id: 8,
-    text: "Yeah sure! After 8 PM works for me.",
-    time: "09:51 AM",
-    isMine: true,
-    seen: false,
-  },
-  {
-    id: 9,
-    text: "Perfect! Talk to you then 😄",
-    time: "09:52 AM",
-    isMine: false,
-  },
-];
+import { getMessages } from "../redux/slices/loadMsgSlice";
 
 // Date divider label component
 const DateLabel = ({ label }) => (
@@ -86,28 +26,47 @@ const DateLabel = ({ label }) => (
 
 const UserChats = ({ chat, onBack }) => {
   const [textMsg, setTextMsg] = useState("");
-  const [messages, setMessages] = useState(FAKE_MESSAGES);
+  // const [messages, setMessages] = useState(FAKE_MESSAGES);
   const [showMenu, setShowMenu] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
+  // const token = localStorage.getItem("token");
+  // const decode = jwtDecode(token);
+  // const userId = decode.id;
+
+  // console.log("userId=============", userId);
+
+  // const { convo_id } = useParams();
+  const dispatch = useDispatch();
+  const { msg, other_user } = useSelector((state) => state.getMsg);
+
+  // console.log("userConversation msg-----------------", msg);
+  // console.log("userConversation other_user-----------------", other_user);
+
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (chat?.conversation_id) {
+      dispatch(getMessages(chat.conversation_id));
+    }
+  }, [dispatch, chat]);
+
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [messages]);
 
   function sendMessage() {
     if (!textMsg.trim()) return;
-    const newMsg = {
-      id: Date.now(),
-      text: textMsg.trim(),
-      time: new Date().toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      isMine: true,
-      seen: false,
-    };
-    setMessages((prev) => [...prev, newMsg]);
+    // const newMsg = {
+    //   id: Date.now(),
+    //   text: textMsg.trim(),
+    //   time: new Date().toLocaleTimeString("en-IN", {
+    //     hour: "2-digit",
+    //     minute: "2-digit",
+    //   }),
+    //   isMine: true,
+    //   seen: false,
+    // };
+    // setMessages((prev) => [...prev, newMsg]);
     setTextMsg("");
     inputRef.current?.focus();
   }
@@ -131,8 +90,6 @@ const UserChats = ({ chat, onBack }) => {
     );
   }
 
-  const { name, avatar: userAvatar = avatar2, online = false } = chat;
-
   return (
     <div className="h-screen w-full flex flex-col">
       {/* Header */}
@@ -146,25 +103,30 @@ const UserChats = ({ chat, onBack }) => {
           </button>
 
           <div className="relative">
-            <img
-              src={userAvatar}
-              alt={name}
-              className="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover"
-            />
-            {online && (
-              <span className="absolute right-0 bottom-0 w-3.5 h-3.5 rounded-full bg-(--wa-green-prim) border-2 border-white"></span>
+            {other_user?.profile_photo ? (
+              <img
+                src={other_user.profile_photo}
+                className="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-10 h-10 md:w-11 md:h-11 bg-purple-700 text-gray-100 flex items-center justify-center rounded-full">
+                {other_user?.name?.charAt(0)?.toUpperCase() || "?"}
+              </div>
             )}
+            {/* {online && (
+              <span className="absolute right-0 bottom-0 w-3.5 h-3.5 rounded-full bg-(--wa-green-prim) border-2 border-white"></span>
+            )} */}
           </div>
 
           <div>
             <h5 className="font-semibold text-gray-800 leading-tight">
-              {name}
+              {other_user?.name}
             </h5>
-            <p
+            {/* <p
               className={`text-xs ${online ? "text-[#25D366] font-medium" : "text-gray-400"}`}
             >
               {online ? "online" : "last seen recently"}
-            </p>
+            </p> */}
           </div>
         </div>
 
@@ -215,8 +177,8 @@ const UserChats = ({ chat, onBack }) => {
         style={{ backgroundImage: `url(${lightChatBg})` }}
       >
         <DateLabel label="Today" />
-        {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} />
+        {msg?.map((msg) => (
+          <MessageBubble key={msg?.id} message={msg} />
         ))}
         <div ref={messagesEndRef} />
       </div>
@@ -246,7 +208,7 @@ const UserChats = ({ chat, onBack }) => {
           disabled={!textMsg.trim()}
           className={`shrink-0 text-lg p-2.5 text-white rounded-full transition-all duration-200 ${
             textMsg.trim()
-              ? "bg-[#25D366] hover:bg-[#1DAA54] shadow-md scale-100"
+              ? "bg-(--wa-green-prim) hover:bg-(--wa-green-secondary) shadow-md scale-100"
               : "bg-gray-300 cursor-not-allowed scale-95"
           }`}
         >

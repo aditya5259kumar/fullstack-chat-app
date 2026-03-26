@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import avatar from "../assets/avatar.webp";
 import {
   HiPencil,
@@ -12,25 +12,39 @@ import {
 } from "react-icons/hi2";
 import Navbar from "../components/navbar/Navbar";
 import InfoRow from "../components/profile/InfoRow";
-
-const fakeUser = {
-  name: "Your Name",
-  username: "yourname",
-  email: "you@example.com",
-  phone: "+91 98765 43210",
-  bio: "Hey there! I'm using LinkUp 💬",
-  joinedDate: "March 2025",
-};
-
+import { useDispatch, useSelector } from "react-redux";
+import { myProfile } from "../redux/slices/userSlice";
+import { userLogout } from "../redux/slices/authSlice";
+import { useNavigate } from "react-router";
 
 const Profile = () => {
-  const [editingBio, setEditingBio] = useState(false);
-  const [bio, setBio] = useState(fakeUser.bio);
-  const [tempBio, setTempBio] = useState(bio);
+  // const [editingBio, setEditingBio] = useState(false);
+  // const [bio, setBio] = useState();
+  // const [tempBio, setTempBio] = useState(bio);
 
-  function saveBio() {
-    setBio(tempBio);
-    setEditingBio(false);
+  // function saveBio() {
+  //   setBio(tempBio);
+  //   setEditingBio(false);
+  // }
+
+  const { profileData } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(myProfile());
+  }, [dispatch]);
+
+  console.log("profileData---------------------", profileData);
+
+  function handleLogout() {
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+
+    if (!confirmLogout) {
+      return;
+    }
+    dispatch(userLogout());
+    navigate("/login");
   }
 
   return (
@@ -44,19 +58,25 @@ const Profile = () => {
           {/* Avatar */}
           <div className="flex flex-col items-center mb-8">
             <div className="relative">
-              <img
-                src={avatar}
-                alt="Profile"
-                className="w-28 h-28 rounded-full object-cover ring-4 ring-[#25D366]/20 shadow-md"
-              />
+              {profileData?.profile_photo ? (
+                <img
+                  src={profileData.profile_photo}
+                  alt="Profile"
+                  className="w-28 h-28 rounded-full object-cover ring-4 ring-[#25D366]/20 shadow-md"
+                />
+              ) : (
+                <div className="w-28 h-28 flex items-center justify-center rounded-full bg-purple-700 text-3xl font-semibold text-gray-100 ring-4 ring-[#25D366]/20 shadow-md">
+                  {profileData?.name?.charAt(0).toUpperCase()}
+                </div>
+              )}
               <button className="absolute bottom-1 right-1 w-8 h-8 bg-[#25D366] rounded-full flex items-center justify-center shadow-md hover:bg-[#1DAA54] transition-colors">
                 <HiCamera className="text-white text-sm" />
               </button>
             </div>
             <h3 className="text-xl font-bold text-gray-800 mt-3">
-              {fakeUser.name}
+              {profileData?.name}
             </h3>
-            <p className="text-sm text-gray-400">@{fakeUser.username}</p>
+            <p className="text-sm text-gray-400">@{profileData?.username}</p>
           </div>
 
           {/* Bio */}
@@ -65,7 +85,7 @@ const Profile = () => {
               <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">
                 About
               </p>
-              {!editingBio && (
+              {/* {!editingBio && (
                 <button
                   onClick={() => {
                     setTempBio(bio);
@@ -75,10 +95,10 @@ const Profile = () => {
                 >
                   <HiPencil className="text-base" />
                 </button>
-              )}
+              )} */}
             </div>
 
-            {editingBio ? (
+            {/* {editingBio ? (
               <div>
                 <textarea
                   value={tempBio}
@@ -105,9 +125,11 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-            ) : (
-              <p className="text-sm text-gray-700">{bio}</p>
-            )}
+            ) : ( */}
+            <p className="text-sm text-gray-700">
+              {profileData?.bio === null ? "no bio yet" : profileData?.bio}
+            </p>
+            {/* )} */}
           </div>
 
           {/* Info */}
@@ -115,27 +137,27 @@ const Profile = () => {
             <InfoRow
               icon={HiUser}
               label="Full Name"
-              value={fakeUser.name}
+              value={profileData?.name}
               editable
               onEdit={() => {}}
             />
             <InfoRow
               icon={HiOutlineEnvelope}
               label="Email"
-              value={fakeUser.email}
+              value={profileData?.email}
               editable={false}
             />
-            <InfoRow
+            {/* <InfoRow
               icon={HiOutlinePhone}
               label="Phone"
               value={fakeUser.phone}
               editable
               onEdit={() => {}}
-            />
+            /> */}
             <InfoRow
               icon={HiOutlineCalendar}
               label="Joined"
-              value={fakeUser.joinedDate}
+              value={profileData?.created_at}
               editable={false}
             />
           </div>
@@ -148,7 +170,10 @@ const Profile = () => {
             <button className="w-full text-left text-sm text-red-500 py-2 hover:text-red-600 font-medium">
               Delete Account
             </button>
-            <button className="w-full text-left text-sm text-red-500 py-2 hover:text-red-600 font-medium">
+            <button
+              onClick={handleLogout}
+              className="w-full text-left text-sm text-red-500 py-2 hover:text-red-600 font-medium"
+            >
               Log Out
             </button>
           </div>

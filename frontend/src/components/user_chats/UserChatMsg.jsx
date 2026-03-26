@@ -3,21 +3,23 @@ import avatar2 from "../../assets/avatar2.jpg";
 import { BsFillPinAngleFill, BsThreeDotsVertical } from "react-icons/bs";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
-const UserChatMsg = ({ chat = {}, isActive = false, onClick }) => {
+const UserChatMsg = ({ chat, isActive = false, onClick }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
 
-  const {
-    name = "Khushi Singh",
-    avatar: userAvatar = avatar2,
-    lastMsg = "This is a very long message that should never break your UI no matter what happens",
-    time = "09:55 PM",
-    unreadCount = 0,
-    pinned = false,
-    online = false,
-    seen = false,
-    isSentByMe = false,
-  } = chat;
+  // console.log(chat);
+
+  // const {
+  //   name = "Khushi Singh",
+  //   avatar: userAvatar = avatar2,
+  //   lastMsg = "This is a very long message that should never break your UI no matter what happens",
+  //   time = "09:55 PM",
+  //   unreadCount = 0,
+  //   pinned = false,
+  //   online = false,
+  //   seen = false,
+  //   isSentByMe = false,
+  // } = chat;
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -40,30 +42,36 @@ const UserChatMsg = ({ chat = {}, isActive = false, onClick }) => {
       <div className="flex items-center gap-3 flex-1 min-w-0">
         {/* Avatar */}
         <div className="relative shrink-0">
-          <img
-            src={userAvatar}
-            alt={name}
-            className="w-12 h-12 rounded-full object-cover"
-          />
-          {online && (
-            <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-(--wa-green-prim) border-2 border-white rounded-full"></span>
+          {chat?.users?.[0]?.avatar ? (
+            <img
+              src={chat.users[0].avatar}
+              alt={chat?.users?.[0]?.username}
+              className="w-12 h-12 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-purple-700 text-white flex items-center justify-center font-semibold">
+              {chat?.users?.[0]?.username?.charAt(0)?.toUpperCase() || "?"}
+            </div>
           )}
+          {/* {online && (
+            <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-(--wa-green-prim) border-2 border-white rounded-full"></span>
+          )} */}
         </div>
 
         {/* Text */}
         <div className="flex flex-col min-w-0">
           <h5 className="font-semibold text-[15px] text-gray-800 truncate">
-            {name}
+            {chat?.users[0]?.username}
           </h5>
           <p className="text-gray-500 text-sm truncate flex items-center gap-1">
-            {isSentByMe && (
+            {/* {isSentByMe && (
               <span
                 className={seen ? "text-(--wa-blue-accent)" : "text-gray-400"}
               >
                 <IoCheckmarkDoneSharp className="text-base inline" />
               </span>
-            )}
-            {lastMsg}
+            )} */}
+            {chat?.last_message}
           </p>
         </div>
       </div>
@@ -72,16 +80,16 @@ const UserChatMsg = ({ chat = {}, isActive = false, onClick }) => {
       <div className="flex items-center gap-2">
         <div className=" flex items-end flex-col gap-1.5 ml-2 shrink-0">
           <p className={`text-xs whitespace-nowrap font-medium text-gray-500`}>
-            {time}
+            {new Date(chat?.last_message_time).toLocaleTimeString()}
           </p>
 
           <div className="flex items-center gap-1.5">
-            {pinned && <BsFillPinAngleFill className="text-red-600 text-sm" />}
-            {unreadCount > 0 && (
+            {/* {pinned && <BsFillPinAngleFill className="text-red-600 text-sm" />} */}
+            {/* {unreadCount > 0 && (
               <span className="text-white text-[11px] font-bold min-w-5 h-5 px-1.5 bg-(--wa-green-prim) rounded-full flex items-center justify-center">
                 {unreadCount > 99 ? "99+" : unreadCount}
               </span>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -100,9 +108,9 @@ const UserChatMsg = ({ chat = {}, isActive = false, onClick }) => {
 
           {showMenu && (
             <div className="absolute right-0 mt-1 w-36 bg-white shadow-xl rounded-xl py-1.5 z-50 border border-gray-100">
-              <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+              {/* <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                 {pinned ? "Unpin Chat" : "Pin Chat"}
-              </button>
+              </button> */}
               {/* <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
               Mark as Read
             </button>

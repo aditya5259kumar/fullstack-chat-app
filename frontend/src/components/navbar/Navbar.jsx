@@ -1,25 +1,25 @@
-import React from "react";
-import avatar from "../../assets/avatar.webp";
+import { useEffect } from "react";
 import {
   HiMiniChatBubbleLeftEllipsis,
   HiMiniCog6Tooth,
   HiMoon,
-  HiUser,
   HiMiniChatBubbleBottomCenterText,
 } from "react-icons/hi2";
-
-import { NavLink, useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
-import { userLogout } from "../../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router";
+import { myProfile } from "../../redux/slices/userSlice";
 
 const Navbar = () => {
+  const { profileData } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  function handleLogout() {
-    dispatch(userLogout());
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (!profileData) {
+      dispatch(myProfile());
+    }
+  }, [dispatch, profileData]);
+
+  // console.log("profileData---------------------", profileData);
 
   return (
     <div className="sticky left-0 top-0 z-50 w-15 md:w-18 bg-white border-r border-gray-100 shadow-lg h-screen flex flex-col items-center justify-between py-4">
@@ -45,7 +45,7 @@ const Navbar = () => {
             <HiMiniChatBubbleBottomCenterText className="text-xl" />
           </NavLink>
 
-          <NavLink
+          {/* <NavLink
             to="/profile"
             className={({ isActive }) =>
               `flex items-center justify-center  w-full py-3 rounded-xl transition-all duration-200 ${
@@ -57,7 +57,7 @@ const Navbar = () => {
             title="Profile"
           >
             <HiUser className="text-xl" />
-          </NavLink>
+          </NavLink> */}
 
           <NavLink
             to="/settings"
@@ -84,13 +84,19 @@ const Navbar = () => {
           <HiMoon className="text-xl" />
         </button>
 
-        <button onClick={handleLogout} title="Profile / Logout">
-          <img
-            src={avatar}
-            alt="avatar"
-            className="w-9 h-9 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
-          />
-        </button>
+        <NavLink to="/profile" title="Profile / Logout">
+          {profileData?.profile_photo ? (
+            <img
+              src={profileData.profile_photo}
+              alt="Profile"
+              className="w-9 h-9 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+            />
+          ) : (
+            <div className="w-9 h-9 rounded-full bg-purple-700 text-gray-100 flex items-center justify-center font-semibold">
+              {profileData?.name?.[0]?.toUpperCase()}
+            </div>
+          )}
+        </NavLink>
       </div>
     </div>
   );
