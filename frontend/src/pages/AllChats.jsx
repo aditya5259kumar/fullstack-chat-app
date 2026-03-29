@@ -34,6 +34,8 @@ const AllChats = ({ activeChatId, onSelectChat }) => {
   const { inboxData } = useSelector((state) => state.convo);
 
   // console.log("userConversation inboxData-----------------", inboxData);
+  // console.log("inboxData type-------------------", typeof inboxData);
+  // console.log("inboxData value-------------------", inboxData);
 
   useEffect(() => {
     dispatch(userConversation());
@@ -51,7 +53,10 @@ const AllChats = ({ activeChatId, onSelectChat }) => {
           {/* <button className="p-2 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors">
             <HiOutlineAdjustmentsHorizontal className="text-lg" />
           </button> */}
-          <Link to="/find" className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors">
+          <Link
+            to="/find"
+            className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"
+          >
             <HiUserPlus className="text-xl md:text-2xl" />
           </Link>
         </div>
@@ -59,7 +64,7 @@ const AllChats = ({ activeChatId, onSelectChat }) => {
 
       {/* Search */}
       <div className="px-3 md:px-4 mb-3">
-      <SearchBar onSearch={setSearchQuery} />
+        <SearchBar onSearch={setSearchQuery} />
       </div>
 
       {/* Filter Tabs */}
@@ -107,14 +112,15 @@ const AllChats = ({ activeChatId, onSelectChat }) => {
                 All Chats
               </p>
             )} */}
-        {inboxData?.map((chat) => (
-          <UserChatMsg
-            key={chat.conversation_id}
-            chat={chat}
-           isActive={activeChatId === chat.conversation_id}
-            onClick={() => handleChatSelect(chat?.conversation_id)}
-          />
-        ))}
+        {Array.isArray(inboxData) &&
+  inboxData.map((chat) => (
+    <UserChatMsg
+      key={chat?.conversation_id}
+      chat={chat}
+      isActive={activeChatId === chat?.conversation_id}
+      onClick={() => handleChatSelect(chat?.conversation_id)}
+    />
+  ))}
         {/* </> */}
         {/* )} */}
 

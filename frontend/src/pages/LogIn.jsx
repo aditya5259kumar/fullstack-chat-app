@@ -9,7 +9,7 @@ import {
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../redux/slices/authSlice";
-import { connectSocket } from "../socket/socket";
+// import { connectSocket } from "../socket/socket";
 
 const LogIn = () => {
   const [passwordShow, setPasswordShow] = useState(false);
@@ -60,7 +60,7 @@ const LogIn = () => {
     console.log("ERROR PAYLOAD---------------:", result.payload);
 
     if (result.meta.requestStatus === "fulfilled") {
-      connectSocket(result.payload.user.id); 
+      // connectSocket(result.payload.user.id); 
       navigate("/");
     }
     console.log("FINAL PAYLOAD----------------------:", result.payload);

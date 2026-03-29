@@ -13,11 +13,11 @@ const MessageBubble = ({ message }) => {
 
   return (
     <div
-      className={`flex ${message?.sender?.id === userId ? "justify-end" : "justify-start"} mb-1.5`}
+      className={`flex ${(message?.sender_id || message?.sender?.id) === userId ? "justify-end" : "justify-start"} mb-1.5`}
     >
       <div
         className={`relative max-w-[75%] md:max-w-[60%] px-3 py-2 rounded-2xl shadow-sm ${
-          message?.sender?.id === userId
+          (message?.sender_id || message?.sender?.id) === userId
             ? "bg-(--wa-msg-out) rounded-br-sm"
             : "bg-white rounded-bl-sm"
         }`}

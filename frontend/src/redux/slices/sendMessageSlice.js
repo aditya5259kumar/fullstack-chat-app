@@ -1,14 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const userConversation = createAsyncThunk(
-  "userConversation",
-  async (_, thunkAPI) => {
+export const sendMsg = createAsyncThunk(
+  "sendMessage/send",
+  async ({ conversation_id, content }, thunkAPI) => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/user/conversations",
+      const response = await axios.post(
+        "http://localhost:4000/api/user/send-message",
+        {
+          conversation_id,
+          content,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -16,39 +20,37 @@ export const userConversation = createAsyncThunk(
         },
       );
 
-      // console.log("response.data--------------", response.data);
-
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data || "failed to fetch profile",
+        error.response?.data || "failed to send message",
       );
     }
   },
 );
 
-const convoSlice = createSlice({
+const sendMessageSlice = createSlice({
   name: "user",
   initialState: {
-    inboxData: [],
+    data: [],
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     // user conversation
-    builder.addCase(userConversation.pending, (state) => {
+    builder.addCase(sendMsg.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(userConversation.fulfilled, (state, action) => {
+    builder.addCase(sendMsg.fulfilled, (state, action) => {
       state.loading = false;
-      state.inboxData = action.payload;
+      state.data.push(action.payload);
     });
-    builder.addCase(userConversation.rejected, (state, action) => {
+    builder.addCase(sendMsg.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
   },
 });
 
-export default convoSlice.reducer;
+export default sendMessageSlice.reducer;

@@ -156,13 +156,56 @@ const userController = {
     }
   },
 
+  // //--------send messages---------
+  // sendMessage: async (req, res) => {
+  //   try {
+  //     const senderId = req.user.id;
+  //     const { conversation_id, content } = req.body;
+
+  //     console.log("req.user:===============", req.user.toJSON());
+
+  //     if (!conversation_id || !content) {
+  //       return res.status(400).json({ message: "Missing fields" });
+  //     }
+
+  //     // Step 1: Check if user is part of this conversation
+  //     const participant = await participantsModel.findOne({
+  //       where: {
+  //         conversation_id,
+  //         user_id: senderId,
+  //       },
+  //     });
+
+  //     if (!participant) {
+  //       return res.status(403).json({
+  //         message: "You are not part of this conversation",
+  //       });
+  //     }
+
+  //     // Step 2: Save message
+  //     const message = await messagesModel.create({
+  //       conversation_id,
+  //       sender_id: senderId,
+  //       content,
+  //     });
+
+  //     return res.status(200).json({
+  //       message: "Message sent successfully.",
+  //       data: message,
+  //     });
+  //   } catch (error) {
+  //     return res.status(500).json({
+  //       message: "Something went wrong!",
+  //       error: error.message,
+  //     });
+  //   }
+  // },
+
   //--------send messages---------
   sendMessage: async (req, res) => {
     try {
       const senderId = req.user.id;
       const { conversation_id, content } = req.body;
-
-      console.log("req.user:===============", req.user.toJSON());
 
       if (!conversation_id || !content) {
         return res.status(400).json({ message: "Missing fields" });
@@ -182,16 +225,37 @@ const userController = {
         });
       }
 
-      // Step 2: Save message
-      const message = await messagesModel.create({
+      // Step 2: Save raw message
+      const rawMessage = await messagesModel.create({
         conversation_id,
         sender_id: senderId,
         content,
       });
 
+      // Step 3: Fetch the newly created message WITH the sender data
+      // This ensures the frontend gets the exact same format as getMessages
+      const populatedMessage = await messagesModel.findOne({
+        where: { id: rawMessage.id },
+        include: [
+          {
+            model: userModel,
+            as: "sender",
+            attributes: ["id", "name", "profile_photo"],
+          },
+        ],
+      });
+
+      // Step 4: Broadcast the message to everyone in the conversation room
+      // req.io is available because of the middleware we added in server.js
+      if (req.io) {
+        req.io
+          .to(`conversation_${conversation_id}`)
+          .emit("receive_message", populatedMessage);
+      }
+
       return res.status(200).json({
         message: "Message sent successfully.",
-        data: message,
+        data: populatedMessage,
       });
     } catch (error) {
       return res.status(500).json({

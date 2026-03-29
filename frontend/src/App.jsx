@@ -38,9 +38,23 @@ import Settings from "./pages/Settings";
 import { Route, Routes, Navigate } from "react-router";
 import { useSelector } from "react-redux";
 import FindUser from "./pages/FindUser";
+import socket, { connectSocket } from "./socket/initSocket";
+import { useEffect } from "react";
 
 const App = () => {
   const { token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (token) {
+      connectSocket();
+
+      // Once connected, tell the server which user this socket belongs to
+      if (user?.id) {
+        socket.emit("register_user", user.id);
+      }
+    }
+  }, [token, user?.id]);
 
   return (
     <Routes>

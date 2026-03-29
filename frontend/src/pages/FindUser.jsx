@@ -7,45 +7,21 @@ import {
   searchUsers,
   resetSearch,
 } from "../redux/slices/searchUserSlice";
-
-export const FindUserBanner = ({ user }) => {
-  return (
-    <div className="md:flex items-center justify-between bg-white rounded-2xl shadow-sm border px-5 py-3 mb-4">
-      <div className="flex items-center">
-        {user.profile_photo ? (
-          <img
-            src={user.profile_photo}
-            alt=""
-            className="h-12 w-12 rounded-full object-cover"
-          />
-        ) : (
-          <div className="h-12 w-12 rounded-full bg-purple-600 text-white flex items-center justify-center">
-            {user?.name?.charAt(0)?.toUpperCase()}
-          </div>
-        )}
-
-        <div className="ml-4">
-          <p className="font-semibold">{user.name}</p>
-          <p className="text-sm text-gray-500">@{user.username}</p>
-        </div>
-      </div>
-
-      <button className="bg-green-600 text-white px-4 py-2 rounded-lg">
-        Start Chat
-      </button>
-    </div>
-  );
-};
+import FindUserCard from "../components/create_convo/FindUserCard";
 
 const FindUser = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
 
-  const { allUsers: users, searchedUsers, loading } = useSelector(
-    (state) => state.searchUser
-  );
+  const {
+    allUsers: users,
+    searchedUsers,
+    loading,
+  } = useSelector((state) => state.searchUser);
 
   const dispatch = useDispatch();
+
+  // console.log("all users---------------------", users);
 
   // ✅ Load all users initially
   useEffect(() => {
@@ -128,9 +104,9 @@ const FindUser = () => {
           <div className="mt-6">
             {loading ? (
               <p className="text-gray-500 text-sm">Loading...</p>
-            ) : displayUsers.length > 0 ? (
-              displayUsers.map((user) => (
-                <FindUserBanner key={user.id} user={user} />
+            ) : displayUsers?.length > 0 ? (
+              displayUsers?.map((user) => (
+                <FindUserCard key={user?.id} user={user} />
               ))
             ) : (
               <p className="text-gray-500 text-sm">No users found</p>

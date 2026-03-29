@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const userConversation = createAsyncThunk(
+export const createConvo = createAsyncThunk(
   "userConversation",
-  async (_, thunkAPI) => {
+  async (id, thunkAPI) => {
     try {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "http://localhost:4000/api/user/conversations",
+        `http://localhost:4000/api/user/find-convo/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -18,7 +18,7 @@ export const userConversation = createAsyncThunk(
 
       // console.log("response.data--------------", response.data);
 
-      return response.data.data;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data || "failed to fetch profile",
@@ -27,28 +27,28 @@ export const userConversation = createAsyncThunk(
   },
 );
 
-const convoSlice = createSlice({
+const createConvoSlice = createSlice({
   name: "user",
   initialState: {
-    inboxData: [],
+    data: null,
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     // user conversation
-    builder.addCase(userConversation.pending, (state) => {
+    builder.addCase(createConvo.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(userConversation.fulfilled, (state, action) => {
+    builder.addCase(createConvo.fulfilled, (state, action) => {
       state.loading = false;
-      state.inboxData = action.payload;
+      state.data = action.payload;
     });
-    builder.addCase(userConversation.rejected, (state, action) => {
+    builder.addCase(createConvo.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
   },
 });
 
-export default convoSlice.reducer;
+export default createConvoSlice.reducer;

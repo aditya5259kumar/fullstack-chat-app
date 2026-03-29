@@ -74,10 +74,11 @@ const Home = () => {
 
   const { inboxData } = useSelector((state) => state.convo);
 
-  // Find the active chat based on URL param
+  // Find the active chat based on URL parama
 
-  const activeChat = chatId
-    ? inboxData?.find((c) => c.conversation_id === parseInt(chatId))
+  const activeChat =
+  Array.isArray(inboxData) && chatId
+    ? inboxData.find((c) => c?.conversation_id === parseInt(chatId))
     : null;
 
   // On mobile: show chat list if no chat selected, show chat if selected

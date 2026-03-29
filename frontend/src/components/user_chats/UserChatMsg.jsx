@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import avatar2 from "../../assets/avatar2.jpg";
 import { BsFillPinAngleFill, BsThreeDotsVertical } from "react-icons/bs";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
