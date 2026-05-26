@@ -10,7 +10,7 @@ This project is currently under active development.
 
 ## Project Status
 
-🚧 Under Development
+🚧 Under Development...
 
 Currently implemented core real-time messaging features are fully functional, while advanced features such as group chat, media sharing, OAuth authentication, and AI chatbot integration are still being developed.
 
