@@ -10,6 +10,15 @@
   --wa-msg-out: #dcf8c6;
   --wa-blue-accent: #34b7f1;
 }
+:root {
+  --wa-green-prim: #3b82f6;       /* modern blue */
+  --wa-green-dark: #0f172a;       /* deep navy */
+  --wa-green-secondary: #6366f1;  /* indigo */
+  --wa-hover: #e2e8f0;            /* light gray hover */
+  --wa-bg-chat: #f8fafc;          /* clean white-gray */
+  --wa-msg-out: #dbeafe;          /* pale blue bubble */
+  --wa-blue-accent: #8b5cf6;      /* soft purple */
+}
 
 * {
   font-family: "Public Sans", sans-serif;

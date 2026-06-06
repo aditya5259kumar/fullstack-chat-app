@@ -43,7 +43,7 @@ const FindUserCard = ({ user }) => {
 
       <button
         onClick={findConvo}
-        className="bg-green-600 text-white px-4 py-2 rounded-lg"
+        className="bg-(--wa-green-prim) text-white px-4 py-2 rounded-lg"
       >
         Start Chat
       </button>

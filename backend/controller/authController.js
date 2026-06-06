@@ -46,9 +46,6 @@ const authController = {
       const token = jwt.sign(
         { id: user.id, email: email },
         process.env.JWT_SECRET,
-        {
-          expiresIn: "7d",
-        },
       );
 
       await sendEmail(
@@ -107,9 +104,6 @@ Enjoy your journey with us 😄
       const token = jwt.sign(
         { id: user.id, email: user.email },
         process.env.JWT_SECRET,
-        {
-          expiresIn: "7d",
-        },
       );
 
       res.status(200).json({

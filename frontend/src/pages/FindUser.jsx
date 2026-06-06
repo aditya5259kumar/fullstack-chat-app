@@ -95,7 +95,7 @@ const FindUser = () => {
               )}
             </div>
 
-            <button className="bg-green-600 text-white px-4 py-2">
+            <button className="bg-(--wa-green-prim) text-white px-4 py-2">
               Search
             </button>
           </form>

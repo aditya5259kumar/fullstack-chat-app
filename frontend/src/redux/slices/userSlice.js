@@ -26,10 +26,15 @@ const userSlice = createSlice({
   initialState: {
     profileData: null,
     conversations: [],
+    onlineUsers: [],
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setOnlineUsers: (state, action) => {
+      state.onlineUsers = action.payload;
+    },
+    },
   extraReducers: (builder) => {
     // my profile
     builder.addCase(myProfile.pending, (state) => {
@@ -47,3 +52,4 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
+export const { setOnlineUsers } = userSlice.actions;

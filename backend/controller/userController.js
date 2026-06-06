@@ -39,7 +39,7 @@ const userController = {
     }
   },
 
-  //--------search user---------
+  //--------all user---------
   allUser: async (req, res) => {
     try {
       const id = req.user.id;
@@ -349,7 +349,7 @@ const userController = {
           {
             model: messagesModel,
             as: "messages",
-            attributes: ["content", "created_at"],
+            attributes: ["content", "created_at", "sender_id"],
             limit: 1,
             order: [["created_at", "DESC"]],
           },
@@ -366,12 +366,40 @@ const userController = {
             .filter((p) => p.user_id !== userId)
             .map((p) => p.user);
 
+          const lastMessage = c.messages?.[0];
+          let lastMessagePreview = null;
+
+          // ✅ Create Instagram-style message preview with content
+          if (lastMessage) {
+            const isCurrentUserSender = lastMessage.sender_id === userId;
+
+            if (isCurrentUserSender) {
+              // You sent: "You: message content" or just "You sent a message"
+              lastMessagePreview = `You: ${lastMessage.content.substring(0, 50)}${lastMessage.content.length > 50 ? "..." : ""}`;
+            } else {
+              // They sent: "TheirName: message content"
+              const sender = c.participants.find(
+                (p) => p.user_id === lastMessage.sender_id,
+              );
+              const senderName = sender?.user?.name || "Someone";
+              lastMessagePreview = `${senderName}: ${lastMessage.content.substring(0, 50)}${lastMessage.content.length > 50 ? "..." : ""}`;
+            }
+          } else {
+            lastMessagePreview = "No messages yet";
+          }
+
           return {
             conversation_id: c.id,
-            users: otherUsers, // ✅ array (future-proof for group chat)
-            last_message: c.messages?.[0]?.content || null,
-            last_message_time: c.messages?.[0]?.created_at || null,
+            users: otherUsers,
+            last_message_preview: lastMessagePreview,
+            last_message_time: lastMessage?.created_at || null,
           };
+        })
+        .sort((a, b) => {
+          return (
+            new Date(b.last_message_time || 0) -
+            new Date(a.last_message_time || 0)
+          );
         });
 
       return res.status(200).json({

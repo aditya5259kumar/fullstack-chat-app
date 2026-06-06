@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { myProfile } from "../redux/slices/userSlice";
 import { userLogout } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router";
+import { disconnectSocket } from "../socket/initSocket";
 
 const Profile = () => {
   // const [editingBio, setEditingBio] = useState(false);
@@ -44,6 +45,8 @@ const Profile = () => {
       return;
     }
     dispatch(userLogout());
+    disconnectSocket();
+    localStorage.removeItem("token");
     navigate("/login");
   }
 

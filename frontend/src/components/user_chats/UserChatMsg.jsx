@@ -6,19 +6,19 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
 
-  // console.log(chat);
+  const formatDateTime = (dateString) => {
+    if (!dateString) return "";
 
-  // const {
-  //   name = "Khushi Singh",
-  //   avatar: userAvatar = avatar2,
-  //   lastMsg = "This is a very long message that should never break your UI no matter what happens",
-  //   time = "09:55 PM",
-  //   unreadCount = 0,
-  //   pinned = false,
-  //   online = false,
-  //   seen = false,
-  //   isSentByMe = false,
-  // } = chat;
+    const date = new Date(dateString);
+    const time = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear().toString().slice(-2)}`;
+
+    return `${time.toLowerCase()}, ${dateStr}`;
+  };
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -70,7 +70,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
                 <IoCheckmarkDoneSharp className="text-base inline" />
               </span>
             )} */}
-            {chat?.last_message}
+            {chat?.last_message_preview}
           </p>
         </div>
       </div>
@@ -79,7 +79,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
       <div className="flex items-center gap-2">
         <div className=" flex items-end flex-col gap-1.5 ml-2 shrink-0">
           <p className={`text-xs whitespace-nowrap font-medium text-gray-500`}>
-            {new Date(chat?.last_message_time).toLocaleTimeString()}
+            {formatDateTime(chat?.last_message_time)}
           </p>
 
           <div className="flex items-center gap-1.5">

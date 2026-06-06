@@ -547,10 +547,12 @@ import { useDispatch, useSelector } from "react-redux";
 // Redux & Socket Imports
 import { getMessages, addMessage } from "../redux/slices/loadMsgSlice";
 import { sendMsg } from "../redux/slices/sendMessageSlice";
+import { userConversation } from "../redux/slices/userConvoSlice";
 import socket from "../socket/initSocket";
 
 // Components
-import lightChatBg from "../assets/chat-bg-light.png";
+// import lightChatBg from "../assets/chat-bg-light.png";
+import chatBg from "../assets/chat-bg.png";
 import MessageBubble from "../components/user_chats/MessageBubble";
 import NoChatSelected from "../components/user_chats/NoChatSelected";
 
@@ -576,10 +578,19 @@ const UserChats = ({ chat }) => {
 
   const { msg, other_user, loading } = useSelector((state) => state.getMsg);
 
+  const { onlineUsers } = useSelector((state) => state.user); // Get online users
+  const isOnline = onlineUsers?.some(
+    (id) => String(id) === String(other_user?.id),
+  );
+
+  const [isTyping, setIsTyping] = useState(false); // Am I seeing the OTHER person typing?
+  const typingTimeoutRef = useRef(null);
+
   // 1. Auto-scroll to bottom whenever messages change
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
 
   useEffect(() => {
     scrollToBottom();
@@ -602,6 +613,25 @@ const UserChats = ({ chat }) => {
     };
   }, [chatId, dispatch]);
 
+  useEffect(() => {
+    socket.on("display_typing", ({ conversationId }) => {
+      if (String(conversationId) === String(chatId)) {
+        setIsTyping(true);
+      }
+    });
+
+    socket.on("hide_typing", ({ conversationId }) => {
+      if (String(conversationId) === String(chatId)) {
+        setIsTyping(false);
+      }
+    });
+
+    return () => {
+      socket.off("display_typing");
+      socket.off("hide_typing");
+    };
+  }, [chatId]);
+
   // 3. Real-time Listener
   useEffect(() => {
     const handleNewMessage = (newMessage) => {
@@ -619,17 +649,40 @@ const UserChats = ({ chat }) => {
     };
   }, [chatId, dispatch]);
 
+  const handleInputChange = (e) => {
+    setTextMsg(e.target.value);
+
+    // Emit typing_start
+    socket.emit("typing_start", { conversationId: chatId });
+
+    // Stop typing logic: Clear existing timeout and set a new one
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit("typing_stop", { conversationId: chatId });
+    }, 2000); // Stop showing "typing" after 2 seconds of inactivity
+  };
+
   const handleSendMessage = async () => {
     if (!textMsg.trim()) return;
 
     const content = textMsg.trim();
-    setTextMsg(""); // Clear input immediately for snappy UI
+    setTextMsg("");
 
-    // Send via REST API to save in MySQL
-    // Your backend controller will handle the socket broadcast
-    dispatch(sendMsg({ conversation_id: chatId, content }));
+    try {
+      await dispatch(
+        sendMsg({
+          conversation_id: chatId,
+          content,
+        }),
+      ).unwrap();
 
-    inputRef.current?.focus();
+      dispatch(userConversation());
+
+      inputRef.current?.focus();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -638,6 +691,13 @@ const UserChats = ({ chat }) => {
       handleSendMessage();
     }
   };
+
+  // useEffect(() => {
+  //   console.log("--- Debugging Online Status ---");
+  //   console.log("Online Users Array:", onlineUsers);
+  //   console.log("Other User ID:", other_user?.id);
+  //   console.log("Type of ID in list:", typeof onlineUsers[0]);
+  // }, [onlineUsers, other_user]);
 
   if (!chat) {
     return (
@@ -674,14 +734,28 @@ const UserChats = ({ chat }) => {
                 {other_user?.name?.charAt(0)?.toUpperCase() || "?"}
               </div>
             )}
-            {/* <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div> */}
+            {isOnline && (
+              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+            )}
           </div>
 
           <div>
             <h2 className="text-[15px] font-semibold text-gray-800 leading-tight">
               {other_user?.name || "Chat"}
             </h2>
-            {/* <p className="text-[12px] text-green-600 font-medium">online</p> */}
+
+            {/* If typing, show typing. If not, show online/offline status */}
+            {isTyping ? (
+              <p className="text-[12px] text-emerald-600 font-medium animate-pulse">
+                typing...
+              </p>
+            ) : (
+              <p
+                className={`text-[12px] font-medium ${isOnline ? "text-green-600" : "text-gray-400"}`}
+              >
+                {isOnline ? "online" : "offline"}
+              </p>
+            )}
           </div>
         </div>
 
@@ -727,7 +801,7 @@ const UserChats = ({ chat }) => {
       {/* Messages List */}
       <div
         className="flex-1 overflow-y-auto px-3 md:px-6 py-4 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${lightChatBg})` }}
+        style={{ backgroundImage: `url(${chatBg})` }}
       >
         {" "}
         {loading && msg.length === 0 ? (
@@ -756,7 +830,7 @@ const UserChats = ({ chat }) => {
             ref={inputRef}
             type="text"
             value={textMsg}
-            onChange={(e) => setTextMsg(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
             className="flex-1 py-2 px-2 text-[15px] focus:outline-none placeholder-gray-400"

@@ -36,25 +36,32 @@ import LogIn from "./pages/LogIn";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import { Route, Routes, Navigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FindUser from "./pages/FindUser";
 import socket, { connectSocket } from "./socket/initSocket";
 import { useEffect } from "react";
+import { setOnlineUsers } from "./redux/slices/userSlice";
 
 const App = () => {
   const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (token) {
       connectSocket();
 
-      // Once connected, tell the server which user this socket belongs to
-      if (user?.id) {
-        socket.emit("register_user", user.id);
-      }
+      // Listen for online users list from server
+      socket.on("get_online_users", (users) => {
+        console.log("Online users received:", users); // Add this log!
+        dispatch(setOnlineUsers(users));
+      });
     }
-  }, [token, user?.id]);
+
+    return () => {
+      socket.off("get_online_users");
+      socket.off("connect");
+    };
+  }, [token, dispatch]);
 
   return (
     <Routes>

@@ -9,7 +9,21 @@ const MessageBubble = ({ message }) => {
   const userId = decode.id;
 
   // console.log("userId=============", userId);
-  // console.log("message=============", message);
+  console.log("message=============", message);
+
+  const formatDateTime = (dateString) => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+    const time = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear().toString().slice(-2)}`;
+
+    return `${time.toLowerCase()}, ${dateStr}`;
+  };
 
   return (
     <div
@@ -31,7 +45,7 @@ const MessageBubble = ({ message }) => {
           }`}
         >
           <span className="text-[12px] text-gray-400">
-            {message?.created_at}
+            {formatDateTime(message?.created_at)}
           </span>
           {/* {message?.id === userId && (
             <span
