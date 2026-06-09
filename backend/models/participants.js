@@ -25,6 +25,10 @@ export default function (sequelize, DataTypes) {
           model: "users",
           key: "id",
         },
+        deleted_at: {
+          type: DataTypes.DATE,
+          allowNull: true,
+        },
       },
     },
     {

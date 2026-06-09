@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import avatar from "../assets/avatar.webp";
+import React, { useEffect, useState } from "react";
 import {
   HiPencil,
   HiCamera,
@@ -17,6 +16,7 @@ import { myProfile } from "../redux/slices/userSlice";
 import { userLogout } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router";
 import { disconnectSocket } from "../socket/initSocket";
+import DeleteAcc from "../components/profile/DeleteAcc";
 
 const Profile = () => {
   // const [editingBio, setEditingBio] = useState(false);
@@ -28,8 +28,13 @@ const Profile = () => {
   //   setEditingBio(false);
   // }
 
-  const { profileData } = useSelector((state) => state.user);
+  const [deletebox, setDeletebox] = useState(false);
+
   const dispatch = useDispatch();
+  const { profileData } = useSelector((state) => state.user);
+  // const { loading, deleteStatus, error } = useSelector(
+  //   (state) => state.deleteAcc,
+  // );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,6 +53,24 @@ const Profile = () => {
     disconnectSocket();
     localStorage.removeItem("token");
     navigate("/login");
+  }
+
+  const date = new Date(profileData?.created_at);
+  const formatted =
+    date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }) +
+    " at " +
+    date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+  function handleAccDelete() {
+    setDeletebox(true);
   }
 
   return (
@@ -146,7 +169,7 @@ const Profile = () => {
             />
             <InfoRow
               icon={HiOutlineEnvelope}
-              label="Email"
+              label="Joined"
               value={profileData?.email}
               editable={false}
             />
@@ -160,17 +183,21 @@ const Profile = () => {
             <InfoRow
               icon={HiOutlineCalendar}
               label="Joined"
-              value={profileData?.created_at}
+              value={formatted}
               editable={false}
             />
           </div>
 
+          {deletebox && <DeleteAcc setDeletebox={setDeletebox} />}
           {/* Danger Zone */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-5 py-4">
             <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-3">
               Account
             </p>
-            <button className="w-full text-left text-sm text-red-500 py-2 hover:text-red-600 font-medium">
+            <button
+              onClick={handleAccDelete}
+              className="w-full text-left text-sm text-red-500 py-2 hover:text-red-600 font-medium"
+            >
               Delete Account
             </button>
             <button

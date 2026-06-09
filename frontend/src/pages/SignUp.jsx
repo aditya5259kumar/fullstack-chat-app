@@ -41,8 +41,8 @@ const SignUp = () => {
     const newError = {};
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/;
     const emailRegex = /^[a-zA-Z][^\s@]*@[^\s@]+\.[^\s@]+$/;
-    // const passwordRegex =
-    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@!#$%^&*_+=<>]).{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@!#$%^&*_+=<>]).{8,}$/;
 
     if (!formData.name) {
       newError.name = "name is required!";
@@ -64,10 +64,10 @@ const SignUp = () => {
     if (!formData.password) {
       newError.password = "password is required!";
     }
-    //  else if (!passwordRegex.test(formData.password)) {
-    //   newError.password =
-    //     "password must contain a lowercase letter, uppercase letter, number, special character";
-    // }
+     else if (!passwordRegex.test(formData.password)) {
+      newError.password =
+        "password must contain a lowercase letter, uppercase letter, number, special character";
+    }
 
     if (Object.keys(newError).length > 0) {
       setError(newError);
@@ -114,7 +114,7 @@ const SignUp = () => {
                       value={formData.name}
                       onChange={handleOnChange}
                       placeholder="Full Name"
-                      className="text-sm w-full px-4 py-2.5 focus:border-none focus:outline-none "
+                      className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none "
                     />
                   </div>
                 </div>
@@ -131,7 +131,7 @@ const SignUp = () => {
                       value={formData.username}
                       onChange={handleOnChange}
                       placeholder="Username"
-                      className="text-sm w-full px-4 py-2.5 focus:border-none focus:outline-none "
+                      className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none "
                     />
                   </div>
                 </div>
@@ -160,7 +160,7 @@ const SignUp = () => {
                   value={formData.email}
                   onChange={handleOnChange}
                   placeholder="Enter Your Email"
-                  className="text-sm w-full px-4 py-2.5 focus:border-none focus:outline-none "
+                  className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none "
                 />
               </div>
               {error.email && (
@@ -183,7 +183,7 @@ const SignUp = () => {
                     value={formData.password}
                     onChange={handleOnChange}
                     placeholder="Enter Your Password"
-                    className="text-sm w-full pl-4 py-2.5 focus:outline-none "
+                    className="text-sm w-full pl-2 py-2.5 focus:outline-none "
                   />
                   <span
                     className="text-md text-gray-500 py-2.5 px-3"

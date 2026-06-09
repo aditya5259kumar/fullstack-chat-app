@@ -12,13 +12,29 @@ function initModels(sequelize) {
   const participants = _participants(sequelize, DataTypes);
   const users = _users(sequelize, DataTypes);
 
-  messages.belongsTo(conversations, { as: "conversation", foreignKey: "conversation_id" });
-  conversations.hasMany(messages, { as: "messages", foreignKey: "conversation_id" });
+  messages.belongsTo(conversations, {
+    as: "conversation",
+    foreignKey: "conversation_id",
+  });
+  conversations.hasMany(messages, {
+    as: "messages",
+    foreignKey: "conversation_id",
+  });
 
-  participants.belongsTo(conversations, { as: "conversation", foreignKey: "conversation_id" });
-  conversations.hasMany(participants, { as: "participants", foreignKey: "conversation_id" });
+  participants.belongsTo(conversations, {
+    as: "conversation",
+    foreignKey: "conversation_id",
+  });
+  conversations.hasMany(participants, {
+    as: "participants",
+    foreignKey: "conversation_id",
+  });
 
-  messages.belongsTo(users, { as: "sender", foreignKey: "sender_id" });
+  messages.belongsTo(users, {
+    as: "sender",
+    foreignKey: "sender_id",
+    onDelete: "SET NULL",
+  });
   users.hasMany(messages, { as: "messages", foreignKey: "sender_id" });
 
   participants.belongsTo(users, { as: "user", foreignKey: "user_id" });

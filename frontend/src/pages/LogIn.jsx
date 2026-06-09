@@ -95,7 +95,7 @@ const LogIn = () => {
                   value={formData.email}
                   onChange={handleOnChange}
                   placeholder="Enter Your Email"
-                  className="text-sm w-full px-4 py-2.5 focus:border-none focus:outline-none "
+                  className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none "
                 />
               </div>
               {error.email && (
@@ -126,7 +126,7 @@ const LogIn = () => {
                     value={formData.password}
                     onChange={handleOnChange}
                     placeholder="Enter Your Password"
-                    className="text-sm w-full pl-4 py-2.5 focus:outline-none "
+                    className="text-sm w-full pl-2 py-2.5 focus:outline-none "
                   />
                   <span
                     className="text-md text-gray-500 py-2.5 px-3"

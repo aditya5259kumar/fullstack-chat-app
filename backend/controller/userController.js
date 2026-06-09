@@ -1,5 +1,6 @@
 import sequelize, { Op } from "sequelize";
 import model from "../models/index.js";
+import bcrypt from "bcrypt";
 const userModel = model.users;
 const participantsModel = model.participants;
 const conversationsModel = model.conversations;
@@ -156,51 +157,6 @@ const userController = {
     }
   },
 
-  // //--------send messages---------
-  // sendMessage: async (req, res) => {
-  //   try {
-  //     const senderId = req.user.id;
-  //     const { conversation_id, content } = req.body;
-
-  //     console.log("req.user:===============", req.user.toJSON());
-
-  //     if (!conversation_id || !content) {
-  //       return res.status(400).json({ message: "Missing fields" });
-  //     }
-
-  //     // Step 1: Check if user is part of this conversation
-  //     const participant = await participantsModel.findOne({
-  //       where: {
-  //         conversation_id,
-  //         user_id: senderId,
-  //       },
-  //     });
-
-  //     if (!participant) {
-  //       return res.status(403).json({
-  //         message: "You are not part of this conversation",
-  //       });
-  //     }
-
-  //     // Step 2: Save message
-  //     const message = await messagesModel.create({
-  //       conversation_id,
-  //       sender_id: senderId,
-  //       content,
-  //     });
-
-  //     return res.status(200).json({
-  //       message: "Message sent successfully.",
-  //       data: message,
-  //     });
-  //   } catch (error) {
-  //     return res.status(500).json({
-  //       message: "Something went wrong!",
-  //       error: error.message,
-  //     });
-  //   }
-  // },
-
   //--------send messages---------
   sendMessage: async (req, res) => {
     try {
@@ -231,6 +187,18 @@ const userController = {
         sender_id: senderId,
         content,
       });
+
+      // Restore conversation for participants who had deleted it
+      await participantsModel.update(
+        {
+          deleted_at: null,
+        },
+        {
+          where: {
+            conversation_id,
+          },
+        },
+      );
 
       // Step 3: Fetch the newly created message WITH the sender data
       // This ensures the frontend gets the exact same format as getMessages
@@ -358,8 +326,9 @@ const userController = {
 
       const result = conversations
         // ✅ only conversations where current user exists
-        .filter((c) => c.participants.some((p) => p.user_id === userId))
-
+        .filter((c) =>
+          c.participants.some((p) => p.user_id === userId && !p.deleted_at),
+        )
         // ✅ format response
         .map((c) => {
           const otherUsers = c.participants
@@ -388,6 +357,9 @@ const userController = {
             lastMessagePreview = "No messages yet";
           }
 
+          console.log(c.participants);
+          console.log(JSON.stringify(conversations[0]?.participants, null, 2));
+
           return {
             conversation_id: c.id,
             users: otherUsers,
@@ -410,6 +382,82 @@ const userController = {
       return res.status(500).json({
         message: "Something went wrong",
         error: error.message,
+      });
+    }
+  },
+
+  //--------delete user account---------
+  deleteAccount: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const { password } = req.body;
+
+      if (!password) {
+        return res.status(400).json({
+          message: "Current password is required",
+        });
+      }
+
+      const user = await userModel.findOne({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        return res.status(401).json({
+          message: "Incorrect password",
+        });
+      }
+
+      await userModel.destroy({
+        where: {
+          id: userId,
+        },
+      });
+
+      return res.status(200).json({
+        message: "User deleted successfully!",
+        userId,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Something went wrong!",
+        error: error.message,
+      });
+    }
+  },
+
+  //--------delete user account ---------
+  deleteConversation: async (req, res) => {
+    try {
+      const { conversationId } = req.params;
+      const userId = req.user.id;
+
+      await participantsModel.update(
+        {
+          deleted_at: new Date(),
+        },
+        {
+          where: {
+            conversation_id: conversationId,
+            user_id: userId,
+          },
+        },
+      );
+
+      return res.status(200).json({
+        message: "Conversation deleted from your inbox",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message,
       });
     }
   },

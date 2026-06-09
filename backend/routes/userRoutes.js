@@ -5,6 +5,11 @@ import authenticateUser from "../middleware/authenticateUser.js";
 const router = express.Router();
 
 router.get("/profile", authenticateUser, userController.myProfile);
+router.delete(
+  "/delete-account",
+  authenticateUser,
+  userController.deleteAccount,
+);
 router.get("/users", authenticateUser, userController.allUser);
 router.get("/search", authenticateUser, userController.findUser);
 router.get(
@@ -21,6 +26,11 @@ router.get(
 
 router.get(
   "/conversations",
+  authenticateUser,
+  userController.getUserConversations,
+);
+router.delete(
+  "/delete-conversation",
   authenticateUser,
   userController.getUserConversations,
 );

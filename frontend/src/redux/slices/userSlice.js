@@ -34,7 +34,7 @@ const userSlice = createSlice({
     setOnlineUsers: (state, action) => {
       state.onlineUsers = action.payload;
     },
-    },
+  },
   extraReducers: (builder) => {
     // my profile
     builder.addCase(myProfile.pending, (state) => {

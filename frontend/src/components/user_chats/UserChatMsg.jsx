@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { BsFillPinAngleFill, BsThreeDotsVertical } from "react-icons/bs";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
+import { LuUserRoundX } from "react-icons/lu";
 
 const UserChatMsg = ({ chat, isActive = false, onClick }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
+
+  console.log("chat======================", chat);
 
   const formatDateTime = (dateString) => {
     if (!dateString) return "";
@@ -48,8 +51,12 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
               className="w-12 h-12 rounded-full object-cover"
             />
           ) : (
-            <div className="w-12 h-12 rounded-full bg-purple-700 text-white flex items-center justify-center font-semibold">
-              {chat?.users?.[0]?.username?.charAt(0)?.toUpperCase() || "?"}
+            <div
+              className={`w-12 h-12 rounded-full text-white ${chat?.users?.length === 0 ? "bg-gray-400" : "bg-purple-700"} flex items-center justify-center font-semibold `}
+            >
+              {chat?.users?.[0]?.username?.charAt(0)?.toUpperCase() || (
+                <LuUserRoundX className="text-xl font-bold" />
+              )}
             </div>
           )}
           {/* {online && (
@@ -60,7 +67,10 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
         {/* Text */}
         <div className="flex flex-col min-w-0">
           <h5 className="font-semibold text-[15px] text-gray-800 truncate">
-            {chat?.users[0]?.username}
+            {/* {chat?.users[0]?.username} */}
+            {chat?.users?.length === 0
+              ? "Account deleted"
+              : chat?.users[0]?.username}
           </h5>
           <p className="text-gray-500 text-sm truncate flex items-center gap-1">
             {/* {isSentByMe && (
