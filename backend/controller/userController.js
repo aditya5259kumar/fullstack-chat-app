@@ -1,4 +1,5 @@
-import sequelize, { Op } from "sequelize";
+import sequelize from "../config/db.js";
+import { Op } from "sequelize";
 import model from "../models/index.js";
 import bcrypt from "bcrypt";
 const userModel = model.users;
@@ -434,13 +435,43 @@ const userController = {
     }
   },
 
-  //--------delete user account ---------
+  //--------delete user conversation ---------
+  // deleteConversation: async (req, res) => {
+  //   try {
+  //     const { conversationId } = req.params;
+  //     const userId = req.user.id;
+
+  //     await participantsModel.update(
+  //       {
+  //         deleted_at: new Date(),
+  //       },
+  //       {
+  //         where: {
+  //           conversation_id: conversationId,
+  //           user_id: userId,
+  //         },
+  //       },
+  //     );
+
+  //     return res.status(200).json({
+  //       message: "Conversation deleted from your inbox",
+  //     });
+  //   } catch (error) {
+  //     return res.status(500).json({
+  //       message: error.message,
+  //     });
+  //   }
+  // },
+
   deleteConversation: async (req, res) => {
+    const transaction = await sequelize.transaction();
+
     try {
       const { conversationId } = req.params;
       const userId = req.user.id;
 
-      await participantsModel.update(
+      // 1. Soft delete current user
+      const [updatedRows] = await participantsModel.update(
         {
           deleted_at: new Date(),
         },
@@ -448,14 +479,54 @@ const userController = {
           where: {
             conversation_id: conversationId,
             user_id: userId,
+            deleted_at: null,
           },
+          transaction,
         },
       );
 
+      if (updatedRows === 0) {
+        throw new Error("Nothing updated. Check userId or conversationId.");
+      }
+
+      // 2. Check remaining active participants
+      const remaining = await participantsModel.count({
+        where: {
+          conversation_id: conversationId,
+          deleted_at: null,
+        },
+        transaction,
+      });
+
+      // 3. Hard delete if no one left
+      if (remaining === 0) {
+        await messagesModel.destroy({
+          where: { conversation_id: conversationId },
+          transaction,
+        });
+
+        await participantsModel.destroy({
+          where: { conversation_id: conversationId },
+          transaction,
+        });
+
+        await conversationsModel.destroy({
+          where: { id: conversationId },
+          transaction,
+        });
+      }
+
+      await transaction.commit();
+
       return res.status(200).json({
-        message: "Conversation deleted from your inbox",
+        message:
+          remaining === 0
+            ? "Conversation permanently deleted"
+            : "Conversation removed from inbox",
       });
     } catch (error) {
+      await transaction.rollback();
+
       return res.status(500).json({
         message: error.message,
       });

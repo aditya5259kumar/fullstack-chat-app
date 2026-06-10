@@ -30,9 +30,9 @@ router.get(
   userController.getUserConversations,
 );
 router.delete(
-  "/delete-conversation",
+  "/delete-conversation/:conversationId",
   authenticateUser,
-  userController.getUserConversations,
+  userController.deleteConversation,
 );
 
 export default router;

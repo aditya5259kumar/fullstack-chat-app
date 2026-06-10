@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { BsFillPinAngleFill, BsThreeDotsVertical } from "react-icons/bs";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { LuUserRoundX } from "react-icons/lu";
+import { deleteConvo } from "../../redux/slices/deleteConvo";
+import { userConversation } from "../../redux/slices/userConvoSlice";
+import { useDispatch } from "react-redux";
 
 const UserChatMsg = ({ chat, isActive = false, onClick }) => {
   const [showMenu, setShowMenu] = useState(false);
@@ -32,6 +35,21 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const dispatch = useDispatch();
+
+  async function deleteHandler() {
+    try {
+      await dispatch(deleteConvo(chat.conversation_id)).unwrap();
+      await dispatch(userConversation());
+
+      setShowMenu(false);
+
+      console.log("Conversation deleted");
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div
@@ -126,7 +144,10 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
             <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
               Mute
             </button> */}
-              <button className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50">
+              <button
+                onClick={deleteHandler}
+                className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
+              >
                 Delete
               </button>
             </div>

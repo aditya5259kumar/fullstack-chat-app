@@ -296,9 +296,6 @@ const UserChats = ({ chat }) => {
       <div className="px-4 py-3 bg-[#f0f2f5] shrink-0">
         <div className="flex items-center gap-2 max-w-5xl mx-auto bg-white rounded-full px-4 py-1.5 shadow-sm border border-gray-200">
           <button className="text-gray-500 hover:text-gray-700 p-1">
-            <HiOutlineFaceSmile size={24} />
-          </button>
-          <button className="text-gray-500 hover:text-gray-700 p-1">
             <MdAttachFile size={22} className="rotate-45" />
           </button>
 
