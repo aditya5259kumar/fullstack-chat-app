@@ -8,6 +8,7 @@ import createConvoReducer from "./slices/createConvoSlice";
 import sendMsgReducer from "./slices/sendMessageSlice";
 import deleteAccReducer from "./slices/deleteAccount";
 import deleteConvoReducer from "./slices/deleteConvo";
+import msgStatusReducer from "./slices/msgStatusSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     sendMsg: sendMsgReducer,
     deleteAcc: deleteAccReducer,
     deleteConvo: deleteConvoReducer,
+    msgStatus: msgStatusReducer,
   },
 });
 

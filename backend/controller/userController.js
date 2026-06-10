@@ -6,6 +6,7 @@ const userModel = model.users;
 const participantsModel = model.participants;
 const conversationsModel = model.conversations;
 const messagesModel = model.messages;
+import { getUserSockets } from "../socket/initSocket.js";
 
 const userController = {
   //--------myProfile---------
@@ -187,6 +188,7 @@ const userController = {
         conversation_id,
         sender_id: senderId,
         content,
+        status: "sent",
       });
 
       // Restore conversation for participants who had deleted it
@@ -214,12 +216,33 @@ const userController = {
         ],
       });
 
-      // Step 4: Broadcast the message to everyone in the conversation room
-      // req.io is available because of the middleware we added in server.js
+      // Step 4: Broadcast to users already inside the chat room
       if (req.io) {
         req.io
           .to(`conversation_${conversation_id}`)
           .emit("receive_message", populatedMessage);
+      }
+
+      // Step 5: Notify participants who are not currently in room
+      const participants = await participantsModel.findAll({
+        where: {
+          conversation_id,
+        },
+      });
+
+      const receiver = participants.find((p) => p.user_id !== senderId);
+
+      if (receiver) {
+        const receiverSockets = getUserSockets(receiver.user_id);
+
+        if (receiverSockets) {
+          receiverSockets.forEach((socketId) => {
+            req.io.to(socketId).emit("new_conversation_message", {
+              conversation_id,
+              message: populatedMessage,
+            });
+          });
+        }
       }
 
       return res.status(200).json({
@@ -229,6 +252,63 @@ const userController = {
     } catch (error) {
       return res.status(500).json({
         message: "Something went wrong!",
+        error: error.message,
+      });
+    }
+  },
+
+  //--------mark messages as seen---------
+  markAsSeen: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const { conversationId } = req.params;
+
+      const [updatedRows] = await messagesModel.update(
+        {
+          status: "seen",
+        },
+        {
+          where: {
+            conversation_id: conversationId,
+            status: "sent",
+            sender_id: {
+              [Op.ne]: userId,
+            },
+          },
+        },
+      );
+
+      const participants = await participantsModel.findAll({
+        where: {
+          conversation_id: conversationId,
+        },
+      });
+
+      const sender = participants.find((p) => p.user_id !== userId);
+
+      console.log("Emitting messages_seen", sender.user_id);
+
+      if (sender) {
+        const senderSockets = getUserSockets(sender.user_id);
+
+        if (senderSockets) {
+          senderSockets.forEach((socketId) => {
+            req.io.to(socketId).emit("messages_seen", {
+              conversationId,
+            });
+          });
+        }
+      }
+
+      console.log("Seen API called", conversationId, updatedRows);
+
+      return res.status(200).json({
+        message: "Messages marked as seen",
+        updated: updatedRows,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Something went wrong",
         error: error.message,
       });
     }
@@ -318,62 +398,79 @@ const userController = {
           {
             model: messagesModel,
             as: "messages",
-            attributes: ["content", "created_at", "sender_id"],
+            attributes: ["content", "created_at", "sender_id", "status"],
             limit: 1,
             order: [["created_at", "DESC"]],
           },
         ],
       });
 
-      const result = conversations
-        // ✅ only conversations where current user exists
-        .filter((c) =>
-          c.participants.some((p) => p.user_id === userId && !p.deleted_at),
-        )
-        // ✅ format response
-        .map((c) => {
+      const filteredConversations = conversations.filter((c) =>
+        c.participants.some((p) => p.user_id === userId && !p.deleted_at),
+      );
+
+      const result = await Promise.all(
+        filteredConversations.map(async (c) => {
           const otherUsers = c.participants
             .filter((p) => p.user_id !== userId)
             .map((p) => p.user);
 
           const lastMessage = c.messages?.[0];
+
           let lastMessagePreview = null;
 
-          // ✅ Create Instagram-style message preview with content
           if (lastMessage) {
             const isCurrentUserSender = lastMessage.sender_id === userId;
 
             if (isCurrentUserSender) {
-              // You sent: "You: message content" or just "You sent a message"
-              lastMessagePreview = `You: ${lastMessage.content.substring(0, 50)}${lastMessage.content.length > 50 ? "..." : ""}`;
+              lastMessagePreview = `You: ${lastMessage.content.substring(
+                0,
+                50,
+              )}${lastMessage.content.length > 50 ? "..." : ""}`;
             } else {
-              // They sent: "TheirName: message content"
               const sender = c.participants.find(
                 (p) => p.user_id === lastMessage.sender_id,
               );
+
               const senderName = sender?.user?.name || "Someone";
-              lastMessagePreview = `${senderName}: ${lastMessage.content.substring(0, 50)}${lastMessage.content.length > 50 ? "..." : ""}`;
+
+              lastMessagePreview = `${senderName}: ${lastMessage.content.substring(
+                0,
+                50,
+              )}${lastMessage.content.length > 50 ? "..." : ""}`;
             }
           } else {
             lastMessagePreview = "No messages yet";
           }
 
-          console.log(c.participants);
-          console.log(JSON.stringify(conversations[0]?.participants, null, 2));
+          const unreadCount = await messagesModel.count({
+            where: {
+              conversation_id: c.id,
+              status: "sent",
+              sender_id: {
+                [Op.ne]: userId,
+              },
+            },
+          });
 
           return {
             conversation_id: c.id,
             users: otherUsers,
             last_message_preview: lastMessagePreview,
             last_message_time: lastMessage?.created_at || null,
+            last_message_sender_id: lastMessage?.sender_id || null, // add this
+            last_message_status: lastMessage?.status || null, // add this
+            unread_count: unreadCount,
           };
-        })
-        .sort((a, b) => {
-          return (
-            new Date(b.last_message_time || 0) -
-            new Date(a.last_message_time || 0)
-          );
-        });
+        }),
+      );
+
+      result.sort((a, b) => {
+        return (
+          new Date(b.last_message_time || 0) -
+          new Date(a.last_message_time || 0)
+        );
+      });
 
       return res.status(200).json({
         message: "Conversations fetched",
@@ -436,33 +533,6 @@ const userController = {
   },
 
   //--------delete user conversation ---------
-  // deleteConversation: async (req, res) => {
-  //   try {
-  //     const { conversationId } = req.params;
-  //     const userId = req.user.id;
-
-  //     await participantsModel.update(
-  //       {
-  //         deleted_at: new Date(),
-  //       },
-  //       {
-  //         where: {
-  //           conversation_id: conversationId,
-  //           user_id: userId,
-  //         },
-  //       },
-  //     );
-
-  //     return res.status(200).json({
-  //       message: "Conversation deleted from your inbox",
-  //     });
-  //   } catch (error) {
-  //     return res.status(500).json({
-  //       message: error.message,
-  //     });
-  //   }
-  // },
-
   deleteConversation: async (req, res) => {
     const transaction = await sequelize.transaction();
 

@@ -24,6 +24,12 @@ router.get(
   userController.getMessages,
 );
 
+router.put(
+  "/seen/:conversationId",
+  authenticateUser,
+  userController.markAsSeen,
+);
+
 router.get(
   "/conversations",
   authenticateUser,

@@ -3,6 +3,10 @@ import jwt from "jsonwebtoken";
 
 let onlineUsers = new Map();
 
+export const getUserSockets = (userId) => {
+  return onlineUsers.get(userId);
+};
+
 export const initSocket = (server) => {
   const io = new Server(server, {
     cors: {

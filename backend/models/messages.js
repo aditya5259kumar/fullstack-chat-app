@@ -35,6 +35,10 @@ export default function (sequelize, DataTypes) {
         allowNull: false,
         defaultValue: Sequelize.NOW,
       },
+      status: {
+        type: DataTypes.ENUM("sent", "seen"),
+        defaultValue: "sent",
+      },
     },
     {
       sequelize,
