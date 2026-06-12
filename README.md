@@ -4,19 +4,9 @@ A real-time chat application built with React, Node.js, Express, MySQL, Socket.I
 
 Linkup allows users to communicate through private one-to-one messaging with real-time updates, typing indicators, active status tracking, and dynamic user discovery.
 
-This project is currently under active development.
-
 ---
 
-## Project Status
-
-🚧 Under Development...
-
-Currently implemented core real-time messaging features are fully functional, while advanced features such as group chat, media sharing, OAuth authentication, and AI chatbot integration are still being developed.
-
----
-
-## Current Features
+## Features
 
 - Real-Time Private Messaging
 - JWT-based Authentication
