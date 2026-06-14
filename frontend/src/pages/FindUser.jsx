@@ -16,7 +16,8 @@ const FindUser = () => {
   const {
     allUsers: users,
     searchedUsers,
-    loading,
+    loadingUsers,
+    searchLoading,
   } = useSelector((state) => state.searchUser);
 
   const dispatch = useDispatch();
@@ -29,18 +30,35 @@ const FindUser = () => {
   }, [dispatch]);
 
   // ✅ Search handler (ONLY when button clicked)
-  const searchHandler = (e) => {
-    e.preventDefault();
+  // const searchHandler = (e) => {
+  //   e.preventDefault();
 
-    if (!searchQuery.trim()) {
-      setIsSearchActive(false);
-      dispatch(resetSearch());
-      return;
-    }
+  //   if (!searchQuery.trim()) {
+  //     setIsSearchActive(false);
+  //     dispatch(resetSearch());
+  //     return;
+  //   }
 
-    dispatch(searchUsers(searchQuery));
-    setIsSearchActive(true);
-  };
+  //   dispatch(searchUsers(searchQuery));
+  //   setIsSearchActive(true);
+  // };
+
+  useEffect(() => {
+    const trimmedQuery = searchQuery.trim();
+
+    const timer = setTimeout(() => {
+      if (trimmedQuery === "") {
+        setIsSearchActive(false);
+        dispatch(resetSearch());
+        return;
+      }
+
+      dispatch(searchUsers(trimmedQuery));
+      setIsSearchActive(true);
+    }, 600); // wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, dispatch]);
 
   // ✅ Clear search button
   const clearSearch = () => {
@@ -50,15 +68,19 @@ const FindUser = () => {
   };
 
   // ✅ Handle typing (important fix)
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value);
+  // const handleChange = (e) => {
+  //   const value = e.target.value;
+  //   setSearchQuery(value);
 
-    // If user deletes everything manually → reset
-    if (value.trim() === "") {
-      setIsSearchActive(false);
-      dispatch(resetSearch());
-    }
+  //   // If user deletes everything manually → reset
+  //   if (value.trim() === "") {
+  //     setIsSearchActive(false);
+  //     dispatch(resetSearch());
+  //   }
+  // };
+
+  const handleChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   // ✅ Final display logic
@@ -74,7 +96,7 @@ const FindUser = () => {
 
           {/* 🔍 Search */}
           <form
-            onSubmit={searchHandler}
+            // onSubmit={searchHandler}
             className="flex items-center bg-white shadow rounded-full overflow-hidden"
           >
             <div className="flex items-center w-full px-3 py-2">
@@ -88,21 +110,25 @@ const FindUser = () => {
                 className="w-full px-2 outline-none"
               />
 
-              {searchQuery && (
-                <button type="button" onClick={clearSearch}>
-                  <HiXMark />
-                </button>
+              {searchLoading ? (
+                <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+              ) : (
+                searchQuery && (
+                  <button type="button" onClick={clearSearch}>
+                    <HiXMark />
+                  </button>
+                )
               )}
             </div>
 
-            <button className="bg-(--wa-green-prim) text-white px-4 py-2">
+            {/* <button className="bg-(--wa-green-prim) text-white px-4 py-2">
               Search
-            </button>
+            </button> */}
           </form>
 
           {/* 👥 Users */}
           <div className="mt-6">
-            {loading ? (
+            {loadingUsers ? (
               <p className="text-gray-500 text-sm">Loading...</p>
             ) : displayUsers?.length > 0 ? (
               displayUsers?.map((user) => (

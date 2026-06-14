@@ -1,4 +1,6 @@
 import sequelize from "../config/db.js";
+import fs from "fs";
+import path from "path";
 import { Op } from "sequelize";
 import model from "../models/index.js";
 import bcrypt from "bcrypt";
@@ -39,6 +41,96 @@ const userController = {
       return res
         .status(400)
         .json({ message: "something went wrong!", error: error });
+    }
+  },
+
+  //--------edit Profile---------
+  updateProfile: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const { name, username, bio } = req.body;
+
+      const user = await userModel.findByPk(userId);
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found!",
+        });
+      }
+
+      // Username uniqueness check
+      if (username && username !== user.username) {
+        const existingUser = await userModel.findOne({
+          where: {
+            username,
+            id: {
+              [Op.ne]: userId,
+            },
+          },
+        });
+
+        if (existingUser) {
+          return res.status(409).json({
+            message: "Username already exists!",
+          });
+        }
+      }
+
+      let profilePhoto = user.profile_photo;
+
+      // Handle new profile photo upload
+      if (req.file) {
+        console.log("New file uploaded:", req.file.filename);
+        console.log("Old photo in DB:", user.profile_photo);
+
+        // Delete old photo
+        if (user.profile_photo) {
+          const oldImagePath = path.join(
+            process.cwd(),
+            "public",
+            "uploads",
+            user.profile_photo,
+          );
+
+          console.log("Deleting:", oldImagePath);
+          console.log("Exists:", fs.existsSync(oldImagePath));
+
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+            console.log("Old image deleted successfully");
+          }
+        }
+
+        profilePhoto = req.file.filename;
+      }
+
+      await user.update({
+        name: name ?? user.name,
+        username: username ?? user.username,
+        bio: bio ?? user.bio,
+        profile_photo: profilePhoto,
+      });
+
+      return res.status(200).json({
+        message: "User profile updated successfully!",
+        user: {
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          profile_photo: user.profile_photo,
+          bio: user.bio,
+          created_at: user.created_at,
+          updated_at: user.updated_at,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        message: "Something went wrong!",
+        error: error.message,
+      });
     }
   },
 
@@ -381,6 +473,7 @@ const userController = {
   getUserConversations: async (req, res) => {
     try {
       const userId = req.user.id;
+      const search = req.query.search?.trim().toLowerCase();
 
       const conversations = await conversationsModel.findAll({
         include: [
@@ -471,10 +564,21 @@ const userController = {
           new Date(a.last_message_time || 0)
         );
       });
+      let finalResult = result;
+
+      if (search) {
+        finalResult = result.filter((conversation) =>
+          conversation.users.some(
+            (user) =>
+              user.name?.toLowerCase().includes(search) ||
+              user.username?.toLowerCase().includes(search),
+          ),
+        );
+      }
 
       return res.status(200).json({
         message: "Conversations fetched",
-        data: result,
+        data: finalResult,
       });
     } catch (error) {
       return res.status(500).json({

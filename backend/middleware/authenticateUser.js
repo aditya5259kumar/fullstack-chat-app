@@ -21,7 +21,7 @@ async function authenticateUser(req, res, next) {
     // console.log("bearer------------------", bearer);
 
     const token = bearer[1];
-    console.log("token------------------", token);
+    // console.log("token------------------", token);
 
     const verifyToken = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -29,7 +29,7 @@ async function authenticateUser(req, res, next) {
       where: { email: verifyToken.email },
     });
 
-    console.log("user--------------------", user);
+    // console.log("user--------------------", user);
 
     if (!user) {
       return res.status(404).json({

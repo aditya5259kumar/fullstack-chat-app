@@ -1,23 +1,37 @@
 import express from "express";
 import userController from "../controller/userController.js";
 import authenticateUser from "../middleware/authenticateUser.js";
+import upload from "../middleware/multer.js";
 
 const router = express.Router();
 
 router.get("/profile", authenticateUser, userController.myProfile);
+
+router.patch(
+  "/update-profile",
+  authenticateUser,
+  upload.single("profile_photo"),
+  userController.updateProfile,
+);
+
 router.delete(
   "/delete-account",
   authenticateUser,
   userController.deleteAccount,
 );
+
 router.get("/users", authenticateUser, userController.allUser);
+
 router.get("/search", authenticateUser, userController.findUser);
+
 router.get(
   "/find-convo/:id",
   authenticateUser,
   userController.findConversation,
 );
+
 router.post("/send-message", authenticateUser, userController.sendMessage);
+
 router.get(
   "/messages/:conversationId",
   authenticateUser,
@@ -35,6 +49,7 @@ router.get(
   authenticateUser,
   userController.getUserConversations,
 );
+
 router.delete(
   "/delete-conversation/:conversationId",
   authenticateUser,

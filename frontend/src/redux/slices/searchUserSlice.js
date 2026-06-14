@@ -6,12 +6,9 @@ export const allUsers = createAsyncThunk("users/all", async (_, thunkAPI) => {
   try {
     const token = localStorage.getItem("token");
 
-    const res = await axios.get(
-      "http://localhost:4000/api/user/users",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const res = await axios.get("http://localhost:4000/api/user/users", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     return res.data.users;
   } catch (err) {
@@ -30,14 +27,14 @@ export const searchUsers = createAsyncThunk(
         `http://localhost:4000/api/user/search?query=${query}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       return res.data.users;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data || "Error");
     }
-  }
+  },
 );
 
 const searchUserSlice = createSlice({
@@ -45,7 +42,8 @@ const searchUserSlice = createSlice({
   initialState: {
     allUsers: [],
     searchedUsers: [],
-    loading: false,
+    loadingUsers: false,
+    searchLoading: false,
     error: null,
   },
   reducers: {
@@ -57,27 +55,27 @@ const searchUserSlice = createSlice({
     builder
       // 🔹 All users
       .addCase(allUsers.pending, (state) => {
-        state.loading = true;
+        state.loadingUsers = true;
       })
       .addCase(allUsers.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingUsers = false;
         state.allUsers = action.payload;
       })
       .addCase(allUsers.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingUsers = false;
         state.error = action.payload;
       })
 
       // 🔹 Search users
       .addCase(searchUsers.pending, (state) => {
-        state.loading = true;
+        state.searchLoading = true;
       })
       .addCase(searchUsers.fulfilled, (state, action) => {
-        state.loading = false;
+        state.searchLoading = false;
         state.searchedUsers = action.payload;
       })
       .addCase(searchUsers.rejected, (state, action) => {
-        state.loading = false;
+        state.searchLoading = false;
         state.error = action.payload;
       });
   },
