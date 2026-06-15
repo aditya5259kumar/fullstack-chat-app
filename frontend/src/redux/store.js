@@ -9,6 +9,7 @@ import sendMsgReducer from "./slices/sendMessageSlice";
 import deleteAccReducer from "./slices/deleteAccount";
 import deleteConvoReducer from "./slices/deleteConvo";
 import msgStatusReducer from "./slices/msgStatusSlice";
+import updateProfileReducer from "./slices/updateProfile";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     deleteAcc: deleteAccReducer,
     deleteConvo: deleteConvoReducer,
     msgStatus: msgStatusReducer,
+    updateProfile: updateProfileReducer,
   },
 });
 

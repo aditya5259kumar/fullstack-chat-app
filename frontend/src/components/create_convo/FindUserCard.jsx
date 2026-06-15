@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 const FindUserCard = ({ user }) => {
-  const {data} = useSelector((state) => state.createOrFindConvo);
+  const { data } = useSelector((state) => state.createOrFindConvo);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // console.log("createOrFindConvo data===================", data);
 
@@ -25,7 +25,7 @@ const FindUserCard = ({ user }) => {
       <div className="flex items-center">
         {user.profile_photo ? (
           <img
-            src={user.profile_photo}
+            src={`http://localhost:4000/uploads/${user?.profile_photo}`}
             alt=""
             className="h-12 w-12 rounded-full object-cover"
           />
@@ -51,4 +51,4 @@ const FindUserCard = ({ user }) => {
   );
 };
 
-export default FindUserCard
+export default FindUserCard;

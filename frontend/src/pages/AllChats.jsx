@@ -47,12 +47,17 @@ const AllChats = ({ activeChatId }) => {
     };
   }, [dispatch]);
 
-  const filteredChats = (inboxData || []).filter((chat) =>
-    chat.users?.some(
-      (user) =>
-        user.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-        user.username?.toLowerCase().includes(debouncedSearch.toLowerCase()),
-    ),
+  // console.log("inboxData type:", typeof inboxData);
+  // console.log("inboxData value:", inboxData);
+  // console.log("Is array?", Array.isArray(inboxData));
+
+  const filteredChats = (Array.isArray(inboxData) ? inboxData : []).filter(
+    (chat) =>
+      chat.users?.some(
+        (user) =>
+          user.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+          user.username?.toLowerCase().includes(debouncedSearch.toLowerCase()),
+      ),
   );
 
   useEffect(() => {

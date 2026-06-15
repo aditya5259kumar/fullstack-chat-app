@@ -1,32 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// export const userConversation = createAsyncThunk(
-//   "userConversation",
-//   async (_, thunkAPI) => {
-//     try {
-//       const token = localStorage.getItem("token");
-
-//       const response = await axios.get(
-//         "http://localhost:4000/api/user/conversations",
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         },
-//       );
-
-//       // console.log("response.data--------------", response.data);
-
-//       return response.data.data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(
-//         error.response?.data || "failed to fetch profile",
-//       );
-//     }
-//   },
-// );
-
 
 export const userConversation = createAsyncThunk(
   "userConversation",

@@ -196,7 +196,7 @@ const UserChats = ({ chat }) => {
           <div className="relative">
             {other_user?.profile_photo ? (
               <img
-                src={other_user.profile_photo}
+                src={`http://localhost:4000/uploads/${chat?.users?.[0]?.profile_photo}`}
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover"
               />
             ) : (
@@ -239,12 +239,12 @@ const UserChats = ({ chat }) => {
         </div>
 
         <div className="flex items-center gap-1 md:gap-4 text-gray-500">
-          <button className="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          {/* <button className="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <HiOutlineVideoCamera size={20} />
           </button>
           <button className="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <HiOutlinePhone size={18} />
-          </button>
+          </button> */}
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
@@ -255,9 +255,9 @@ const UserChats = ({ chat }) => {
             <div className="absolute top-12 right-5 mt-1 w-40 bg-white shadow-xl rounded-xl py-1.5 z-50 border border-gray-100">
               {[
                 "View Profile",
-                "Mute",
-                "Clear Chat",
-                "Block",
+                // "Mute",
+                // "Clear Chat",
+                // "Block",
                 "Delete Chat",
               ].map((item) => (
                 <button
@@ -298,7 +298,6 @@ const UserChats = ({ chat }) => {
       {/* Input Area */}
       <div className="px-4 py-3 bg-[#f0f2f5] shrink-0">
         <div className="flex items-center gap-2 max-w-5xl mx-auto bg-white rounded-full px-4 py-1.5 shadow-sm border border-gray-200">
-          
           <button className="text-gray-500 hover:text-gray-700 p-1">
             <MdAttachFile size={22} className="rotate-45" />
           </button>
