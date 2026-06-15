@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
-import userReducer from "./slices/userSlice";
+import ProfileReducer from "./slices/myProfileSlice";
 import convoReducer from "./slices/userConvoSlice";
 import getMsgReducer from "./slices/loadMsgSlice";
 import searchUserReducer from "./slices/searchUserSlice";
@@ -10,11 +10,12 @@ import deleteAccReducer from "./slices/deleteAccount";
 import deleteConvoReducer from "./slices/deleteConvo";
 import msgStatusReducer from "./slices/msgStatusSlice";
 import updateProfileReducer from "./slices/updateProfile";
+import otherUserProfileReducer from "./slices/userProfileSlice";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    user: userReducer,
+    profile: ProfileReducer,
     convo: convoReducer,
     getMsg: getMsgReducer,
     searchUser: searchUserReducer,
@@ -24,6 +25,7 @@ const store = configureStore({
     deleteConvo: deleteConvoReducer,
     msgStatus: msgStatusReducer,
     updateProfile: updateProfileReducer,
+    otherUserProfile: otherUserProfileReducer,
   },
 });
 

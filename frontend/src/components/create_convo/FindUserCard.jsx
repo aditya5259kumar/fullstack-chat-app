@@ -20,6 +20,12 @@ const FindUserCard = ({ user }) => {
     }
   }, [data, navigate]);
 
+  function viewProfileHandler() {
+    navigate(`/user/${user?.id}`);
+
+    // console.log("userrrrrrrrrrrrrrrrr",user)
+  }
+
   return (
     <div className="md:flex items-center justify-between bg-white rounded-2xl shadow-md px-5 py-3 mb-4">
       <div className="flex items-center">
@@ -41,12 +47,21 @@ const FindUserCard = ({ user }) => {
         </div>
       </div>
 
-      <button
-        onClick={findConvo}
-        className="bg-(--wa-green-prim) text-white px-4 py-2 rounded-lg"
-      >
-        Start Chat
-      </button>
+      <div className="flex space-x-3 mt-2.5">
+        <button
+          onClick={viewProfileHandler}
+          className="border border-gray-400 px-4 py-2 rounded-lg"
+        >
+          View Profile
+        </button>
+
+        <button
+          onClick={findConvo}
+          className="bg-(--wa-green-prim) text-white px-4 py-2 rounded-lg"
+        >
+          Start Chat
+        </button>
+      </div>
     </div>
   );
 };

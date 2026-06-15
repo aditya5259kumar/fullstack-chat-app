@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get("/profile", authenticateUser, userController.myProfile);
 
+router.get("/user/:userId", authenticateUser, userController.usersProfile);
+
 router.patch(
   "/update-profile",
   authenticateUser,

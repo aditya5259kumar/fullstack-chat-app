@@ -11,6 +11,7 @@ import { LuUserRoundX } from "react-icons/lu";
 import { MdAttachFile } from "react-icons/md";
 import { useParams, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteConvo } from "../redux/slices/deleteConvo";
 
 // Redux & Socket Imports
 import {
@@ -42,7 +43,7 @@ const UserChats = ({ chat }) => {
 
   const { msg, other_user, loading } = useSelector((state) => state.getMsg);
 
-  const { onlineUsers } = useSelector((state) => state.user); // Get online users
+  const { onlineUsers } = useSelector((state) => state.profile); // Get online users
   const isOnline = onlineUsers?.some(
     (id) => String(id) === String(other_user?.id),
   );
@@ -169,6 +170,10 @@ const UserChats = ({ chat }) => {
     }
   };
 
+  function viewProfileHandler() {
+    navigate(`/user/${chat?.users?.[0]?.id}`);
+  }
+
   if (!chat) {
     return (
       <div className="flex justify-between items-center px-3 md:px-4 py-3 z-10">
@@ -179,6 +184,19 @@ const UserChats = ({ chat }) => {
         </div>
       </div>
     );
+  }
+
+  async function deleteHandler() {
+    try {
+      await dispatch(deleteConvo(chat.conversation_id)).unwrap();
+      await dispatch(userConversation());
+
+      setShowMenu(false);
+
+      // console.log("Conversation deleted");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -253,25 +271,18 @@ const UserChats = ({ chat }) => {
           </button>
           {showMenu && (
             <div className="absolute top-12 right-5 mt-1 w-40 bg-white shadow-xl rounded-xl py-1.5 z-50 border border-gray-100">
-              {[
-                "View Profile",
-                // "Mute",
-                // "Clear Chat",
-                // "Block",
-                "Delete Chat",
-              ].map((item) => (
-                <button
-                  key={item}
-                  className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
-                    item === "Block" || item === "Delete Chat"
-                      ? "text-red-500"
-                      : "text-gray-700"
-                  }`}
-                  onClick={() => setShowMenu(false)}
-                >
-                  {item}
-                </button>
-              ))}
+              <button
+                className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                onClick={viewProfileHandler}
+              >
+                View Profile
+              </button>
+              <button
+                className="block w-full text-red-700 text-left px-4 py-2 text-sm hover:bg-gray-50"
+                onClick={deleteHandler}
+              >
+                Delete Chat
+              </button>
             </div>
           )}
         </div>

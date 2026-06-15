@@ -7,10 +7,10 @@ import {
 } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router";
-import { myProfile } from "../../redux/slices/userSlice";
+import { myProfile } from "../../redux/slices/myProfileSlice";
 
 const Navbar = () => {
-  const { profileData } = useSelector((state) => state.user);
+  const { profileData } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
 
@@ -20,7 +20,7 @@ const Navbar = () => {
     }
   }, [dispatch, token]);
 
-  console.log("profileData=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=", profileData);
+  // console.log("profileData=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=", profileData);
 
   return (
     <>

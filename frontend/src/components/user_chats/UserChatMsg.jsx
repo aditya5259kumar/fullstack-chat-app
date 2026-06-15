@@ -6,6 +6,8 @@ import { deleteConvo } from "../../redux/slices/deleteConvo";
 import { userConversation } from "../../redux/slices/userConvoSlice";
 import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
+import { Navigate } from "react-router";
+import { useNavigate } from "react-router";
 
 // Decode once at module level, not on every render
 const token = localStorage.getItem("token");
@@ -15,7 +17,9 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
 
-  console.log("chat======================", chat);
+  const navigate = useNavigate();
+
+  // console.log("chat======================", chat);
 
   const formatDateTime = (dateString) => {
     if (!dateString) return "";
@@ -43,6 +47,10 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
 
   const dispatch = useDispatch();
 
+  function viewProfileHandler() {
+    navigate(`/user/${chat?.users?.[0]?.id}`);
+  }
+
   async function deleteHandler() {
     try {
       await dispatch(deleteConvo(chat.conversation_id)).unwrap();
@@ -50,7 +58,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
 
       setShowMenu(false);
 
-      console.log("Conversation deleted");
+      // console.log("Conversation deleted");
     } catch (error) {
       console.error(error);
     }
@@ -70,7 +78,6 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
       <div className="flex items-center gap-3 flex-1 min-w-0">
         {/* Avatar */}
         <div className="relative shrink-0">
-
           {chat?.users?.[0]?.profile_photo ? (
             <img
               src={`http://localhost:4000/uploads/${chat?.users?.[0]?.profile_photo}`}
@@ -148,15 +155,12 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
 
           {showMenu && (
             <div className="absolute right-0 mt-1 w-36 bg-white shadow-xl rounded-xl py-1.5 z-50 border border-gray-100">
-              {/* <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                {pinned ? "Unpin Chat" : "Pin Chat"}
-              </button> */}
-              {/* <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-              Mark as Read
-            </button>
-            <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-              Mute
-            </button> */}
+              <button
+                onClick={viewProfileHandler}
+                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+              >
+                View Profile
+              </button>
               <button
                 onClick={deleteHandler}
                 className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"

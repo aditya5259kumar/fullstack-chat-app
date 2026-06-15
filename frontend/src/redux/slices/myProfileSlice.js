@@ -21,7 +21,7 @@ export const myProfile = createAsyncThunk("myProfile", async (_, thunkAPI) => {
   }
 });
 
-const userSlice = createSlice({
+const myProfileSlice = createSlice({
   name: "user",
   initialState: {
     profileData: null,
@@ -51,5 +51,5 @@ const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer;
-export const { setOnlineUsers } = userSlice.actions;
+export default myProfileSlice.reducer;
+export const { setOnlineUsers } = myProfileSlice.actions;

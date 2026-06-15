@@ -44,6 +44,39 @@ const userController = {
     }
   },
 
+  //--------other users Profile---------
+  usersProfile: async (req, res) => {
+    try {
+      const userId = req.params.userId;
+
+      const user = await userModel.findOne({
+        where: { id: userId },
+        attributes: [
+          "id",
+          "name",
+          "username",
+          "profile_photo",
+          "bio",
+          "created_at",
+        ],
+      });
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found!",
+        });
+      }
+
+      return res
+        .status(200)
+        .json({ message: "user profile fetched successfully!", user });
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ message: "something went wrong!", error: error });
+    }
+  },
+
   //--------edit Profile---------
   updateProfile: async (req, res) => {
     try {

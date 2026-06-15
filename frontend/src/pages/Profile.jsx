@@ -8,7 +8,7 @@ import {
 } from "react-icons/hi2";
 import Navbar from "../components/navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { myProfile } from "../redux/slices/userSlice";
+import { myProfile } from "../redux/slices/myProfileSlice";
 import { userLogout } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router";
 import { disconnectSocket } from "../socket/initSocket";
@@ -25,7 +25,7 @@ const Profile = () => {
   const [generalError, setGeneralError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { profileData } = useSelector((state) => state.user);
+  const { profileData } = useSelector((state) => state.profile);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
