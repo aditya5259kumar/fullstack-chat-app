@@ -24,24 +24,10 @@ const FindUser = () => {
 
   // console.log("all users---------------------", users);
 
-  // ✅ Load all users initially
+  // Load all users initially
   useEffect(() => {
     dispatch(allUsers());
   }, [dispatch]);
-
-  // ✅ Search handler (ONLY when button clicked)
-  // const searchHandler = (e) => {
-  //   e.preventDefault();
-
-  //   if (!searchQuery.trim()) {
-  //     setIsSearchActive(false);
-  //     dispatch(resetSearch());
-  //     return;
-  //   }
-
-  //   dispatch(searchUsers(searchQuery));
-  //   setIsSearchActive(true);
-  // };
 
   useEffect(() => {
     const trimmedQuery = searchQuery.trim();
@@ -66,18 +52,6 @@ const FindUser = () => {
     setIsSearchActive(false);
     dispatch(resetSearch());
   };
-
-  // ✅ Handle typing (important fix)
-  // const handleChange = (e) => {
-  //   const value = e.target.value;
-  //   setSearchQuery(value);
-
-  //   // If user deletes everything manually → reset
-  //   if (value.trim() === "") {
-  //     setIsSearchActive(false);
-  //     dispatch(resetSearch());
-  //   }
-  // };
 
   const handleChange = (e) => {
     setSearchQuery(e.target.value);
@@ -120,10 +94,6 @@ const FindUser = () => {
                 )
               )}
             </div>
-
-            {/* <button className="bg-(--wa-green-prim) text-white px-4 py-2">
-              Search
-            </button> */}
           </form>
 
           {/* 👥 Users */}

@@ -20,13 +20,11 @@ const Navbar = () => {
     }
   }, [dispatch, token]);
 
-  // console.log("profileData=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=", profileData);
+  // console.log("profileData", profileData);
 
   return (
     <>
-      {/* Desktop Sidebar - hidden on md and below */}
       <div className="sticky left-0 top-0 z-50 w-18 bg-white border-r border-gray-100 shadow-lg h-screen hidden md:flex flex-col items-center justify-between py-4">
-        {/* Logo */}
         <div className="flex flex-col items-center gap-8 w-full px-2">
           <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-(--wa-green-secondary) rounded-full shadow-md">
             <HiMiniChatBubbleLeftEllipsis className="text-white text-xl md:text-2xl" />
@@ -64,7 +62,6 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Bottom section */}
         <div className="flex flex-col items-center gap-3 w-full px-2">
           <button
             className="flex items-center justify-center w-full py-3 rounded-xl text-(--wa-green-dark) hover:bg-gray-100 hover:text-gray-600 transition-all duration-200"
@@ -89,14 +86,12 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Bottom Navigation Bar - visible on md and below */}
+      {/* Mobile Bottom Navigation Bar*/}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 shadow-lg flex items-center justify-around py-2 md:hidden">
-        {/* Logo/Brand Icon */}
         <div className="flex items-center justify-center w-10 h-10 bg-(--wa-green-secondary) rounded-full shadow-md">
           <HiMiniChatBubbleLeftEllipsis className="text-white text-xl" />
         </div>
 
-        {/* Chat Link */}
         <NavLink
           to="/"
           end
@@ -112,7 +107,6 @@ const Navbar = () => {
           <HiMiniChatBubbleBottomCenterText className="text-2xl" />
         </NavLink>
 
-        {/* Settings Link */}
         <NavLink
           to="/settings"
           className={({ isActive }) =>
@@ -127,7 +121,6 @@ const Navbar = () => {
           <HiMiniCog6Tooth className="text-2xl" />
         </NavLink>
 
-        {/* Dark Mode Button */}
         <button
           className="flex items-center justify-center w-12 py-2 rounded-xl text-(--wa-green-dark) hover:bg-gray-100 hover:text-gray-600 transition-all duration-200"
           title="Dark mode"
@@ -135,7 +128,6 @@ const Navbar = () => {
           <HiMoon className="text-2xl" />
         </button>
 
-        {/* Profile Link */}
         <NavLink to="/profile" title="Profile / Logout">
           {profileData?.profile_photo ? (
             <img

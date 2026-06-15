@@ -21,7 +21,7 @@ const App = () => {
 
       // Listen for online users list from server
       socket.on("get_online_users", (users) => {
-        // console.log("Online users received:", users); // Add this log!
+        // console.log("Online users received:", users);
         dispatch(setOnlineUsers(users));
       });
     }

@@ -13,9 +13,9 @@ const Home = () => {
   // Find the active chat based on URL parama
 
   const activeChat =
-  Array.isArray(inboxData) && chatId
-    ? inboxData.find((c) => c?.conversation_id === parseInt(chatId))
-    : null;
+    Array.isArray(inboxData) && chatId
+      ? inboxData.find((c) => c?.conversation_id === parseInt(chatId))
+      : null;
 
   // On mobile: show chat list if no chat selected, show chat if selected
   const isMobileChatOpen = !!activeChat;
@@ -26,7 +26,6 @@ const Home = () => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50 min-w-0">
-      {/* Sidebar Navbar - always visible on desktop, hidden on mobile when chat open */}
       <div
         className={`${isMobileChatOpen ? "hidden md:block" : "block"} shrink-0`}
       >
@@ -39,7 +38,6 @@ const Home = () => {
       >
         <AllChats
           activeChatId={activeChat?.conversation_id}
-          // onSelectChat={() => {}}
           isMobileView={!isMobileChatOpen}
         />
       </div>

@@ -9,7 +9,6 @@ import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router";
 import { useNavigate } from "react-router";
 
-// Decode once at module level, not on every render
 const token = localStorage.getItem("token");
 const userId = token ? jwtDecode(token).id : null;
 
@@ -74,9 +73,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
         isActive ? "bg-(--wa-hover)" : "hover:bg-gray-100"
       }`}
     >
-      {/* Left: Avatar + Info */}
       <div className="flex items-center gap-3 flex-1 min-w-0">
-        {/* Avatar */}
         <div className="relative shrink-0">
           {chat?.users?.[0]?.profile_photo ? (
             <img
@@ -94,21 +91,15 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
               )}
             </div>
           )}
-          {/* {online && (
-            <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-(--wa-green-prim) border-2 border-white rounded-full"></span>
-          )} */}
         </div>
 
-        {/* Text */}
         <div className="flex flex-col min-w-0">
           <h5 className="font-semibold text-[15px] text-gray-800 truncate">
-            {/* {chat?.users[0]?.username} */}
             {chat?.users?.length === 0
               ? "Account deleted"
               : chat?.users[0]?.name}
           </h5>
           <p className="text-gray-500 text-sm truncate min-w-0">
-            {/* Only show tick if I sent the last message and there are no unread messages */}
             {isSentByMe && unreadCount === 0 && (
               <span
                 className={`shrink-0 ${chat?.last_message_status === "seen" ? "text-blue-500" : "text-gray-400"}`}
@@ -121,7 +112,6 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
         </div>
       </div>
 
-      {/* Right: Time + Badge */}
       <div className="flex items-center gap-2">
         <div className=" flex items-end flex-col gap-1.5 ml-2 shrink-0">
           <p
@@ -131,7 +121,6 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
           </p>
 
           <div className="flex items-center gap-1.5">
-            {/* {pinned && <BsFillPinAngleFill className="text-red-600 text-sm" />} */}
             {unreadCount > 0 && (
               <span className="text-white text-[11px] font-bold min-w-5 h-5 px-1.5 bg-(--wa-green-prim) rounded-full flex items-center justify-center">
                 {unreadCount > 99 ? "99+" : unreadCount}
@@ -140,7 +129,6 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
           </div>
         </div>
 
-        {/* 3-dot Menu */}
         <div
           ref={menuRef}
           className="right-2 top-3 hidden group-hover:block z-10"

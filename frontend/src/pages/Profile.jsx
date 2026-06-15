@@ -218,7 +218,6 @@ const Profile = () => {
 
     const date = new Date(dateString);
 
-    // Check if date is valid
     if (isNaN(date.getTime())) return "Invalid date";
 
     const formattedDate =
@@ -260,19 +259,12 @@ const Profile = () => {
       <Navbar />
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-lg mx-auto px-4 py-8">
-          {/* Header */}
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Profile</h2>
 
-          {/* Avatar */}
           <form>
             <div className="flex flex-col items-center mb-8">
               <div className="relative">
                 {getImageSource() ? (
-                  // <img
-                  //   src={getImageSource()}
-                  //   alt="Profile"
-                  //   className="w-28 h-28 rounded-full object-cover ring-4 ring-[#25D366]/20 shadow-md"
-                  // />
                   <img
                     src={getImageSource()}
                     alt="Profile"
@@ -313,7 +305,6 @@ const Profile = () => {
               <p className="text-sm text-gray-400">{profileData?.name}</p>
             </div>
 
-            {/* Bio */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-5 py-4 mb-4">
               <div className="mb-2.5 border-b border-gray-100">
                 <div>
@@ -321,13 +312,6 @@ const Profile = () => {
                     Username
                   </p>
                   {editMode ? (
-                    // <input
-                    //   type="text"
-                    //   name="username"
-                    //   value={formData.username}
-                    //   onChange={handleChange}
-                    //   className="w-full border rounded px-3 py-2 text-sm"
-                    // />
                     <div>
                       <input
                         type="text"
@@ -355,13 +339,6 @@ const Profile = () => {
                   About
                 </p>
                 {editMode ? (
-                  // <textarea
-                  //   name="bio"
-                  //   value={formData.bio}
-                  //   onChange={handleChange}
-                  //   rows={3}
-                  //   className="w-full border rounded px-3 py-2 text-sm"
-                  // />
                   <div>
                     <textarea
                       name="bio"
@@ -383,7 +360,6 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Info */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-5 mb-4">
               <div className="flex items-start gap-4 py-4 border-b border-gray-100 last:border-0">
                 <div className="w-9 h-9 rounded-full bg-[#E8F5E9] flex items-center justify-center shrink-0">
@@ -394,13 +370,6 @@ const Profile = () => {
                     name
                   </p>
                   {editMode ? (
-                    // <input
-                    //   type="text"
-                    //   name="name"
-                    //   value={formData.name}
-                    //   onChange={handleChange}
-                    //   className="w-full border rounded px-3 py-2 text-sm"
-                    // />
                     <div>
                       <input
                         type="text"

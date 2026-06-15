@@ -236,7 +236,7 @@ const userController = {
           .json({ message: "You cannot chat with yourself" });
       }
 
-      // Step 1: Find conversation where BOTH users exist
+      //Step 1: finding conversation where both users exist
       const existingConversation = await participantsModel.findAll({
         attributes: ["conversation_id"],
         where: {

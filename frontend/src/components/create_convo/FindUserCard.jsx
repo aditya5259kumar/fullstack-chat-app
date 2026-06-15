@@ -22,8 +22,6 @@ const FindUserCard = ({ user }) => {
 
   function viewProfileHandler() {
     navigate(`/user/${user?.id}`);
-
-    // console.log("userrrrrrrrrrrrrrrrr",user)
   }
 
   return (

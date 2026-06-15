@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SearchBar from "../components/search_bar/SearchBar";
 import { HiUserPlus } from "react-icons/hi2";
-import ActiveUsers from "../components/active_floating_users/ActiveUsers";
 import UserChatMsg from "../components/user_chats/UserChatMsg";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,10 +45,6 @@ const AllChats = ({ activeChatId }) => {
       socket.off("messages_seen", handleMessagesSeen);
     };
   }, [dispatch]);
-
-  // console.log("inboxData type:", typeof inboxData);
-  // console.log("inboxData value:", inboxData);
-  // console.log("Is array?", Array.isArray(inboxData));
 
   const filteredChats = (Array.isArray(inboxData) ? inboxData : []).filter(
     (chat) =>
@@ -103,12 +98,10 @@ const AllChats = ({ activeChatId }) => {
         </div>
       </div>
 
-      {/* Search */}
       <div className="px-3 md:px-4 mb-3">
         <SearchBar onSearch={setSearchQuery} />
       </div>
 
-      {/* Chat list */}
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
         {filteredChats.length === 0 ? (
           <div className="flex h-full items-center justify-center">

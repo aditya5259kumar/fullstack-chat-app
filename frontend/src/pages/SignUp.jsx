@@ -74,7 +74,7 @@ const SignUp = () => {
       return;
     }
 
-    console.log("formData--------------", formData);
+    // console.log("formData--------------", formData);
     const result = await dispatch(userSignUp(formData));
 
     console.log("API RESULT:", result);

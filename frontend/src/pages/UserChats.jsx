@@ -67,7 +67,7 @@ const UserChats = ({ chat }) => {
     const initChat = async () => {
       await dispatch(getMessages(chatId));
       await dispatch(msgStatus(chatId));
-      await dispatch(userConversation()); // <-- add this
+      await dispatch(userConversation()); //
     };
 
     initChat();
@@ -257,12 +257,6 @@ const UserChats = ({ chat }) => {
         </div>
 
         <div className="flex items-center gap-1 md:gap-4 text-gray-500">
-          {/* <button className="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <HiOutlineVideoCamera size={20} />
-          </button>
-          <button className="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <HiOutlinePhone size={18} />
-          </button> */}
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
@@ -288,7 +282,6 @@ const UserChats = ({ chat }) => {
         </div>
       </header>
 
-      {/* Messages List */}
       <div
         className="flex-1 overflow-y-auto px-3 md:px-6 py-4 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${chatBg})` }}
@@ -306,7 +299,6 @@ const UserChats = ({ chat }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
       <div className="px-4 py-3 bg-[#f0f2f5] shrink-0">
         <div className="flex items-center gap-2 max-w-5xl mx-auto bg-white rounded-full px-4 py-1.5 shadow-sm border border-gray-200">
           <button className="text-gray-500 hover:text-gray-700 p-1">

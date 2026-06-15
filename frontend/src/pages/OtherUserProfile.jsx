@@ -14,8 +14,8 @@ import { useParams } from "react-router";
 const Profile = () => {
   const {
     data: profileData,
-    loading,
-    error,
+    // loading,
+    // error,
   } = useSelector((state) => state.otherUserProfile);
 
   const { userId } = useParams();
@@ -32,7 +32,6 @@ const Profile = () => {
 
     const date = new Date(dateString);
 
-    // Check if date is valid
     if (isNaN(date.getTime())) return "Invalid date";
 
     const formattedDate =
@@ -58,10 +57,8 @@ const Profile = () => {
       <Navbar />
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-lg mx-auto px-4 py-8">
-          {/* Header */}
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Profile</h2>
 
-          {/* Avatar */}
           <div className="flex flex-col items-center mb-8">
             <div className="relative">
               {profileData?.profile_photo ? (
@@ -82,7 +79,6 @@ const Profile = () => {
             <p className="text-sm text-gray-400">{profileData?.name}</p>
           </div>
 
-          {/* Bio */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-5 py-4 mb-4">
             <div className="mb-2.5 border-b border-gray-100">
               <p className="text-xs mb-0.5 text-gray-400 font-semibold uppercase tracking-wider">
@@ -100,7 +96,6 @@ const Profile = () => {
             </p>
           </div>
 
-          {/* Info */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-5 mb-4">
             <div className="flex items-start gap-4 py-4 border-b border-gray-100 last:border-0">
               <div className="w-9 h-9 rounded-full bg-[#E8F5E9] flex items-center justify-center shrink-0">
