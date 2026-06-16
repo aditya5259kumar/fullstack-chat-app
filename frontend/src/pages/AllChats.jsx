@@ -83,15 +83,15 @@ const AllChats = ({ activeChatId }) => {
 
   return (
     <div
-      className={`h-screen bg-white  flex flex-col overflow-hidden
-        w-full md:w-80 lg:w-110 shadow-xl`}
+      className={`h-screen bg-(--surface) flex flex-col overflow-hidden
+        w-full md:w-80 lg:w-110 shadow-(--shadow-lg)`}
     >
       <div className="px-3 md:px-4 pt-4 pb-3 flex justify-between items-center">
-        <h4 className="text-xl font-bold text-gray-800">Messages</h4>
+        <h4 className="text-xl font-bold text-(--text)">Messages</h4>
         <div className="flex items-center gap-1">
           <Link
             to="/find"
-            className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-xl text-(--text-muted) hover:bg-(--surface-2) transition-colors"
           >
             <HiUserPlus className="text-xl md:text-2xl" />
           </Link>
@@ -105,7 +105,7 @@ const AllChats = ({ activeChatId }) => {
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
         {filteredChats.length === 0 ? (
           <div className="flex h-full items-center justify-center">
-            <p className="text-gray-500">
+            <p className="text-(--text-muted)">
               {searchQuery
                 ? "No matching conversations found"
                 : "No conversations yet"}

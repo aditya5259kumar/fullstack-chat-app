@@ -6,11 +6,17 @@ import {
   HiSun,
   HiMiniChatBubbleBottomCenterText,
 } from "react-icons/hi2";
+import { FaRocketchat } from "react-icons/fa";
+import { RiChatSmileAiFill } from "react-icons/ri";
+import { BiCommentDetail } from "react-icons/bi";
+
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router";
 import { myProfile } from "../../redux/slices/myProfileSlice";
+import { toggleTheme } from "../../redux/slices/themeSlice";
 
-const Navbar = ({ theme, toggleTheme }) => {
+const Navbar = () => {
+  const theme = useSelector((store) => store.theme.theme);
   const { profileData } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
@@ -25,10 +31,10 @@ const Navbar = ({ theme, toggleTheme }) => {
 
   return (
     <>
-      <div className="sticky left-0 top-0 z-50 w-18 bg-(--surface) border-r border-gray-100 shadow-lg h-screen hidden md:flex flex-col items-center justify-between py-4">
+      <div className="sticky left-0 top-0 z-50 w-18 bg-(--surface) border-r border-(--border) shadow-(--shadow) h-screen hidden md:flex flex-col items-center justify-between py-4">
         <div className="flex flex-col items-center gap-8 w-full px-2">
-          <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-(--wa-green-secondary) rounded-full shadow-md">
-            <HiMiniChatBubbleLeftEllipsis className="text-white text-xl md:text-2xl" />
+          <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-(--primary) rounded-full shadow-md">
+            <RiChatSmileAiFill className="text-white text-xl md:text-2xl" />
           </div>
 
           <div className="flex w-full flex-col gap-2">
@@ -38,8 +44,8 @@ const Navbar = ({ theme, toggleTheme }) => {
               className={({ isActive }) =>
                 `flex items-center justify-center w-full py-3 rounded-xl transition-all duration-200 group relative ${
                   isActive
-                    ? "bg-(--wa-hover) text-(--wa-green-secondary)"
-                    : "hover:bg-gray-100 text-(--wa-green-dark)"
+                    ? "bg-(--surface-2) text-(--primary)"
+                    : "hover:bg-(--surface-2) text-(--text-muted)"
                 }`
               }
               title="Chats"
@@ -52,8 +58,8 @@ const Navbar = ({ theme, toggleTheme }) => {
               className={({ isActive }) =>
                 `flex items-center justify-center w-full py-3 rounded-xl transition-all duration-200 ${
                   isActive
-                    ? "bg-[#E8F5E9] text-(--wa-green-secondary)"
-                    : "hover:bg-gray-100 text-(--wa-green-dark)"
+                    ? "bg-(--surface-2) text-(--primary)"
+                    : "hover:bg-(--surface-2) text-(--text-muted)"
                 }`
               }
               title="Settings"
@@ -65,12 +71,12 @@ const Navbar = ({ theme, toggleTheme }) => {
 
         <div className="flex flex-col items-center gap-3 w-full px-2">
           <button
-            onClick={toggleTheme}
-            className="flex items-center justify-center w-full py-3 rounded-xl text-(--wa-green-dark) hover:bg-gray-100 hover:text-gray-600 transition-all duration-200"
+          onClick={() => dispatch(toggleTheme())}
+            className="flex items-center justify-center w-full py-3 rounded-xl text-(--text-muted) hover:bg-(--surface-2) hover:text-(--text) transition-all duration-200"
             title="Dark mode"
           >
             {theme === "light" ? (
-              <HiMoon className="text-xl" />
+              <HiMoon className="text-lg" />
             ) : (
               <HiSun className="text-xl" />
             )}
@@ -84,7 +90,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                 className="w-9 h-9 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
               />
             ) : (
-              <div className="w-9 h-9 rounded-full bg-purple-700 text-gray-100 flex items-center justify-center font-semibold">
+              <div className="w-9 h-9 rounded-full bg-(--primary) text-white flex items-center justify-center font-semibold">
                 {profileData?.name?.[0]?.toUpperCase()}
               </div>
             )}
@@ -93,10 +99,10 @@ const Navbar = ({ theme, toggleTheme }) => {
       </div>
 
       {/* Mobile Bottom Navigation Bar*/}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 shadow-lg flex items-center justify-around py-2 md:hidden">
-        <div className="flex items-center justify-center w-10 h-10 bg-(--wa-green-secondary) rounded-full shadow-md">
-          <HiMiniChatBubbleLeftEllipsis className="text-white text-xl" />
-        </div>
+     <div className="fixed bottom-0 left-0 right-0 z-50 bg-(--surface) border-t border-(--border) shadow-(--shadow) flex items-center justify-around py-2 md:hidden">
+        {/* <div className="flex items-center justify-center w-10 h-10 bg-(--primary) rounded-full shadow-md">
+          <RiChatSmileAiFill className="text-white text-xl" />
+        </div> */}
 
         <NavLink
           to="/"
@@ -104,8 +110,8 @@ const Navbar = ({ theme, toggleTheme }) => {
           className={({ isActive }) =>
             `flex items-center justify-center w-12 py-2 rounded-xl transition-all duration-200 ${
               isActive
-                ? "bg-(--wa-hover) text-(--wa-green-secondary)"
-                : "hover:bg-gray-100 text-(--wa-green-dark)"
+                ? "bg-(--surface-2) text-(--primary)"
+                : "hover:bg-(--surface-2) text-(--text-muted)"
             }`
           }
           title="Chats"
@@ -118,8 +124,8 @@ const Navbar = ({ theme, toggleTheme }) => {
           className={({ isActive }) =>
             `flex items-center justify-center w-12 py-2 rounded-xl transition-all duration-200 ${
               isActive
-                ? "bg-[#E8F5E9] text-(--wa-green-secondary)"
-                : "hover:bg-gray-100 text-(--wa-green-dark)"
+                ? "bg-(--surface-2) text-(--primary)"
+                : "hover:bg-(--surface-2) text-(--text-muted)"
             }`
           }
           title="Settings"
@@ -128,10 +134,15 @@ const Navbar = ({ theme, toggleTheme }) => {
         </NavLink>
 
         <button
-          className="flex items-center justify-center w-12 py-2 rounded-xl text-(--wa-green-dark) hover:bg-gray-100 hover:text-gray-600 transition-all duration-200"
+       onClick={() => dispatch(toggleTheme())}
+          className="flex items-center justify-center w-12 py-2 rounded-xl text-(--text-muted) hover:bg-(--surface-2) hover:text-(--text) transition-all duration-200"
           title="Dark mode"
         >
-          <HiMoon className="text-2xl" />
+           {theme === "light" ? (
+              <HiMoon className="text-lg" />
+            ) : (
+              <HiSun className="text-xl" />
+            )}
         </button>
 
         <NavLink to="/profile" title="Profile / Logout">
@@ -142,7 +153,7 @@ const Navbar = ({ theme, toggleTheme }) => {
               className="w-9 h-9 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
             />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-purple-700 text-gray-100 flex items-center justify-center font-semibold text-sm">
+            <div className="w-9 h-9 rounded-full bg-(--primary) text-white flex items-center justify-center font-semibold text-sm">
               {profileData?.name?.[0]?.toUpperCase()}
             </div>
           )}

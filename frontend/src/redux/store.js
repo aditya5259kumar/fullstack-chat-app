@@ -11,6 +11,7 @@ import deleteConvoReducer from "./slices/deleteConvo";
 import msgStatusReducer from "./slices/msgStatusSlice";
 import updateProfileReducer from "./slices/updateProfile";
 import otherUserProfileReducer from "./slices/userProfileSlice";
+import themeReducer from "./slices/themeSlice";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     msgStatus: msgStatusReducer,
     updateProfile: updateProfileReducer,
     otherUserProfile: otherUserProfileReducer,
+    theme: themeReducer,
   },
 });
 

@@ -86,26 +86,26 @@ const SignUp = () => {
   }
 
   return (
-    <div className="bg-(--wa-bg-chat) min-h-screen flex items-center justify-center">
+    <div className="bg-(--bg) min-h-screen flex items-center justify-center">
       <div className="container w-full max-w-md md:max-w-md lg:max-w-lg mx-auto flex flex-col px-4">
         <div className="flex items-center gap-2 justify-center mb-8">
-          <span className="text-4xl text-(--wa-green-secondary)">
+          <span className="text-4xl text-(--primary)">
             <HiMiniChatBubbleLeftEllipsis />
           </span>
-          <h4 className="text-3xl font-bold">LinkUp</h4>
+          <h4 className="text-3xl font-bold text-(--text)">LinkUp</h4>
         </div>
 
-        <div className="px-6 md:px-8 lg:px-10 shadow-sm bg-white rounded-md py-8 text-center">
-          <h1 className="text-2xl font-semibold mb-2">Sign Up</h1>
-          <p className="mb-8 text-gray-500">Get your LinkUp account now.</p>
+        <div className="px-6 md:px-8 lg:px-10 shadow-(--shadow) bg-(--surface) rounded-md py-8 text-center">
+          <h1 className="text-2xl font-semibold mb-2 text-(--text)">Sign Up</h1>
+          <p className="mb-8 text-(--text-muted)">Get your LinkUp account now.</p>
 
           <form action="" onSubmit={submitHandler}>
             <div className="mb-4">
               <div className="flex gap-4 items-start">
-                <div className="mb-1">
-                  <p className="text-start mb-1">Name</p>
-                  <div className="flex items-center border text-sm border-gray-200 rounded-md overflow-hidden">
-                    <span className="bg-gray-100 px-3.5 py-3 text-base border-r border-gray-200">
+                <div className="mb-1 flex-1">
+                  <p className="text-start mb-1 text-(--text)">Name</p>
+                  <div className="flex items-center border text-sm border-(--border) rounded-md overflow-hidden">
+                    <span className="bg-(--surface-2) px-3.5 py-3 text-base border-r border-(--border) text-(--text-muted)">
                       <HiMiniItalic />
                     </span>
                     <input
@@ -114,15 +114,15 @@ const SignUp = () => {
                       value={formData.name}
                       onChange={handleOnChange}
                       placeholder="Full Name"
-                      className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none "
+                      className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none bg-transparent text-(--input-text) placeholder-(--placeholder)"
                     />
                   </div>
                 </div>
 
-                <div className="mb-1">
-                  <p className="text-start mb-1">Username</p>
-                  <div className="flex items-center border text-sm border-gray-200 rounded-md overflow-hidden">
-                    <span className="bg-gray-100 px-3.5 py-3 text-base border-r border-gray-200">
+                <div className="mb-1 flex-1">
+                  <p className="text-start mb-1 text-(--text)">Username</p>
+                  <div className="flex items-center border text-sm border-(--border) rounded-md overflow-hidden">
+                    <span className="bg-(--surface-2) px-3.5 py-3 text-base border-r border-(--border) text-(--text-muted)">
                       <HiUser />
                     </span>
                     <input
@@ -131,27 +131,27 @@ const SignUp = () => {
                       value={formData.username}
                       onChange={handleOnChange}
                       placeholder="Username"
-                      className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none "
+                      className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none bg-transparent text-(--input-text) placeholder-(--placeholder)"
                     />
                   </div>
                 </div>
               </div>
               {error.name && (
-                <p className="ml-1 text-xs text-red-700 text-start">
+                <p className="ml-1 text-xs text-(--error) text-start">
                   {error.name}
                 </p>
               )}
               {error.username && (
-                <p className="ml-1 text-xs text-red-700 text-start">
+                <p className="ml-1 text-xs text-(--error) text-start">
                   {error.username}
                 </p>
               )}
             </div>
 
             <div className="mb-4">
-              <p className="text-start mb-1 ">Email</p>
-              <div className="flex items-center border text-sm border-gray-200 rounded-md overflow-hidden">
-                <span className="bg-gray-100 px-3.5 py-3 text-base border-r border-gray-200">
+              <p className="text-start mb-1 text-(--text)">Email</p>
+              <div className="flex items-center border text-sm border-(--border) rounded-md overflow-hidden">
+                <span className="bg-(--surface-2) px-3.5 py-3 text-base border-r border-(--border) text-(--text-muted)">
                   <HiOutlineEnvelope />
                 </span>
                 <input
@@ -160,20 +160,20 @@ const SignUp = () => {
                   value={formData.email}
                   onChange={handleOnChange}
                   placeholder="Enter Your Email"
-                  className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none "
+                  className="text-sm w-full px-2 py-2.5 focus:border-none focus:outline-none bg-transparent text-(--input-text) placeholder-(--placeholder)"
                 />
               </div>
               {error.email && (
-                <p className="mt-1 ml-1 text-xs text-red-700 text-start">
+                <p className="mt-1 ml-1 text-xs text-(--error) text-start">
                   {error.email}
                 </p>
               )}
             </div>
 
             <div className="mb-6">
-              <p className="text-start mb-1">Password</p>
-              <div className=" flex w-full items-center border border-gray-200 rounded-md">
-                <span className="bg-gray-100 px-3.5 p-3 text-base border-r border-gray-200">
+              <p className="text-start mb-1 text-(--text)">Password</p>
+              <div className=" flex w-full items-center border border-(--border) rounded-md">
+                <span className="bg-(--surface-2) px-3.5 p-3 text-base border-r border-(--border) text-(--text-muted)">
                   <HiMiniLockClosed />
                 </span>
                 <div className="flex items-center w-full">
@@ -183,14 +183,14 @@ const SignUp = () => {
                     value={formData.password}
                     onChange={handleOnChange}
                     placeholder="Enter Your Password"
-                    className="text-sm w-full pl-2 py-2.5 focus:outline-none "
+                    className="text-sm w-full pl-2 py-2.5 focus:outline-none bg-transparent text-(--input-text) placeholder-(--placeholder)"
                   />
                   <span
-                    className="text-md text-gray-500 py-2.5 px-3"
+                    className="text-md text-(--text-muted) py-2.5 px-3 cursor-pointer hover:text-(--text)"
                     onClick={handleShowPassword}
                   >
                     {passwordShow ? (
-                      <HiOutlineEye className="text-black" />
+                      <HiOutlineEye className="text-(--text)" />
                     ) : (
                       <HiOutlineEyeOff />
                     )}
@@ -198,30 +198,30 @@ const SignUp = () => {
                 </div>
               </div>
               {error.password && (
-                <p className="mt-1 ml-1 text-xs text-red-700 text-start">
+                <p className="mt-1 ml-1 text-xs text-(--error) text-start">
                   {error.password}
                 </p>
               )}
             </div>
 
             {authError && (
-              <p className="text-sm py-3 border border-red-700 rounded-md bg-red-100 text-center text-red-700 mb-4">
+              <p className="text-sm py-3 border border-(--error) rounded-md bg-(--error)/10 text-center text-(--error) mb-4">
                 {authError}
               </p>
             )}
-            <button className="w-full mb-4 bg-(--wa-green-secondary) border-(--wa-green-dark) hover:bg-(--wa-green-dark) text-white py-4 rounded-md text-sm font-medium transition-all ease-in-out">
+            <button className="w-full mb-4 bg-(--primary) hover:bg-(--primary-hover) text-white py-4 rounded-md text-sm font-medium transition-all ease-in-out">
               {loading ? "Loading..." : "Sign Up"}
             </button>
-            <p>By registering you agree to the Chatvia <span className="cursor-pointer text-blue-500">Terms of Use</span></p>
+            <p className="text-(--text-muted)">By registering you agree to the Chatvia <span className="cursor-pointer text-(--primary) hover:text-(--primary-hover)">Terms of Use</span></p>
           </form>
         </div>
-        <p className="mt-8 text-center">
+        <p className="mt-8 text-center text-(--text)">
           Already have an account ?{" "}
-          <Link to="/login" className="text-(--wa-green-secondary) font-bold">
+          <Link to="/login" className="text-(--primary) font-bold hover:text-(--primary-hover)">
             Login
           </Link>
         </p>
-        <p>© 2026 LinkUp. Created with ❤️ by Aditya Kumar</p>
+        <p className="text-(--text-muted)">© 2026 LinkUp. Created with ❤️ by Aditya Kumar</p>
       </div>
     </div>
   );

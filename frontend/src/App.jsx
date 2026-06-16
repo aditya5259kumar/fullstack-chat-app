@@ -12,6 +12,19 @@ import { useEffect } from "react";
 import { setOnlineUsers } from "./redux/slices/myProfileSlice";
 
 const App = () => {
+
+  // theme toggle
+const theme = useSelector((state) => state.theme.theme);
+
+useEffect(() => {
+  localStorage.setItem("theme", theme);
+
+  document.documentElement.setAttribute(
+    "data-theme",
+    theme
+  );
+}, [theme]);
+
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 

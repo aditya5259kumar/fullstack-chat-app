@@ -26,7 +26,7 @@ import socket from "../socket/initSocket";
 
 // Components
 // import lightChatBg from "../assets/chat-bg-light.png";
-import chatBg from "../assets/chat-bg.png";
+// import chatBg from "../assets/chat-bg.png";
 import MessageBubble from "../components/user_chats/MessageBubble";
 import NoChatSelected from "../components/user_chats/NoChatSelected";
 
@@ -226,13 +226,13 @@ const UserChats = ({ chat }) => {
   }
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[#f0f2f5] relative overflow-hidden">
+    <div className="flex flex-col h-screen w-full bg-(--bg) relative overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200 shrink-0 z-10">
+      <header className="flex items-center justify-between px-4 py-3 bg-(--surface) border-b border-(--border) shrink-0 z-10">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/")}
-            className="md:hidden text-gray-600 p-1 hover:bg-gray-100 rounded-full"
+            className="md:hidden text-(--text-muted) p-1 hover:bg-(--surface-2) rounded-full"
           >
             <HiMiniArrowLeft size={24} />
           </button>
@@ -245,7 +245,7 @@ const UserChats = ({ chat }) => {
               />
             ) : (
               <div
-                className={`w-10 h-10 md:w-11 md:h-11 ${chat?.users?.length === 0 ? "bg-gray-400" : "bg-purple-700"} text-gray-100 flex items-center justify-center rounded-full`}
+                className={`w-10 h-10 md:w-11 md:h-11 ${chat?.users?.length === 0 ? "bg-(--text-muted)" : "bg-(--primary)"} text-white flex items-center justify-center rounded-full`}
               >
                 {chat?.users?.[0]?.username?.charAt(0)?.toUpperCase() || (
                   <LuUserRoundX className="text-xl font-bold" />
@@ -253,23 +253,23 @@ const UserChats = ({ chat }) => {
               </div>
             )}
             {isOnline && (
-              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+              <div className="absolute bottom-0 right-0 w-3 h-3 bg-(--success) border-2 border-(--surface) rounded-full"></div>
             )}
           </div>
 
           <div>
-            <h2 className="text-[15px] font-semibold text-gray-800 leading-tight">
+            <h2 className="text-[15px] font-semibold text-(--text) leading-tight">
               {chat?.users?.length === 0 ? "Account deleted" : other_user?.name}
             </h2>
 
             {/* If typing, show typing. If not, show online/offline status */}
             {isTyping ? (
-              <p className="text-[12px] text-emerald-600 font-medium animate-pulse">
+              <p className="text-[12px] text-(--primary) font-medium animate-pulse">
                 typing...
               </p>
             ) : (
               <p
-                className={`text-[12px] font-medium ${isOnline ? "text-green-600" : "text-gray-400"}`}
+                className={`text-[12px] font-medium ${isOnline ? "text-(--success)" : "text-(--text-muted)"}`}
               >
                 {/* {isOnline ? "online" : "offline"} */}
                 {chat?.users?.length === 0
@@ -282,23 +282,23 @@ const UserChats = ({ chat }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-1 md:gap-4 text-gray-500">
+        <div className="flex items-center gap-1 md:gap-4 text-(--text-muted)">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 text-(--text-muted) hover:bg-(--surface-2) rounded-full transition-colors"
           >
             <HiMiniEllipsisVertical className="text-xl" />
           </button>
           {showMenu && (
-            <div className="absolute top-12 right-5 mt-1 w-40 bg-white shadow-xl rounded-xl py-1.5 z-50 border border-gray-100">
+            <div className="absolute top-12 right-5 mt-1 w-40 bg-(--surface) shadow-(--shadow-lg) rounded-xl py-1.5 z-50 border border-(--border)">
               <button
-                className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                className="text-(--text) block w-full text-left px-4 py-2 text-sm hover:bg-(--surface-2)"
                 onClick={viewProfileHandler}
               >
                 View Profile
               </button>
               <button
-                className="block w-full text-red-700 text-left px-4 py-2 text-sm hover:bg-gray-50"
+                className="block w-full text-(--error) text-left px-4 py-2 text-sm hover:bg-(--surface-2)"
                 onClick={deleteHandler}
               >
                 Delete Chat
@@ -310,11 +310,11 @@ const UserChats = ({ chat }) => {
 
       <div
         className="flex-1 overflow-y-auto px-3 md:px-6 py-4 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${chatBg})` }}
+        // style={{ backgroundImage: `url(${chatBg})` }}
       >
         {" "}
         {loading && msg.length === 0 ? (
-          <div className="flex justify-center items-center h-full text-gray-400">
+          <div className="flex justify-center items-center h-full text-(--text-muted)">
             Loading messages...
           </div>
         ) : (
@@ -328,7 +328,7 @@ const UserChats = ({ chat }) => {
       {/* Preview strip - shows above input when a file is selected */}
       {selectedFile && (
         <div className="px-4 pb-2 max-w-5xl mx-auto">
-          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-2 relative">
+          <div className="flex items-center gap-2 bg-(--surface) border border-(--border) rounded-lg p-2 relative">
             {previewUrl ? (
               <img
                 src={previewUrl}
@@ -336,16 +336,16 @@ const UserChats = ({ chat }) => {
                 className="w-12 h-12 object-cover rounded"
               />
             ) : (
-              <div className="w-12 h-12 flex items-center justify-center bg-gray-100 rounded text-gray-500 text-[10px] text-center px-1 font-medium">
+              <div className="w-12 h-12 flex items-center justify-center bg-(--surface-2) rounded text-(--text-muted) text-[10px] text-center px-1 font-medium">
                 {selectedFile.name.split(".").pop().toUpperCase()}
               </div>
             )}
-            <div className="flex-1 truncate text-sm text-gray-700">
+            <div className="flex-1 truncate text-sm text-(--text)">
               {selectedFile.name}
             </div>
             <button
               onClick={removeSelectedFile}
-              className="text-gray-400 hover:text-red-500 px-2"
+              className="text-(--text-muted) hover:text-(--error) px-2"
             >
               ✕
             </button>
@@ -354,8 +354,8 @@ const UserChats = ({ chat }) => {
       )}
 
       {/* Input Area */}
-      <div className="px-4 py-3 bg-[#f0f2f5] shrink-0">
-        <div className="flex items-center gap-2 max-w-5xl mx-auto bg-white rounded-full px-4 py-1.5 shadow-sm border border-gray-200">
+      <div className="px-4 py-3 bg-(--bg) shrink-0">
+        <div className="flex items-center gap-2 max-w-5xl mx-auto bg-(--surface) rounded-full px-4 py-1.5 shadow-(--shadow) border border-(--border)">
           <input
             type="file"
             ref={fileInputRef}
@@ -366,7 +366,7 @@ const UserChats = ({ chat }) => {
 
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="text-gray-500 hover:text-gray-700 p-1"
+            className="text-(--text-muted) hover:text-(--text) p-1"
           >
             <MdAttachFile size={22} className="rotate-45" />
           </button>
@@ -378,7 +378,7 @@ const UserChats = ({ chat }) => {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
-            className="flex-1 py-2 px-2 text-[15px] focus:outline-none placeholder-gray-400"
+            className="flex-1 py-2 px-2 text-[15px] focus:outline-none bg-transparent text-(--text) placeholder-(--placeholder)"
           />
 
           <button
@@ -386,7 +386,7 @@ const UserChats = ({ chat }) => {
             disabled={!textMsg.trim() && !selectedFile}
             className={`p-2 rounded-full transition-all ${
               textMsg.trim() || selectedFile
-                ? "bg-emerald-500 inline-block text-white shadow-md hover:bg-emerald-600"
+                ? "bg-(--primary) inline-block text-white shadow-md hover:bg-(--primary-hover)"
                 : "hidden"
             }`}
           >

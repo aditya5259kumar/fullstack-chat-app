@@ -32,14 +32,14 @@ const MessageBubble = ({ message }) => {
   const isMyMessage = (message?.sender_id || message?.sender?.id) === userId;
 
   return (
-    <div
+   <div
       className={`flex ${(message?.sender_id || message?.sender?.id) === userId ? "justify-end" : "justify-start"} mb-1.5`}
     >
       <div
-        className={`relative max-w-[75%] md:max-w-[60%] px-3 py-2 rounded-2xl shadow-sm ${
+        className={`relative max-w-[75%] md:max-w-[60%] px-3 py-2 rounded-2xl shadow-(--shadow) ${
           (message?.sender_id || message?.sender?.id) === userId
-            ? "bg-(--wa-msg-out) rounded-br-sm"
-            : "bg-white rounded-bl-sm"
+            ? "bg-(--chat-user) rounded-br-sm"
+            : "bg-(--chat-ai) rounded-bl-sm"
         }`}
       >
         {fileUrl && isImage && (
@@ -57,34 +57,39 @@ const MessageBubble = ({ message }) => {
             target="_blank"
             rel="noopener noreferrer"
             download={message?.file_name}
-            className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg p-2 mb-1 hover:bg-gray-100 max-w-55"
+            className="flex items-center gap-2 bg-(--surface-2) border border-(--border) rounded-lg p-2 mb-1 hover:bg-(--surface) max-w-55"
           >
-            <BsFileEarmarkText className="text-xl text-gray-500 shrink-0" />
-            <span className="text-sm text-gray-700 truncate">
+            <BsFileEarmarkText className="text-xl text-(--text-muted) shrink-0" />
+            <span className="text-sm text-(--text) truncate">
               {message?.file_name}
             </span>
           </a>
         )}
 
         {message?.content && (
-          <p className="text-sm text-gray-800 leading-relaxed wrap-break-words">
+          <p className={`text-sm leading-relaxed wrap-break-words ${
+            (message?.sender_id || message?.sender?.id) === userId
+              ? "text-(--chat-user-text)"
+              : "text-(--chat-ai-text)"
+          }`}>
             {message.content}
           </p>
         )}
 
-        <p className="text-sm text-gray-800 leading-relaxed wrap-break-words">
-          {message?.content}
-        </p>
         <div className="flex items-center gap-1 mt-0.5 justify-end">
           <div className="flex items-center justify-between space-x-2">
-            <span className="text-[12px] text-gray-400">
+            <span className={`text-[12px] ${
+              (message?.sender_id || message?.sender?.id) === userId
+                ? "text-(--chat-user-text)"
+                : "text-(--text-muted)"
+            } opacity-80`}>
               {formatDateTime(message?.created_at)}
             </span>
 
             {isMyMessage && (
               <span
                 className={`text font-medium ${
-                  message?.status === "seen" ? "text-blue-500" : "text-gray-400"
+                  message?.status === "seen" ? "text-(--primary)" : "text-(--text-muted)"
                 }`}
               >
                 {message?.status === "seen" ? <BsCheckAll /> : <BsCheck />}

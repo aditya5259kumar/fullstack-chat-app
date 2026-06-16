@@ -25,7 +25,7 @@ const FindUserCard = ({ user }) => {
   }
 
   return (
-    <div className="md:flex items-center justify-between bg-white rounded-2xl shadow-md px-5 py-3 mb-4">
+  <div className="md:flex items-center justify-between bg-(--surface) rounded-2xl shadow-(--shadow) px-5 py-3 mb-4">
       <div className="flex items-center">
         {user.profile_photo ? (
           <img
@@ -34,28 +34,28 @@ const FindUserCard = ({ user }) => {
             className="h-12 w-12 rounded-full object-cover"
           />
         ) : (
-          <div className="h-12 w-12 rounded-full bg-purple-600 text-white flex items-center justify-center">
+          <div className="h-12 w-12 rounded-full bg-(--primary) text-white flex items-center justify-center">
             {user?.name?.charAt(0)?.toUpperCase()}
           </div>
         )}
 
         <div className="ml-4">
-          <p className="font-semibold">{user.name}</p>
-          <p className="text-sm text-gray-500">@{user.username}</p>
+          <p className="font-semibold text-(--text)">{user.name}</p>
+          <p className="text-sm text-(--text-muted)">@{user.username}</p>
         </div>
       </div>
 
       <div className="flex space-x-3 mt-2.5">
         <button
           onClick={viewProfileHandler}
-          className="border border-gray-400 px-4 py-2 rounded-lg"
+          className="border border-(--border) px-4 py-2 rounded-lg text-(--text) hover:bg-(--surface-2) transition-colors"
         >
           View Profile
         </button>
 
         <button
           onClick={findConvo}
-          className="bg-(--wa-green-prim) text-white px-4 py-2 rounded-lg"
+          className="bg-(--primary) text-white px-4 py-2 rounded-lg hover:bg-(--primary-hover) transition-colors"
         >
           Start Chat
         </button>

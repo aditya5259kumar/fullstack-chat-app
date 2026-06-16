@@ -61,34 +61,38 @@ const FindUser = () => {
   const displayUsers = isSearchActive ? searchedUsers : users;
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-(--bg)">
       <Navbar />
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-lg mx-auto px-4 py-8">
-          <h2 className="text-2xl font-bold mb-6">New Chat</h2>
+          <h2 className="text-2xl font-bold mb-6 text-(--text)">New Chat</h2>
 
           {/* 🔍 Search */}
           <form
             // onSubmit={searchHandler}
-            className="flex items-center bg-white shadow rounded-full overflow-hidden"
+            className="flex items-center bg-(--surface) shadow-(--shadow) rounded-full overflow-hidden"
           >
             <div className="flex items-center w-full px-3 py-2">
-              <HiOutlineMagnifyingGlass className="text-gray-400" />
+              <HiOutlineMagnifyingGlass className="text-(--text-muted)" />
 
               <input
                 type="text"
                 value={searchQuery}
                 onChange={handleChange}
                 placeholder="Search users..."
-                className="w-full px-2 outline-none"
+                className="w-full px-2 outline-none bg-transparent text-(--text) placeholder-(--placeholder)"
               />
 
               {searchLoading ? (
-                <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-(--border) border-t-(--primary) rounded-full animate-spin" />
               ) : (
                 searchQuery && (
-                  <button type="button" onClick={clearSearch}>
+                  <button
+                    type="button"
+                    onClick={clearSearch}
+                    className="text-(--text-muted) hover:text-(--text)"
+                  >
                     <HiXMark />
                   </button>
                 )
@@ -99,13 +103,13 @@ const FindUser = () => {
           {/* 👥 Users */}
           <div className="mt-6">
             {loadingUsers ? (
-              <p className="text-gray-500 text-sm">Loading...</p>
+              <p className="text-(--text-muted) text-sm">Loading...</p>
             ) : displayUsers?.length > 0 ? (
               displayUsers?.map((user) => (
                 <FindUserCard key={user?.id} user={user} />
               ))
             ) : (
-              <p className="text-gray-500 text-sm">No users found</p>
+              <p className="text-(--text-muted) text-sm">No users found</p>
             )}
           </div>
         </div>
