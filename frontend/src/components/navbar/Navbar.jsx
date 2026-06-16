@@ -3,13 +3,14 @@ import {
   HiMiniChatBubbleLeftEllipsis,
   HiMiniCog6Tooth,
   HiMoon,
+  HiSun,
   HiMiniChatBubbleBottomCenterText,
 } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router";
 import { myProfile } from "../../redux/slices/myProfileSlice";
 
-const Navbar = () => {
+const Navbar = ({ theme, toggleTheme }) => {
   const { profileData } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
@@ -24,7 +25,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="sticky left-0 top-0 z-50 w-18 bg-white border-r border-gray-100 shadow-lg h-screen hidden md:flex flex-col items-center justify-between py-4">
+      <div className="sticky left-0 top-0 z-50 w-18 bg-(--surface) border-r border-gray-100 shadow-lg h-screen hidden md:flex flex-col items-center justify-between py-4">
         <div className="flex flex-col items-center gap-8 w-full px-2">
           <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-(--wa-green-secondary) rounded-full shadow-md">
             <HiMiniChatBubbleLeftEllipsis className="text-white text-xl md:text-2xl" />
@@ -64,10 +65,15 @@ const Navbar = () => {
 
         <div className="flex flex-col items-center gap-3 w-full px-2">
           <button
+            onClick={toggleTheme}
             className="flex items-center justify-center w-full py-3 rounded-xl text-(--wa-green-dark) hover:bg-gray-100 hover:text-gray-600 transition-all duration-200"
             title="Dark mode"
           >
-            <HiMoon className="text-xl" />
+            {theme === "light" ? (
+              <HiMoon className="text-xl" />
+            ) : (
+              <HiSun className="text-xl" />
+            )}
           </button>
 
           <NavLink to="/profile" title="Profile / Logout">

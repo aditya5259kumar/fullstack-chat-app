@@ -212,6 +212,7 @@ const SignUp = () => {
             <button className="w-full mb-4 bg-(--wa-green-secondary) border-(--wa-green-dark) hover:bg-(--wa-green-dark) text-white py-4 rounded-md text-sm font-medium transition-all ease-in-out">
               {loading ? "Loading..." : "Sign Up"}
             </button>
+            <p>By registering you agree to the Chatvia <span className="cursor-pointer text-blue-500">Terms of Use</span></p>
           </form>
         </div>
         <p className="mt-8 text-center">
@@ -220,6 +221,7 @@ const SignUp = () => {
             Login
           </Link>
         </p>
+        <p>© 2026 LinkUp. Created with ❤️ by Aditya Kumar</p>
       </div>
     </div>
   );

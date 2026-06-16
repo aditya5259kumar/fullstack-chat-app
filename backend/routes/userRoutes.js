@@ -2,6 +2,7 @@ import express from "express";
 import userController from "../controller/userController.js";
 import authenticateUser from "../middleware/authenticateUser.js";
 import upload from "../middleware/multer.js";
+import chatUpload from "../middleware/chatUpload.js";
 
 const router = express.Router();
 
@@ -32,7 +33,12 @@ router.get(
   userController.findConversation,
 );
 
-router.post("/send-message", authenticateUser, userController.sendMessage);
+router.post(
+  "/send-message",
+  authenticateUser,
+  chatUpload.single("file"),
+  userController.sendMessage,
+);
 
 router.get(
   "/messages/:conversationId",

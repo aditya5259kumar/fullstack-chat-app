@@ -51,6 +51,29 @@ const UserChats = ({ chat }) => {
   const [isTyping, setIsTyping] = useState(false); // Am I seeing the OTHER person typing?
   const typingTimeoutRef = useRef(null);
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+
+    if (file.type.startsWith("image/")) {
+      setPreviewUrl(URL.createObjectURL(file));
+    } else {
+      setPreviewUrl(null);
+    }
+  };
+
+  const removeSelectedFile = () => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   // 1. Auto-scroll to bottom whenever messages change
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -142,21 +165,24 @@ const UserChats = ({ chat }) => {
   };
 
   const handleSendMessage = async () => {
-    if (!textMsg.trim()) return;
+    if (!textMsg.trim() && !selectedFile) return;
 
     const content = textMsg.trim();
+    const fileToSend = selectedFile;
+
     setTextMsg("");
+    removeSelectedFile();
 
     try {
       await dispatch(
         sendMsg({
           conversation_id: chatId,
           content,
+          file: fileToSend,
         }),
       ).unwrap();
 
       dispatch(userConversation());
-
       inputRef.current?.focus();
     } catch (err) {
       console.error(err);
@@ -299,9 +325,49 @@ const UserChats = ({ chat }) => {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Preview strip - shows above input when a file is selected */}
+      {selectedFile && (
+        <div className="px-4 pb-2 max-w-5xl mx-auto">
+          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-2 relative">
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt="preview"
+                className="w-12 h-12 object-cover rounded"
+              />
+            ) : (
+              <div className="w-12 h-12 flex items-center justify-center bg-gray-100 rounded text-gray-500 text-[10px] text-center px-1 font-medium">
+                {selectedFile.name.split(".").pop().toUpperCase()}
+              </div>
+            )}
+            <div className="flex-1 truncate text-sm text-gray-700">
+              {selectedFile.name}
+            </div>
+            <button
+              onClick={removeSelectedFile}
+              className="text-gray-400 hover:text-red-500 px-2"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Input Area */}
       <div className="px-4 py-3 bg-[#f0f2f5] shrink-0">
         <div className="flex items-center gap-2 max-w-5xl mx-auto bg-white rounded-full px-4 py-1.5 shadow-sm border border-gray-200">
-          <button className="text-gray-500 hover:text-gray-700 p-1">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip"
+          />
+
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="text-gray-500 hover:text-gray-700 p-1"
+          >
             <MdAttachFile size={22} className="rotate-45" />
           </button>
 
@@ -317,9 +383,9 @@ const UserChats = ({ chat }) => {
 
           <button
             onClick={handleSendMessage}
-            disabled={!textMsg.trim()}
+            disabled={!textMsg.trim() && !selectedFile}
             className={`p-2 rounded-full transition-all ${
-              textMsg.trim()
+              textMsg.trim() || selectedFile
                 ? "bg-emerald-500 inline-block text-white shadow-md hover:bg-emerald-600"
                 : "hidden"
             }`}

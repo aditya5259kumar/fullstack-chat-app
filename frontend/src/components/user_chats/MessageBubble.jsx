@@ -1,5 +1,5 @@
 import React from "react";
-import { BsCheckAll, BsCheck } from "react-icons/bs";
+import { BsCheckAll, BsCheck, BsFileEarmarkText } from "react-icons/bs";
 import { jwtDecode } from "jwt-decode";
 
 const token = localStorage.getItem("token");
@@ -9,6 +9,11 @@ const userId = token ? jwtDecode(token).id : null;
 const MessageBubble = ({ message }) => {
   // console.log("userId=============", userId);
   // console.log("message=============", message);
+
+  const isImage = message?.file_type?.startsWith("image/");
+  const fileUrl = message?.file_url
+    ? `http://localhost:4000${message.file_url}`
+    : null;
 
   const formatDateTime = (dateString) => {
     if (!dateString) return "";
@@ -37,6 +42,36 @@ const MessageBubble = ({ message }) => {
             : "bg-white rounded-bl-sm"
         }`}
       >
+        {fileUrl && isImage && (
+          <img
+            src={fileUrl}
+            alt={message?.file_name || "attachment"}
+            className="max-w-60 max-h-60 rounded-lg mb-1 object-cover cursor-pointer"
+            onClick={() => window.open(fileUrl, "_blank")}
+          />
+        )}
+
+        {fileUrl && !isImage && (
+          <a
+            href={fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            download={message?.file_name}
+            className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg p-2 mb-1 hover:bg-gray-100 max-w-55"
+          >
+            <BsFileEarmarkText className="text-xl text-gray-500 shrink-0" />
+            <span className="text-sm text-gray-700 truncate">
+              {message?.file_name}
+            </span>
+          </a>
+        )}
+
+        {message?.content && (
+          <p className="text-sm text-gray-800 leading-relaxed wrap-break-words">
+            {message.content}
+          </p>
+        )}
+
         <p className="text-sm text-gray-800 leading-relaxed wrap-break-words">
           {message?.content}
         </p>

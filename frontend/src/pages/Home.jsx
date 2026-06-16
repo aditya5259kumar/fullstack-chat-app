@@ -3,6 +3,7 @@ import Navbar from "../components/navbar/Navbar";
 import AllChats from "./AllChats";
 import UserChats from "./UserChats";
 import { useParams, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const { chatId } = useParams();
@@ -24,12 +25,27 @@ const Home = () => {
     navigate("/");
   }
 
+  // theme toggle
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  function toggleTheme() {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50 min-w-0">
       <div
         className={`${isMobileChatOpen ? "hidden md:block" : "block"} shrink-0`}
       >
-        <Navbar />
+        <Navbar theme={theme} toggleTheme={toggleTheme} />
       </div>
 
       {/* Chat List - hidden on mobile when chat open */}

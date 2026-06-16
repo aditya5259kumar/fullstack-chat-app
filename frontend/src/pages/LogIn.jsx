@@ -59,7 +59,7 @@ const LogIn = () => {
     // console.log("ERROR PAYLOAD---------------:", result.payload);
 
     if (result.meta.requestStatus === "fulfilled") {
-      // connectSocket(result.payload.user.id); 
+      // connectSocket(result.payload.user.id);
       navigate("/");
     }
     // console.log("FINAL PAYLOAD----------------------:", result.payload);

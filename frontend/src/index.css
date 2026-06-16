@@ -1,6 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
+* {
+  font-family: "Public Sans", sans-serif;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --wa-green-prim: #25d366;
   --wa-green-dark: #075e54;
@@ -10,16 +16,91 @@
   --wa-msg-out: #dcf8c6;
   --wa-blue-accent: #34b7f1;
 }
+/* ================================= */
 :root {
-  --wa-green-prim: #3b82f6;       /* modern blue */
-  --wa-green-dark: #0f172a;       /* deep navy */
-  --wa-green-secondary: #6366f1;  /* indigo */
-  --wa-hover: #e2e8f0;            /* light gray hover */
-  --wa-bg-chat: #f8fafc;          /* clean white-gray */
-  --wa-msg-out: #dbeafe;          /* pale blue bubble */
-  --wa-blue-accent: #8b5cf6;      /* soft purple */
+  --wa-green-prim: #3b82f6; /* modern blue */
+  --wa-green-dark: #0f172a; /* deep navy */
+  --wa-green-secondary: #6366f1; /* indigo */
+  --wa-hover: #e2e8f0; /* light gray hover */
+  --wa-bg-chat: #f8fafc; /* clean white-gray */
+  --wa-msg-out: #dbeafe; /* pale blue bubble */
+  --wa-blue-accent: #8b5cf6; /* soft purple */
+}
+/* =================================== */
+@import "tailwindcss";
+
+:root {
+  /* Base */
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --surface-2: #f1f5f9;
+  --border: #e2e8f0;
+
+  /* Text */
+  --text: #0f172a;
+  --text-muted: #64748b;
+
+  /* Brand */
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+
+  /* Chat */
+  --chat-user: #3b82f6;
+  --chat-user-text: #ffffff;
+
+  --chat-ai: #f1f5f9;
+  --chat-ai-text: #0f172a;
+
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --input-text: #0f172a;
+  --placeholder: #94a3b8;
+
+  /* Status */
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+
+  /* Effects */
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
-* {
-  font-family: "Public Sans", sans-serif;
+.dark {
+  /* Base */
+  --bg: #0f172a;
+  --surface: #111827;
+  --surface-2: #1f2937;
+  --border: #334155;
+
+  /* Text */
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+
+  /* Brand */
+  --primary: #60a5fa;
+  --primary-hover: #3b82f6;
+
+  /* Chat */
+  --chat-user: #2563eb;
+  --chat-user-text: #ffffff;
+
+  --chat-ai: #1e293b;
+  --chat-ai-text: #e2e8f0;
+
+  /* Inputs */
+  --input-bg: #111827;
+  --input-border: #374151;
+  --input-text: #f8fafc;
+  --placeholder: #64748b;
+
+  /* Status */
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #f87171;
+
+  /* Effects */
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
 }

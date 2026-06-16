@@ -289,9 +289,16 @@ const userController = {
     try {
       const senderId = req.user.id;
       const { conversation_id, content } = req.body;
+      const file = req.file;
 
-      if (!conversation_id || !content) {
-        return res.status(400).json({ message: "Missing fields" });
+      if (!conversation_id) {
+        return res.status(400).json({ message: "Missing conversation_id" });
+      }
+
+      if (!content?.trim() && !file) {
+        return res.status(400).json({
+          message: "Message must contain text or a file",
+        });
       }
 
       // Step 1: Check if user is part of this conversation
@@ -308,28 +315,27 @@ const userController = {
         });
       }
 
-      // Step 2: Save raw message
-      const rawMessage = await messagesModel.create({
+      // Step 2: Save message (with file fields if present)
+      const messagePayload = {
         conversation_id,
         sender_id: senderId,
-        content,
+        content: content?.trim() || null,
         status: "sent",
-      });
+      };
 
-      // Restore conversation for participants who had deleted it
+      if (file) {
+        messagePayload.file_url = `/uploads/chat/${file.filename}`;
+        messagePayload.file_name = file.originalname;
+        messagePayload.file_type = file.mimetype;
+      }
+
+      const rawMessage = await messagesModel.create(messagePayload);
+
       await participantsModel.update(
-        {
-          deleted_at: null,
-        },
-        {
-          where: {
-            conversation_id,
-          },
-        },
+        { deleted_at: null },
+        { where: { conversation_id } },
       );
 
-      // Step 3: Fetch the newly created message WITH the sender data
-      // This ensures the frontend gets the exact same format as getMessages
       const populatedMessage = await messagesModel.findOne({
         where: { id: rawMessage.id },
         include: [
@@ -341,25 +347,20 @@ const userController = {
         ],
       });
 
-      // Step 4: Broadcast to users already inside the chat room
       if (req.io) {
         req.io
           .to(`conversation_${conversation_id}`)
           .emit("receive_message", populatedMessage);
       }
 
-      // Step 5: Notify participants who are not currently in room
       const participants = await participantsModel.findAll({
-        where: {
-          conversation_id,
-        },
+        where: { conversation_id },
       });
 
       const receiver = participants.find((p) => p.user_id !== senderId);
 
       if (receiver) {
         const receiverSockets = getUserSockets(receiver.user_id);
-
         if (receiverSockets) {
           receiverSockets.forEach((socketId) => {
             req.io.to(socketId).emit("new_conversation_message", {
@@ -524,7 +525,15 @@ const userController = {
           {
             model: messagesModel,
             as: "messages",
-            attributes: ["content", "created_at", "sender_id", "status"],
+            attributes: [
+              "content",
+              "created_at",
+              "sender_id",
+              "status",
+              "file_url",
+              "file_name",
+              "file_type",
+            ],
             limit: 1,
             order: [["created_at", "DESC"]],
           },
@@ -548,22 +557,33 @@ const userController = {
           if (lastMessage) {
             const isCurrentUserSender = lastMessage.sender_id === userId;
 
+            let bodyText;
+            if (lastMessage.file_type) {
+              if (lastMessage.file_type.startsWith("image/")) {
+                bodyText = "📷 Photo";
+              } else {
+                bodyText = `📎 ${lastMessage.file_name || "File"}`;
+              }
+              if (lastMessage.content?.trim()) {
+                bodyText += ` · ${lastMessage.content.trim()}`;
+              }
+            } else {
+              bodyText = lastMessage.content || "";
+            }
+
+            const truncated =
+              bodyText.length > 50
+                ? `${bodyText.substring(0, 50)}...`
+                : bodyText;
+
             if (isCurrentUserSender) {
-              lastMessagePreview = `You: ${lastMessage.content.substring(
-                0,
-                50,
-              )}${lastMessage.content.length > 50 ? "..." : ""}`;
+              lastMessagePreview = `You: ${truncated}`;
             } else {
               const sender = c.participants.find(
                 (p) => p.user_id === lastMessage.sender_id,
               );
-
               const senderName = sender?.user?.name || "Someone";
-
-              lastMessagePreview = `${senderName}: ${lastMessage.content.substring(
-                0,
-                50,
-              )}${lastMessage.content.length > 50 ? "..." : ""}`;
+              lastMessagePreview = `${senderName}: ${truncated}`;
             }
           } else {
             lastMessagePreview = "No messages yet";

@@ -39,6 +39,22 @@ export default function (sequelize, DataTypes) {
         type: DataTypes.ENUM("sent", "seen"),
         defaultValue: "sent",
       },
+      content: {
+        type: DataTypes.TEXT,
+        allowNull: true, // was false
+      },
+      file_url: {
+        type: DataTypes.STRING(500),
+        allowNull: true,
+      },
+      file_name: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      file_type: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
     },
     {
       sequelize,

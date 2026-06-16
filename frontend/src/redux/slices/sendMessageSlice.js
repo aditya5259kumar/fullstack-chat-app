@@ -3,16 +3,24 @@ import axios from "axios";
 
 export const sendMsg = createAsyncThunk(
   "sendMessage/send",
-  async ({ conversation_id, content }, thunkAPI) => {
+  async ({ conversation_id, content, file }, thunkAPI) => {
     try {
       const token = localStorage.getItem("token");
 
+      const formData = new FormData();
+      formData.append("conversation_id", conversation_id);
+
+      if (content) {
+        formData.append("content", content);
+      }
+
+      if (file) {
+        formData.append("file", file);
+      }
+
       const response = await axios.post(
         "http://localhost:4000/api/user/send-message",
-        {
-          conversation_id,
-          content,
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,

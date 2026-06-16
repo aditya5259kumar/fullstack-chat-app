@@ -66,6 +66,20 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
   const isSentByMe = chat?.last_message_sender_id === userId;
   const unreadCount = chat?.unread_count || 0;
 
+  const renderPreview = () => {
+    if (chat?.last_message_file_type) {
+      if (chat.last_message_file_type.startsWith("image/")) {
+        return chat?.last_message_content?.trim()
+          ? `📷 ${chat.last_message_content}`
+          : "📷 Photo";
+      }
+      return chat?.last_message_content?.trim()
+        ? `📎 ${chat.last_message_content}`
+        : `📎 ${chat?.last_message_file_name || "File"}`;
+    }
+    return chat?.last_message_preview;
+  };
+
   return (
     <div
       onClick={onClick}
@@ -78,7 +92,6 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
           {chat?.users?.[0]?.profile_photo ? (
             <img
               src={`http://localhost:4000/uploads/${chat?.users?.[0]?.profile_photo}`}
-              alt="Profile"
               alt={chat?.users?.[0]?.username}
               className="w-12 h-12 rounded-full object-cover"
             />
@@ -107,7 +120,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
                 <IoCheckmarkDoneSharp className="text-base inline" />
               </span>
             )}
-            {chat?.last_message_preview}
+            {renderPreview()}
           </p>
         </div>
       </div>
