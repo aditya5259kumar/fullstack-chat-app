@@ -37,17 +37,19 @@ const loadMsgSlice = createSlice({
   },
   reducers: {
     addMessage: (state, action) => {
-      state.msg.push(action.payload);
+      const incoming = action.payload;
+      const alreadyExists = state.msg.some((m) => m.id === incoming.id);
+      if (!alreadyExists) {
+        state.msg.push(incoming);
+      }
     },
     markAllSeen: (state) => {
-      // Update all sent messages to seen in Redux store without a full refetch
       state.msg = state.msg.map((m) =>
         m.status === "sent" ? { ...m, status: "seen" } : m,
       );
     },
   },
   extraReducers: (builder) => {
-    // user conversation
     builder.addCase(getMessages.pending, (state) => {
       state.loading = true;
     });

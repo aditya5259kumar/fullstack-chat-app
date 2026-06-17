@@ -18,7 +18,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
 
   const navigate = useNavigate();
 
-  // console.log("chat======================", chat);
+  console.log("chat======================", chat);
 
   const formatDateTime = (dateString) => {
     if (!dateString) return "";

@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import SearchBar from "../components/search_bar/SearchBar";
 import { HiMiniChatBubbleLeftEllipsis, HiUserPlus } from "react-icons/hi2";
 import UserChatMsg from "../components/user_chats/UserChatMsg";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
 import socket from "../socket/initSocket";
 
-import { userConversation } from "../redux/slices/userConvoSlice";
+import {
+  userConversation,
+  updateConvoLastMessage,
+  incrementUnreadCount,
+} from "../redux/slices/userConvoSlice";
 import Navbar from "../components/navbar/Navbar";
 
 const AllChats = ({ activeChatId }) => {
@@ -15,36 +20,55 @@ const AllChats = ({ activeChatId }) => {
   const navigate = useNavigate();
 
   function handleChatSelect(id) {
-    // if (onSelectChat) onSelectChat(chat);
     navigate(`/chat/${id}`);
   }
 
   const dispatch = useDispatch();
   const { inboxData, loading, error } = useSelector((state) => state.convo);
 
-  console.log("userConversation inboxData-----------------", inboxData);
-  // console.log("inboxData type-------------------", typeof inboxData);
-  // console.log("inboxData value-------------------", inboxData);
-
   useEffect(() => {
     dispatch(userConversation());
+  }, [dispatch]);
 
-    // const handleNewConversation = () => {
-    //   dispatch(userConversation());
-    // };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const myId = token ? jwtDecode(token).id : null;
 
-    const handleMessagesSeen = () => {
-      dispatch(userConversation());
+    const handleNewMessage = (newMessage) => {
+      dispatch(
+        updateConvoLastMessage({
+          conversation_id: newMessage.conversation_id,
+          message: newMessage,
+        }),
+      );
+
+      const isMine = String(newMessage.sender_id) === String(myId);
+      const isOpen = String(activeChatId) === String(newMessage.conversation_id);
+
+      if (!isMine && !isOpen) {
+        dispatch(incrementUnreadCount(newMessage.conversation_id));
+      }
     };
 
-    // socket.on("new_conversation_message", handleNewConversation);
+    const handleMessagesSeen = ({ conversationId }) => {
+      dispatch(
+        updateConvoLastMessage({
+          conversation_id: conversationId,
+          message: { status: "seen" },
+        }),
+      );
+    };
+
+    socket.on("receive_message", handleNewMessage);
+    socket.on("new_conversation_message", handleNewMessage);
     socket.on("messages_seen", handleMessagesSeen);
 
     return () => {
-      // socket.off("new_conversation_message", handleNewConversation);
+      socket.off("receive_message", handleNewMessage);
+      socket.off("new_conversation_message", handleNewMessage);
       socket.off("messages_seen", handleMessagesSeen);
     };
-  }, [dispatch]);
+  }, [dispatch, activeChatId]);
 
   const filteredChats = (Array.isArray(inboxData) ? inboxData : []).filter(
     (chat) =>

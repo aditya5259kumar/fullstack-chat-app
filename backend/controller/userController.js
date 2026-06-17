@@ -363,10 +363,9 @@ const userController = {
         const receiverSockets = getUserSockets(receiver.user_id);
         if (receiverSockets) {
           receiverSockets.forEach((socketId) => {
-            req.io.to(socketId).emit("new_conversation_message", {
-              conversation_id,
-              message: populatedMessage,
-            });
+            req.io
+              .to(socketId)
+              .emit("new_conversation_message", populatedMessage);
           });
         }
       }

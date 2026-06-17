@@ -12,23 +12,22 @@ import { MdAttachFile } from "react-icons/md";
 import { useParams, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteConvo } from "../redux/slices/deleteConvo";
-import { updateConvoLastMessage } from "../redux/slices/userConvoSlice";
+import { jwtDecode } from "jwt-decode";
 
-
-// Redux & Socket Imports
 import {
   getMessages,
   addMessage,
   markAllSeen,
 } from "../redux/slices/loadMsgSlice";
 import { sendMsg } from "../redux/slices/sendMessageSlice";
-import { userConversation } from "../redux/slices/userConvoSlice";
+import {
+  userConversation,
+  updateConvoLastMessage,
+  resetUnreadCount,
+} from "../redux/slices/userConvoSlice";
 import { msgStatus } from "../redux/slices/msgStatusSlice";
 import socket from "../socket/initSocket";
 
-// Components
-// import lightChatBg from "../assets/chat-bg-light.png";
-// import chatBg from "../assets/chat-bg.png";
 import MessageBubble from "../components/user_chats/MessageBubble";
 import NoChatSelected from "../components/user_chats/NoChatSelected";
 
@@ -45,12 +44,12 @@ const UserChats = ({ chat }) => {
 
   const { msg, other_user, loading } = useSelector((state) => state.getMsg);
 
-  const { onlineUsers } = useSelector((state) => state.profile); // Get online users
+  const { onlineUsers } = useSelector((state) => state.profile);
   const isOnline = onlineUsers?.some(
     (id) => String(id) === String(other_user?.id),
   );
 
-  const [isTyping, setIsTyping] = useState(false); // Am I seeing the OTHER person typing?
+  const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef(null);
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -76,7 +75,6 @@ const UserChats = ({ chat }) => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // 1. Auto-scroll to bottom whenever messages change
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -85,14 +83,14 @@ const UserChats = ({ chat }) => {
     scrollToBottom();
   }, [msg]);
 
-  // 2. Room Management & Initial Load
+  // Room Management & Initial Load — runs once per chatId change
   useEffect(() => {
     if (!chatId) return;
 
     const initChat = async () => {
       await dispatch(getMessages(chatId));
       await dispatch(msgStatus(chatId));
-      await dispatch(userConversation()); 
+      dispatch(resetUnreadCount(chatId));
     };
 
     initChat();
@@ -123,23 +121,31 @@ const UserChats = ({ chat }) => {
     };
   }, [chatId]);
 
-  // 3. Real-time Listener
+  // Real-time Listener
   useEffect(() => {
     if (!chatId) return;
 
     const handleNewMessage = (newMessage) => {
-  if (String(newMessage.conversation_id) === String(chatId)) {
-    dispatch(addMessage(newMessage));
-    dispatch(updateConvoLastMessage({
-      conversation_id: newMessage.conversation_id,
-      message: newMessage,
-    }));
-  }
-};
+      if (String(newMessage.conversation_id) !== String(chatId)) return;
+
+      dispatch(addMessage(newMessage));
+      dispatch(
+        updateConvoLastMessage({
+          conversation_id: newMessage.conversation_id,
+          message: newMessage,
+        }),
+      );
+
+      const token = localStorage.getItem("token");
+      const myId = token ? jwtDecode(token).id : null;
+      if (String(newMessage.sender_id) !== String(myId)) {
+        dispatch(msgStatus(chatId));
+        dispatch(resetUnreadCount(chatId));
+      }
+    };
 
     const handleMessagesSeen = ({ conversationId }) => {
       if (String(conversationId) === String(chatId)) {
-        // Update Redux store directly without a full refetch
         dispatch(markAllSeen());
       }
     };
@@ -156,15 +162,13 @@ const UserChats = ({ chat }) => {
   const handleInputChange = (e) => {
     setTextMsg(e.target.value);
 
-    // Emit typing_start
     socket.emit("typing_start", { conversationId: chatId });
 
-    // Stop typing logic: Clear existing timeout and set a new one
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
 
     typingTimeoutRef.current = setTimeout(() => {
       socket.emit("typing_stop", { conversationId: chatId });
-    }, 2000); // Stop showing "typing" after 2 seconds of inactivity
+    }, 2000);
   };
 
   const handleSendMessage = async () => {
@@ -177,7 +181,7 @@ const UserChats = ({ chat }) => {
     removeSelectedFile();
 
     try {
-      await dispatch(
+      const sentMessage = await dispatch(
         sendMsg({
           conversation_id: chatId,
           content,
@@ -185,7 +189,15 @@ const UserChats = ({ chat }) => {
         }),
       ).unwrap();
 
-      dispatch(userConversation());
+      // sentMessage is the populatedMessage returned by the backend (data.data)
+      dispatch(addMessage(sentMessage));
+      dispatch(
+        updateConvoLastMessage({
+          conversation_id: chatId,
+          message: sentMessage,
+        }),
+      );
+
       inputRef.current?.focus();
     } catch (err) {
       console.error(err);
@@ -219,20 +231,14 @@ const UserChats = ({ chat }) => {
     try {
       await dispatch(deleteConvo(chat.conversation_id)).unwrap();
       await dispatch(userConversation());
-
       setShowMenu(false);
-
-      // console.log("Conversation deleted");
     } catch (error) {
       console.error(error);
     }
   }
 
-  console.log("msg=================================", msg);
-
   return (
     <div className="flex flex-col h-screen w-full bg-(--bg) relative overflow-hidden border-l border-(--border)">
-      {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-(--surface) border-b border-(--border) shrink-0 z-10">
         <div className="flex items-center gap-3">
           <button
@@ -267,7 +273,6 @@ const UserChats = ({ chat }) => {
               {chat?.users?.length === 0 ? "Account deleted" : other_user?.name}
             </h2>
 
-            {/* If typing, show typing. If not, show online/offline status */}
             {isTyping ? (
               <p className="text-[12px] text-(--primary) font-medium animate-pulse">
                 typing...
@@ -276,7 +281,6 @@ const UserChats = ({ chat }) => {
               <p
                 className={`text-[12px] font-medium ${isOnline ? "text-(--success)" : "text-(--text-muted)"}`}
               >
-                {/* {isOnline ? "online" : "offline"} */}
                 {chat?.users?.length === 0
                   ? ""
                   : isOnline
@@ -313,11 +317,7 @@ const UserChats = ({ chat }) => {
         </div>
       </header>
 
-      <div
-        className="flex-1 overflow-y-auto px-3 md:px-6 py-4 bg-cover bg-center bg-no-repeat"
-        // style={{ backgroundImage: `url(${chatBg})` }}
-      >
-        {" "}
+      <div className="flex-1 overflow-y-auto px-3 md:px-6 py-4 bg-cover bg-center bg-no-repeat">
         {loading && msg.length === 0 ? (
           <div className="flex justify-center items-center h-full text-(--text-muted)">
             Loading messages...
@@ -330,7 +330,6 @@ const UserChats = ({ chat }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Preview strip - shows above input when a file is selected */}
       {selectedFile && (
         <div className="px-4 pb-2 max-w-5xl mx-auto">
           <div className="flex items-center gap-2 bg-(--surface) border border-(--border) rounded-lg p-2 relative">
@@ -358,7 +357,6 @@ const UserChats = ({ chat }) => {
         </div>
       )}
 
-      {/* Input Area */}
       <div className="px-4 py-3 bg-(--bg) shrink-0">
         <div className="flex items-center gap-2 max-w-5xl mx-auto bg-(--surface) rounded-full px-4 py-1.5 shadow-(--shadow) border border-(--border)">
           <input

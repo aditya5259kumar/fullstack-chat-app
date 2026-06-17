@@ -56,7 +56,7 @@ const MessageBubble = ({ message }) => {
           <img
             src={fileUrl}
             alt={message?.file_name || "attachment"}
-            className="max-w-60 max-h-60 rounded-lg mb-1 object-cover cursor-pointer"
+            className="max-w-full h-auto rounded-lg mb-1 object-cover cursor-pointer block"
             onClick={() => window.open(fileUrl, "_blank")}
           />
         )}
