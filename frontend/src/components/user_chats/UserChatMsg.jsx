@@ -4,7 +4,7 @@ import { BsCheckAll, BsCheck } from "react-icons/bs";
 import { LuUserRoundX } from "react-icons/lu";
 import { deleteConvo } from "../../redux/slices/deleteConvo";
 import { userConversation } from "../../redux/slices/userConvoSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router";
 import { useNavigate } from "react-router";
@@ -15,6 +15,10 @@ const userId = token ? jwtDecode(token).id : null;
 const UserChatMsg = ({ chat, isActive = false, onClick }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
+
+  const { loading: deleteConvoLoading } = useSelector(
+    (state) => state.deleteConvo,
+  );
 
   const navigate = useNavigate();
 
@@ -171,7 +175,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
                 onClick={deleteHandler}
                 className="block w-full text-left px-4 py-2 text-sm text-(--error) hover:bg-(--surface-2)"
               >
-                Delete
+                {deleteConvoLoading ? "Deleting..." : "Delete"}
               </button>
             </div>
           )}

@@ -43,6 +43,10 @@ const UserChats = ({ chat }) => {
   const inputRef = useRef(null);
 
   const { msg, other_user, loading } = useSelector((state) => state.getMsg);
+  const { loading: sendMsgLoading } = useSelector((state) => state.sendMsg);
+  const { loading: deleteConvoLoading } = useSelector(
+    (state) => state.deleteConvo,
+  );
 
   const { onlineUsers } = useSelector((state) => state.profile);
   const isOnline = onlineUsers?.some(
@@ -172,6 +176,8 @@ const UserChats = ({ chat }) => {
   };
 
   const handleSendMessage = async () => {
+    if (sendMsgLoading) return;
+
     if (!textMsg.trim() && !selectedFile) return;
 
     const content = textMsg.trim();
@@ -310,7 +316,7 @@ const UserChats = ({ chat }) => {
                 className="block w-full text-(--error) text-left px-4 py-2 text-sm hover:bg-(--surface-2)"
                 onClick={deleteHandler}
               >
-                Delete Chat
+                {deleteConvoLoading ? "Deleting..." : "Delete Chat"}
               </button>
             </div>
           )}
@@ -318,9 +324,9 @@ const UserChats = ({ chat }) => {
       </header>
 
       <div className="flex-1 overflow-y-auto px-3 md:px-6 py-4 bg-cover bg-center bg-no-repeat">
-        {loading && msg.length === 0 ? (
-          <div className="flex justify-center items-center h-full text-(--text-muted)">
-            Loading messages...
+        {loading ? (
+          <div className="flex justify-center items-center h-full">
+            <div className="w-10 h-10 border-4 border-(--primary) border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           msg.map((m, index) => (
@@ -386,14 +392,16 @@ const UserChats = ({ chat }) => {
 
           <button
             onClick={handleSendMessage}
-            disabled={!textMsg.trim() && !selectedFile}
-            className={`p-2 rounded-full transition-all ${
-              textMsg.trim() || selectedFile
-                ? "bg-(--primary) inline-block text-white shadow-md hover:bg-(--primary-hover)"
-                : "hidden"
-            }`}
+            disabled={sendMsgLoading || (!textMsg.trim() && !selectedFile)}
+            className="p-2 rounded-full transition-all bg-(--primary) text-white shadow-md hover:bg-(--primary-hover)"
           >
-            <IoMdSend size={22} />
+            {sendMsgLoading ? (
+              <div className="flex justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : (
+              <IoMdSend size={22} />
+            )}
           </button>
         </div>
       </div>

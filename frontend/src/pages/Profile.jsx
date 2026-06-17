@@ -19,7 +19,6 @@ const Profile = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [deletebox, setDeletebox] = useState(false);
 
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");

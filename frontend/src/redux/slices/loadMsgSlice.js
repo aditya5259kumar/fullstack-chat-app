@@ -52,6 +52,8 @@ const loadMsgSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getMessages.pending, (state) => {
       state.loading = true;
+      state.msg = [];
+      state.other_user = null;
     });
     builder.addCase(getMessages.fulfilled, (state, action) => {
       state.loading = false;

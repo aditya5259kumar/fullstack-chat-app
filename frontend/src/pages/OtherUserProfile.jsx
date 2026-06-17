@@ -14,7 +14,7 @@ import { useParams } from "react-router";
 const Profile = () => {
   const {
     data: profileData,
-    // loading,
+    loading,
     // error,
   } = useSelector((state) => state.otherUserProfile);
 
@@ -52,8 +52,21 @@ const Profile = () => {
 
   const formatted_joinDate = formatDate(profileData?.created_at);
 
+  if (loading) {
   return (
-   <div className="flex h-screen overflow-hidden bg-(--bg)">
+    <div className="flex h-screen overflow-hidden bg-(--bg)">
+      <Navbar />
+      <div className="flex-1 flex items-center justify-center">
+        <div className="text-(--text-muted)">
+          Loading profile...
+        </div>
+      </div>
+    </div>
+  );
+}
+
+  return (
+    <div className="flex h-screen overflow-hidden bg-(--bg)">
       <Navbar />
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-lg mx-auto px-4 py-8">

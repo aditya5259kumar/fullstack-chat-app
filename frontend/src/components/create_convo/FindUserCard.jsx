@@ -1,16 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
 import { createConvo } from "../../redux/slices/createConvoSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const FindUserCard = ({ user }) => {
-  const { data } = useSelector((state) => state.createOrFindConvo);
+  const [clickedUserId, setClickedUserId] = useState(null);
+  const { data, loading } = useSelector((state) => state.createOrFindConvo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // console.log("createOrFindConvo data===================", data);
 
   function findConvo() {
+    setClickedUserId(user.id);
     dispatch(createConvo(user.id));
   }
 
@@ -75,9 +77,15 @@ const FindUserCard = ({ user }) => {
 
         <button
           onClick={findConvo}
-          className="w-21 h-9 md:w-22 md:h-10 rounded-lg text-sm font-medium text-white bg-(--primary) hover:bg-(--primary-hover) shadow-sm hover:shadow-md transition-all duration-200"
+          className="w-21 h-9 md:w-22 md:h-10 rounded-lg text-sm font-medium text-white bg-(--primary)"
         >
-          Message
+          {loading && clickedUserId === user.id ? (
+            <div className="flex justify-center">
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            "Message"
+          )}
         </button>
       </div>
     </div>
