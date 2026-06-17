@@ -1,89 +1,184 @@
-# Linkup
+# LinkUp
 
-A real-time chat application built with React, Node.js, Express, MySQL, Socket.IO, and Redux Toolkit.
+A full-stack real-time chat application built with React, Node.js, Express, MySQL, Socket.IO, and Redux Toolkit.
 
-Linkup allows users to communicate through private one-to-one messaging with real-time updates, typing indicators, active status tracking, and dynamic user discovery.
+LinkUp enables users to communicate instantly through private one-to-one messaging with features such as typing indicators, online presence tracking, read receipts, file sharing, user discovery, and account management.
+
+---
+
+## Live Demo
+
+Will be added soon...
+
+---
+
+## Screenshots
+
+### Inbox Page
+![Inbox](./images/inbox.png)
+
+### Find Users Page
+![Find Users](./images/find-users.png)
+
+### User Profile
+![User Profile](./images/profile.png)
+
+### Mobile Responsive View
+![Mobile View](./images/mobile.png)
 
 ---
 
 ## Features
 
-- Real-Time Private Messaging
-- JWT-based Authentication
-- Online & Offline User Status
-- Typing Indicators
-- Real-Time Message Updates using Socket.IO
-- Search Users by Username
-- Dynamic User Discovery
-- Start Chat Functionality
-- Responsive UI Design
-- Redux Toolkit State Management
-- MVC Backend Architecture
-
----
-
-## Planned Features
-
-- Group Chat System
-- File & Image Sharing
-- Dark & Light Theme
-- Google OAuth Login
-- Forgot Password System
-- Email Verification
-- Change Password
-- Delete Account
-- AI Chatbot Integration
-- Message Notifications
-- Read Receipts
-- Emoji Support
-
----
-
-## How It Works
-
-### User Discovery
-
-Users can:
-
-- Browse all registered users
-- Search users using their `@username`
-- Start private conversations instantly
+### Authentication & User Management
+- JWT Authentication
+- User Signup & Login
+- Welcome Email using Nodemailer
+- Profile Editing & Profile Picture Upload
+- Account Deletion
 
 ### Real-Time Communication
+- One-to-One Messaging with Socket.IO
+- Typing Indicators
+- Online / Offline Presence
+- Read Receipts & Unread Message Counters
 
-Using Socket.IO, Linkup supports:
+### Messaging Features
+- Text Messaging
+- Image Sharing
+- File Sharing
+- Conversation Management
 
-- Instant message delivery
-- Live typing indicators
-- Dynamic online/offline presence updates
+### User Discovery
+- Search Users by Username
+- Start Chats with New Users
+- View Other User Profiles
+- Search Existing Conversations
 
-### User Presence System
-
-- Online status updates automatically
-- Offline status changes when users disconnect
-- Real-time activity synchronization between users
+### User Experience
+- Dark / Light Theme
+- Responsive Design
+- Debounced Search
+- Redux Toolkit State Management
+- MVC Backend Architecture
 
 ---
 
 ## Tech Stack
 
 ### Frontend
+
 - React.js
-- Tailwind CSS
 - Redux Toolkit
+- Tailwind CSS
 - Axios
 - React Router DOM
 
 ### Backend
+
 - Node.js
 - Express.js
-- Socket.IO
 
 ### Database
+
 - MySQL
 
+### Real-Time Communication
+
+- Socket.IO
+
 ### Authentication
+
 - JWT (JSON Web Token)
 
-### Real-Time Communication
-- Socket.IO
+### Email Service
+
+- Nodemailer
+
+### File Uploads
+
+- Multer
+
+### Deployment
+
+- Vercel (Frontend)
+- Render (Backend)
+
+---
+
+## Folder Structure
+
+```bash
+LinkUp/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/         
+│   │   ├── pages/               
+│   │   ├── redux/                          
+│   │   ├── assets/             
+│   │   ├── socket/            
+│   │   ├── App.jsx             
+│   │   ├── main.jsx            
+│   │   ├── index.css           
+│   │   └── App.css             
+│   ├── index.html             
+│   ├── package.json            
+│   ├── package-lock.json       
+│   ├── vite.config.js         
+│   ├── eslint.config.js       
+│   └── .gitignore           
+│
+├── backend/
+│   ├── controllers/           
+│   ├── routes/                 
+│   ├── models/                 
+│   ├── middleware/             
+│   ├── socket/                 
+│   ├── config/                
+│   ├── utils/                       
+│   ├── public/                
+│   ├── app.js                   
+│   ├── package.json            
+│   ├── package-lock.json        
+│   └── .env                    
+│
+├── .gitignore                   
+└── README.md
+```
+
+---
+
+## What I Learned
+
+This project helped me improve my understanding of:
+
+- Real-time communication using Socket.IO
+- WebSocket event handling
+- Online presence systems
+- Read receipt implementation
+- File upload workflows
+- MySQL database design
+
+---
+
+## Challenges Faced
+
+- Managing real-time Socket.IO events
+- Synchronizing online user states
+- Implementing typing indicators
+- Handling read receipt logic
+- Managing unread message counts
+- File uploads within chats
+- Maintaining real-time UI consistency
+
+---
+
+## Future Improvements
+
+- Group Chat Support
+- Message Reactions
+- Message Reply Feature
+- Message Editing
+- Message Deletion for Everyone
+- Push Notifications
