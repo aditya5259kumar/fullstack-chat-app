@@ -7,34 +7,14 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-:root {
-  --wa-green-prim: #25d366;
-  --wa-green-dark: #075e54;
-  --wa-green-secondary: #128c7e;
-  --wa-hover: #e8f5e9;
-  --wa-bg-chat: #ece5dd;
-  --wa-msg-out: #dcf8c6;
-  --wa-blue-accent: #34b7f1;
-}
-/* ================================= */
-:root {
-  --wa-green-prim: #3b82f6; /* modern blue */
-  --wa-green-dark: #0f172a; /* deep navy */
-  --wa-green-secondary: #6366f1; /* indigo */
-  --wa-hover: #e2e8f0; /* light gray hover */
-  --wa-bg-chat: #f8fafc; /* clean white-gray */
-  --wa-msg-out: #dbeafe; /* pale blue bubble */
-  --wa-blue-accent: #8b5cf6; /* soft purple */
-}
-/* =================================== */
 @import "tailwindcss";
 
 :root {
   /* Base */
   --bg: #ffffff;
   --surface: #f8fafc;
-  --surface-2: #f1f5f9;
-  --border: #e2e8f0;
+  --surface-2: #e8edf5;
+  --border: #d1d9e6;
 
   /* Text */
   --text: #0f172a;
@@ -45,10 +25,9 @@
   --primary-hover: #2563eb;
 
   /* Chat */
-  --chat-user: #3b82f6;
+  --chat-user: #000000;
   --chat-user-text: #ffffff;
-
-  --chat-ai: #f1f5f9;
+  --chat-ai: #e8edf5;
   --chat-ai-text: #0f172a;
 
   /* Inputs */
@@ -68,32 +47,31 @@
 }
 
 [data-theme="dark"] {
-  /* Base */
-  --bg: #0f172a;
-  --surface: #111827;
-  --surface-2: #1f2937;
-  --border: #334155;
+  /* Base - Clear distinction between layers */
+  --bg: #0a0e1a;
+  --surface: #141d2e;
+  --surface-2: #1e2a42;
+  --border: #2d3f5e;
 
   /* Text */
-  --text: #f8fafc;
-  --text-muted: #94a3b8;
+  --text: #f0f4ff;
+  --text-muted: #8899bb;
 
   /* Brand */
-  --primary: #60a5fa;
-  --primary-hover: #3b82f6;
+  --primary: #5b9af5;
+  --primary-hover: #7ab0ff;
 
   /* Chat */
-  --chat-user: #2563eb;
+  --chat-user: #000000;
   --chat-user-text: #ffffff;
-
-  --chat-ai: #1e293b;
-  --chat-ai-text: #e2e8f0;
+  --chat-ai: #1e2a42;
+  --chat-ai-text: #d6e0f0;
 
   /* Inputs */
-  --input-bg: #111827;
-  --input-border: #374151;
-  --input-text: #f8fafc;
-  --placeholder: #64748b;
+  --input-bg: #0a0e1a;
+  --input-border: #2d3f5e;
+  --input-text: #f0f4ff;
+  --placeholder: #5a6d8a;
 
   /* Status */
   --success: #4ade80;
@@ -101,6 +79,27 @@
   --error: #f87171;
 
   /* Effects */
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.8);
+}
+
+/* Custom Scrollbar for Light Theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }

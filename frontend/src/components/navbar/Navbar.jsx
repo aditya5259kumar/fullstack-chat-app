@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router";
 import { myProfile } from "../../redux/slices/myProfileSlice";
 import { toggleTheme } from "../../redux/slices/themeSlice";
+import { HiMiniPlus } from "react-icons/hi2";
+
 
 const Navbar = () => {
   const theme = useSelector((store) => store.theme.theme);
@@ -34,7 +36,7 @@ const Navbar = () => {
       <div className="sticky left-0 top-0 z-50 w-18 bg-(--surface) border-r border-(--border) shadow-(--shadow) h-screen hidden md:flex flex-col items-center justify-between py-4">
         <div className="flex flex-col items-center gap-8 w-full px-2">
           <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-(--primary) rounded-full shadow-md">
-            <RiChatSmileAiFill className="text-white text-xl md:text-2xl" />
+            <HiMiniChatBubbleLeftEllipsis className="text-white text-xl md:text-2xl" />
           </div>
 
           <div className="flex w-full flex-col gap-2">
@@ -54,6 +56,20 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
+              to="/find"
+              className={({ isActive }) =>
+                `flex items-center justify-center w-full py-3 rounded-xl transition-all duration-200 ${
+                  isActive
+                    ? "bg-(--surface-2) text-(--primary)"
+                    : "hover:bg-(--surface-2) text-(--text-muted)"
+                }`
+              }
+              title="Find User"
+            >
+              <HiMiniPlus className="text-xl" />
+            </NavLink>
+        
+            <NavLink
               to="/settings"
               className={({ isActive }) =>
                 `flex items-center justify-center w-full py-3 rounded-xl transition-all duration-200 ${
@@ -67,7 +83,7 @@ const Navbar = () => {
               <HiMiniCog6Tooth className="text-xl" />
             </NavLink>
           </div>
-        </div>
+          </div>
 
         <div className="flex flex-col items-center gap-3 w-full px-2">
           <button
@@ -131,6 +147,20 @@ const Navbar = () => {
           title="Settings"
         >
           <HiMiniCog6Tooth className="text-2xl" />
+        </NavLink>
+
+        <NavLink
+          to="/find"
+          className={({ isActive }) =>
+            `flex items-center justify-center w-12 py-2 rounded-xl transition-all duration-200 ${
+              isActive
+                ? "bg-(--surface-2) text-(--primary)"
+                : "hover:bg-(--surface-2) text-(--text-muted)"
+            }`
+          }
+          title="Find User"
+        >
+          <HiMiniPlus className="text-2xl" />
         </NavLink>
 
         <button

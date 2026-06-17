@@ -12,6 +12,8 @@ import { MdAttachFile } from "react-icons/md";
 import { useParams, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteConvo } from "../redux/slices/deleteConvo";
+import { updateConvoLastMessage } from "../redux/slices/userConvoSlice";
+
 
 // Redux & Socket Imports
 import {
@@ -90,7 +92,7 @@ const UserChats = ({ chat }) => {
     const initChat = async () => {
       await dispatch(getMessages(chatId));
       await dispatch(msgStatus(chatId));
-      await dispatch(userConversation()); //
+      await dispatch(userConversation()); 
     };
 
     initChat();
@@ -125,14 +127,15 @@ const UserChats = ({ chat }) => {
   useEffect(() => {
     if (!chatId) return;
 
-    const handleNewMessage = async (newMessage) => {
-      if (String(newMessage.conversation_id) === String(chatId)) {
-        dispatch(addMessage(newMessage));
-
-        await dispatch(msgStatus(chatId));
-        await dispatch(userConversation());
-      }
-    };
+    const handleNewMessage = (newMessage) => {
+  if (String(newMessage.conversation_id) === String(chatId)) {
+    dispatch(addMessage(newMessage));
+    dispatch(updateConvoLastMessage({
+      conversation_id: newMessage.conversation_id,
+      message: newMessage,
+    }));
+  }
+};
 
     const handleMessagesSeen = ({ conversationId }) => {
       if (String(conversationId) === String(chatId)) {
@@ -225,8 +228,10 @@ const UserChats = ({ chat }) => {
     }
   }
 
+  console.log("msg=================================", msg);
+
   return (
-    <div className="flex flex-col h-screen w-full bg-(--bg) relative overflow-hidden">
+    <div className="flex flex-col h-screen w-full bg-(--bg) relative overflow-hidden border-l border-(--border)">
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-(--surface) border-b border-(--border) shrink-0 z-10">
         <div className="flex items-center gap-3">

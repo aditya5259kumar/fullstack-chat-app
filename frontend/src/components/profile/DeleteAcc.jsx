@@ -41,24 +41,24 @@ const DeleteAcc = ({ setDeletebox }) => {
   };
 
   return (
-    <div
+   <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
       onClick={closehandler}
     >
       <div
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl bg-(--surface) p-6 shadow-(--shadow-lg)"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-2xl font-bold text-gray-900">Delete Account</h2>
+        <h2 className="text-2xl font-bold text-(--text)">Delete Account</h2>
 
-        <p className="mt-3 text-sm text-gray-600">
+        <p className="mt-3 text-sm text-(--text-muted)">
           Are you sure you want to permanently delete your account? This action
           cannot be undone and you will lose access to all your data.
         </p>
 
         <form className="mt-6 space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-sm font-medium text-(--text)">
               Current Password
             </label>
 
@@ -71,29 +71,28 @@ const DeleteAcc = ({ setDeletebox }) => {
                   setPassword(e.target.value);
                   setError("");
                 }}
-                className={`w-full rounded-lg border px-4 py-3 pr-12 outline-none ${
-                  error ? "border-red-500" : "border-gray-300"
-                }`}
+                className={`w-full rounded-lg border px-4 py-3 pr-12 outline-none bg-(--input-bg) text-(--input-text) placeholder-(--placeholder) ${
+                  error ? "border-(--error)" : "border-(--border)"
+                } focus:ring-2 focus:ring-(--primary)`}
               />
 
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-(--text-muted) hover:text-(--text)"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
 
-            {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
           </div>
-          {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+          {error && <p className="mt-1 text-sm text-(--error)">{error}</p>}
 
           <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"
               onClick={closehandler}
-              className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100"
+              className="rounded-lg border border-(--border) px-4 py-2 text-(--text) hover:bg-(--surface-2) transition-colors"
             >
               Cancel
             </button>
@@ -101,7 +100,7 @@ const DeleteAcc = ({ setDeletebox }) => {
             <button
               type="submit"
               onClick={deleteHandler}
-              className="rounded-lg bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
+              className="rounded-lg bg-(--error) px-4 py-2 font-medium text-white hover:bg-(--error)/80 transition-colors"
             >
               Delete Permanently
             </button>

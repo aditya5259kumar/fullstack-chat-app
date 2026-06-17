@@ -2,13 +2,13 @@ import React from "react";
 import { BsCheckAll, BsCheck, BsFileEarmarkText } from "react-icons/bs";
 import { jwtDecode } from "jwt-decode";
 
-const token = localStorage.getItem("token");
-const userId = token ? jwtDecode(token).id : null;
-
 // Single message bubble
 const MessageBubble = ({ message }) => {
   // console.log("userId=============", userId);
-  // console.log("message=============", message);
+  console.log("message=============", message);
+
+  const token = localStorage.getItem("token");
+  const userId = token ? jwtDecode(token).id : null;
 
   const isImage = message?.file_type?.startsWith("image/");
   const fileUrl = message?.file_url
@@ -29,18 +29,28 @@ const MessageBubble = ({ message }) => {
     return `${time.toLowerCase()}, ${dateStr}`;
   };
 
-  const isMyMessage = (message?.sender_id || message?.sender?.id) === userId;
+  const isMyMessage =
+    String(message?.sender_id || message?.sender?.id) === String(userId);
+
+  console.log("sender_id:", message?.sender_id, typeof message?.sender_id);
+  console.log("userId:", userId, typeof userId);
+  console.log({
+    id: message.id,
+    sender_id: message.sender_id,
+    sender: message.sender,
+    calculatedSender: message?.sender_id || message?.sender?.id,
+    userId,
+    isMyMessage,
+  });
 
   return (
-   <div
+    <div
       className={`flex ${(message?.sender_id || message?.sender?.id) === userId ? "justify-end" : "justify-start"} mb-1.5`}
     >
       <div
-        className={`relative max-w-[75%] md:max-w-[60%] px-3 py-2 rounded-2xl shadow-(--shadow) ${
-          (message?.sender_id || message?.sender?.id) === userId
-            ? "bg-(--chat-user) rounded-br-sm"
-            : "bg-(--chat-ai) rounded-bl-sm"
-        }`}
+        className={`relative max-w-[75%] md:max-w-[60%] px-3 py-2 rounded-2xl shadow-(--shadow) 
+          ${isMyMessage ? "bg-(--chat-user) rounded-br-sm" : "bg-(--chat-ai) rounded-bl-sm"}
+          `}
       >
         {fileUrl && isImage && (
           <img
@@ -67,29 +77,41 @@ const MessageBubble = ({ message }) => {
         )}
 
         {message?.content && (
-          <p className={`text-sm leading-relaxed wrap-break-words ${
-            (message?.sender_id || message?.sender?.id) === userId
-              ? "text-(--chat-user-text)"
-              : "text-(--chat-ai-text)"
-          }`}>
+          <p
+            className={`text-sm leading-relaxed wrap-break-words ${
+              (message?.sender_id || message?.sender?.id) === userId
+                ? "text-(--chat-user-text)"
+                : "text-(--chat-ai-text)"
+            }`}
+          >
             {message.content}
           </p>
         )}
 
         <div className="flex items-center gap-1 mt-0.5 justify-end">
           <div className="flex items-center justify-between space-x-2">
-            <span className={`text-[12px] ${
-              (message?.sender_id || message?.sender?.id) === userId
-                ? "text-(--chat-user-text)"
-                : "text-(--text-muted)"
-            } opacity-80`}>
+            <span
+              className={`text-[12px] ${
+                (message?.sender_id || message?.sender?.id) === userId
+                  ? "text-(--chat-user-text)"
+                  : "text-(--text-muted)"
+              } opacity-80`}
+            >
               {formatDateTime(message?.created_at)}
             </span>
 
             {isMyMessage && (
+              // <span
+              //   className={`text font-medium ${
+              //     message?.status === "seen"
+              //       ? "text-(--primary)"
+              //       : "text-(--text-muted)"
+              //   }`}
               <span
                 className={`text font-medium ${
-                  message?.status === "seen" ? "text-(--primary)" : "text-(--text-muted)"
+                  message?.status === "seen"
+                    ? "text-(--primary)"
+                    : "text-(--text-muted)"
                 }`}
               >
                 {message?.status === "seen" ? <BsCheckAll /> : <BsCheck />}

@@ -63,8 +63,7 @@ const SignUp = () => {
 
     if (!formData.password) {
       newError.password = "password is required!";
-    }
-     else if (!passwordRegex.test(formData.password)) {
+    } else if (!passwordRegex.test(formData.password)) {
       newError.password =
         "password must contain a lowercase letter, uppercase letter, number, special character";
     }
@@ -81,29 +80,31 @@ const SignUp = () => {
     console.log("ERROR PAYLOAD:", result.payload);
 
     if (result.meta.requestStatus === "fulfilled") {
-      navigate("/");
+      navigate("/profile");
     }
   }
 
   return (
     <div className="bg-(--bg) min-h-screen flex items-center justify-center">
       <div className="container w-full max-w-md md:max-w-md lg:max-w-lg mx-auto flex flex-col px-4">
-        <div className="flex items-center gap-2 justify-center mb-8">
+        <div className="flex items-center gap-2 justify-center mb-6">
           <span className="text-4xl text-(--primary)">
             <HiMiniChatBubbleLeftEllipsis />
           </span>
           <h4 className="text-3xl font-bold text-(--text)">LinkUp</h4>
         </div>
 
-        <div className="px-6 md:px-8 lg:px-10 shadow-(--shadow) bg-(--surface) rounded-md py-8 text-center">
+        <div className="px-4 md:px-6 lg:px-8 shadow-(--shadow) bg-(--surface) rounded-md py-6 text-center">
           <h1 className="text-2xl font-semibold mb-2 text-(--text)">Sign Up</h1>
-          <p className="mb-8 text-(--text-muted)">Get your LinkUp account now.</p>
+          <p className="mb-8 text-(--text-muted) text-sm">
+            Get your LinkUp account now.
+          </p>
 
           <form action="" onSubmit={submitHandler}>
             <div className="mb-4">
               <div className="flex gap-4 items-start">
                 <div className="mb-1 flex-1">
-                  <p className="text-start mb-1 text-(--text)">Name</p>
+                  <p className="text-start mb-1 text-(--text) text-sm">Name</p>
                   <div className="flex items-center border text-sm border-(--border) rounded-md overflow-hidden">
                     <span className="bg-(--surface-2) px-3.5 py-3 text-base border-r border-(--border) text-(--text-muted)">
                       <HiMiniItalic />
@@ -120,7 +121,9 @@ const SignUp = () => {
                 </div>
 
                 <div className="mb-1 flex-1">
-                  <p className="text-start mb-1 text-(--text)">Username</p>
+                  <p className="text-start mb-1 text-(--text) text-sm">
+                    Username
+                  </p>
                   <div className="flex items-center border text-sm border-(--border) rounded-md overflow-hidden">
                     <span className="bg-(--surface-2) px-3.5 py-3 text-base border-r border-(--border) text-(--text-muted)">
                       <HiUser />
@@ -149,7 +152,7 @@ const SignUp = () => {
             </div>
 
             <div className="mb-4">
-              <p className="text-start mb-1 text-(--text)">Email</p>
+              <p className="text-start mb-1 text-(--text) text-sm">Email</p>
               <div className="flex items-center border text-sm border-(--border) rounded-md overflow-hidden">
                 <span className="bg-(--surface-2) px-3.5 py-3 text-base border-r border-(--border) text-(--text-muted)">
                   <HiOutlineEnvelope />
@@ -171,7 +174,7 @@ const SignUp = () => {
             </div>
 
             <div className="mb-6">
-              <p className="text-start mb-1 text-(--text)">Password</p>
+              <p className="text-start mb-1 text-(--text) text-sm">Password</p>
               <div className=" flex w-full items-center border border-(--border) rounded-md">
                 <span className="bg-(--surface-2) px-3.5 p-3 text-base border-r border-(--border) text-(--text-muted)">
                   <HiMiniLockClosed />
@@ -205,23 +208,42 @@ const SignUp = () => {
             </div>
 
             {authError && (
-              <p className="text-sm py-3 border border-(--error) rounded-md bg-(--error)/10 text-center text-(--error) mb-4">
+              <p className="text-sm py-2.5 border border-(--error) rounded-md bg-(--error)/10 text-center text-(--error) mb-4">
                 {authError}
               </p>
             )}
-            <button className="w-full mb-4 bg-(--primary) hover:bg-(--primary-hover) text-white py-4 rounded-md text-sm font-medium transition-all ease-in-out">
-              {loading ? "Loading..." : "Sign Up"}
+            <button
+              disabled={loading}
+              className={`w-full  mb-4 cursor-pointer text-white py-3 rounded-md text-sm font-medium transition-all ease-in-out ${loading ? "bg-(--chat-user)" : "bg-(--primary)"}`}
+            >
+              {loading ? (
+                <div className="flex justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : (
+                "Sign Up"
+              )}
             </button>
-            <p className="text-(--text-muted)">By registering you agree to the Chatvia <span className="cursor-pointer text-(--primary) hover:text-(--primary-hover)">Terms of Use</span></p>
+            <p className="text-(--text-muted) text-sm">
+              By registering you agree to the Chatvia{" "}
+              <span className="cursor-pointer text-(--primary) hover:text-(--primary-hover)">
+                Terms of Use
+              </span>
+            </p>
           </form>
         </div>
-        <p className="mt-8 text-center text-(--text)">
+        <p className="mt-6 text-center text-(--text)">
           Already have an account ?{" "}
-          <Link to="/login" className="text-(--primary) font-bold hover:text-(--primary-hover)">
+          <Link
+            to="/login"
+            className="text-sm text-(--primary) font-bold hover:text-(--primary-hover)"
+          >
             Login
           </Link>
         </p>
-        <p className="text-(--text-muted)">© 2026 LinkUp. Created with ❤️ by Aditya Kumar</p>
+        <p className="text-(--text-muted) mt-2 text-xs text-center">
+          © 2026 LinkUp. Created with ❤️ by Aditya Kumar
+        </p>
       </div>
     </div>
   );

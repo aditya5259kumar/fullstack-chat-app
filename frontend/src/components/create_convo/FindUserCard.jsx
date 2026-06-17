@@ -24,40 +24,60 @@ const FindUserCard = ({ user }) => {
     navigate(`/user/${user?.id}`);
   }
 
-  return (
-  <div className="md:flex items-center justify-between bg-(--surface) rounded-2xl shadow-(--shadow) px-5 py-3 mb-4">
-      <div className="flex items-center">
-        {user.profile_photo ? (
-          <img
-            src={`http://localhost:4000/uploads/${user?.profile_photo}`}
-            alt=""
-            className="h-12 w-12 rounded-full object-cover"
-          />
-        ) : (
-          <div className="h-12 w-12 rounded-full bg-(--primary) text-white flex items-center justify-center">
-            {user?.name?.charAt(0)?.toUpperCase()}
-          </div>
-        )}
+  // console.log("users===================", user);
 
-        <div className="ml-4">
-          <p className="font-semibold text-(--text)">{user.name}</p>
-          <p className="text-sm text-(--text-muted)">@{user.username}</p>
+  return (
+    <div className="flex items-center justify-between bg-(--surface) rounded-2xl shadow-(--shadow) border border-(--border) py-3 px-5 mb-4 group">
+      <div className="flex md:flex-row flex-col items-center gap-2 md:gap-4">
+        {/* Avatar with status indicator */}
+        <div className="relative">
+          {user.profile_photo ? (
+            <img
+              src={`http://localhost:4000/uploads/${user?.profile_photo}`}
+              alt={user?.name}
+              className="h-14 w-14 rounded-full object-cover ring-2 ring-(--surface) shadow-sm"
+            />
+          ) : (
+            <div className="h-14 w-14 rounded-full bg-(--primary) text-white flex items-center justify-center text-xl font-semibold shadow-sm">
+              {user?.name?.charAt(0)?.toUpperCase()}
+            </div>
+          )}
+          {user?.isOnline && (
+            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-(--success) border-2 border-(--surface) rounded-full"></div>
+          )}
+        </div>
+
+        <div className="flex-1 text-center min-w-0">
+          <p className="font-semibold text-(--text) text-base truncate">
+            @{user.username}
+          </p>
+          <div className="flex justify-center items-center gap-2 mt-0.5">
+            <p className="text-sm text-(--text-muted) truncate">{user.name}</p>
+            {user?.isVerified && (
+              <HiBadgeCheck className="text-(--primary) text-sm shrink-0" />
+            )}
+          </div>
+          {user?.bio && (
+            <p className="text-xs text-(--text-muted) mt-1 truncate max-w-50">
+              {user.bio}
+            </p>
+          )}
         </div>
       </div>
 
-      <div className="flex space-x-3 mt-2.5">
+      <div className="flex md:flex-row flex-col items-center gap-2 md:gap-3 mt-3 md:mt-0">
         <button
           onClick={viewProfileHandler}
-          className="border border-(--border) px-4 py-2 rounded-lg text-(--text) hover:bg-(--surface-2) transition-colors"
+          className="w-21 h-9 md:w-22 md:h-10 rounded-lg text-sm font-medium text-(--text) border border-(--border) hover:bg-(--surface-2) hover:border-(--text-muted) transition-all duration-200"
         >
-          View Profile
+          Profile
         </button>
 
         <button
           onClick={findConvo}
-          className="bg-(--primary) text-white px-4 py-2 rounded-lg hover:bg-(--primary-hover) transition-colors"
+          className="w-21 h-9 md:w-22 md:h-10 rounded-lg text-sm font-medium text-white bg-(--primary) hover:bg-(--primary-hover) shadow-sm hover:shadow-md transition-all duration-200"
         >
-          Start Chat
+          Message
         </button>
       </div>
     </div>

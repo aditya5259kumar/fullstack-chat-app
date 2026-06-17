@@ -68,22 +68,22 @@ const LogIn = () => {
   return (
     <div className="bg-(--bg) min-h-screen flex items-center justify-center">
       <div className="container w-full max-w-md md:max-w-md lg:max-w-lg mx-auto flex flex-col px-4">
-        <div className="flex items-center gap-2 justify-center mb-8">
+        <div className="flex items-center gap-2 justify-center mb-6">
           <span className="text-4xl text-(--primary)">
             <HiMiniChatBubbleLeftEllipsis />
           </span>
           <h4 className="text-3xl font-bold text-(--text)">LinkUp</h4>
         </div>
 
-        <div className="px-6 md:px-8 lg:px-10 shadow-(--shadow) bg-(--surface) rounded-md py-8 text-center">
+        <div className="px-4 md:px-6 lg:px-8 shadow-(--shadow) bg-(--surface) rounded-md py-6 text-center">
           <h1 className="text-2xl font-semibold mb-2 text-(--text)">Log In</h1>
-          <p className="mb-8 text-(--text-muted)">
+          <p className="mb-8 text-sm text-(--text-muted)">
             Login to your LinkUp account now.
           </p>
 
           <form action="" onSubmit={submitHandler}>
             <div className="mb-4">
-              <p className="text-start mb-1 text-(--text)">Email</p>
+              <p className="text-start text-sm mb-1 text-(--text)">Email</p>
               <div className="flex items-center border text-sm border-(--border) rounded-md overflow-hidden">
                 <span className="bg-(--surface-2) px-3.5 py-3 text-base border-r border-(--border) text-(--text-muted)">
                   <HiOutlineEnvelope />
@@ -106,13 +106,10 @@ const LogIn = () => {
 
             <div className="mb-6">
               <div className="flex justify-between mb-1">
-                <p className="text-start text-(--text)">Password</p>
-                <a
-                  href=""
-                  className="block font-semibold text-(--primary)"
-                >
+                <p className="text-start text-sm text-(--text)">Password</p>
+                {/* <a href="" className="block font-semibold text-(--primary)">
                   Forgot Password
-                </a>
+                </a> */}
               </div>
               <div className=" flex w-full items-center border border-(--border) rounded-md">
                 <span className="bg-(--surface-2) px-3.5 p-3 text-base border-r border-(--border) text-(--text-muted)">
@@ -147,21 +144,36 @@ const LogIn = () => {
             </div>
 
             {authError && (
-              <p className="text-sm py-3 border border-(--error) rounded-md bg-(--error)/10 text-center text-(--error) mb-4">
+              <p className="text-sm py-2.5 border border-(--error) rounded-md bg-(--error)/10 text-center text-(--error) mb-4">
                 {authError}
               </p>
             )}
 
-            <button className="w-full mb-4 bg-(--primary) hover:bg-(--primary-hover) text-white py-4 rounded-md text-sm font-medium transition-all ease-in-out">
-              {loading ? "Loading..." : "Log In"}
+            <button
+              disabled={loading}
+              className={`w-full  mb-4 cursor-pointer text-white py-3 rounded-md text-sm font-medium transition-all ease-in-out ${loading ? "bg-(--chat-user)" : "bg-(--primary)"}`}
+            >
+              {loading ? (
+                <div className="flex justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : (
+                "Log In"
+              )}
             </button>
           </form>
         </div>
-        <p className="mt-8 text-center text-(--text)">
+        <p className="text-sm mt-6 text-center text-(--text)">
           Don't have an account ?{" "}
-          <Link to="/signup" className="text-(--primary) font-bold hover:text-(--primary-hover)">
+          <Link
+            to="/signup"
+            className="text-(--primary) font-bold hover:text-(--primary-hover)"
+          >
             Signin
           </Link>
+        </p>
+        <p className="text-(--text-muted) mt-2 text-xs text-center">
+          © 2026 LinkUp. Created with ❤️ by Aditya Kumar
         </p>
       </div>
     </div>

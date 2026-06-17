@@ -9,9 +9,9 @@ import {
 import Navbar from "../components/navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { myProfile } from "../redux/slices/myProfileSlice";
-import { userLogout } from "../redux/slices/authSlice";
-import { useNavigate } from "react-router";
-import { disconnectSocket } from "../socket/initSocket";
+// import { userLogout } from "../redux/slices/authSlice";
+// import { useNavigate } from "react-router";
+// import { disconnectSocket } from "../socket/initSocket";
 import DeleteAcc from "../components/profile/DeleteAcc";
 import { updateProfile } from "../redux/slices/updateProfile";
 
@@ -28,7 +28,6 @@ const Profile = () => {
   const { profileData } = useSelector((state) => state.profile);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(myProfile());
@@ -201,17 +200,17 @@ const Profile = () => {
     setEditMode(false);
   }
 
-  function handleLogout() {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
+  // function handleLogout() {
+  //   const confirmLogout = window.confirm("Are you sure you want to logout?");
 
-    if (!confirmLogout) {
-      return;
-    }
-    dispatch(userLogout());
-    disconnectSocket();
-    localStorage.removeItem("token");
-    navigate("/login");
-  }
+  //   if (!confirmLogout) {
+  //     return;
+  //   }
+  //   dispatch(userLogout());
+  //   disconnectSocket();
+  //   localStorage.removeItem("token");
+  //   navigate("/login");
+  // }
 
   function formatDate(dateString) {
     if (!dateString) return "Invalid date";
@@ -239,9 +238,9 @@ const Profile = () => {
   const formatted_joinDate = formatDate(profileData?.created_at);
   const formatted_updateDate = formatDate(profileData?.updated_at);
 
-  function handleAccDelete() {
-    setDeletebox(true);
-  }
+  // function handleAccDelete() {
+  //   setDeletebox(true);
+  // }
 
   // Helper function to get the image source (preview or actual profile photo)
   const getImageSource = () => {
@@ -466,26 +465,26 @@ const Profile = () => {
             </div>
           </form>
 
-          {deletebox && <DeleteAcc setDeletebox={setDeletebox} />}
+          {/* {deletebox && <DeleteAcc setDeletebox={setDeletebox} />}
           <div className="bg-(--surface) rounded-2xl shadow-(--shadow) border border-(--border) px-5 py-4">
             <p className="text-xs text-(--text-muted) font-semibold uppercase tracking-wider mb-3">
               Account
-            </p>
-            <button
+            </p> */}
+            {/* <button
               type="button"
               onClick={handleAccDelete}
               className="w-full text-left text-sm text-(--error) py-2 hover:text-(--error) font-medium hover:bg-(--surface-2) px-2 rounded transition-colors"
             >
               Delete Account
-            </button>
-            <button
+            </button> */}
+            {/* <button
               type="button"
               onClick={handleLogout}
               className="w-full text-left text-sm text-(--error) py-2 hover:text-(--error) font-medium hover:bg-(--surface-2) px-2 rounded transition-colors"
             >
               Log Out
-            </button>
-          </div>
+            </button> */}
+          {/* </div> */}
         </div>
       </div>
     </div>

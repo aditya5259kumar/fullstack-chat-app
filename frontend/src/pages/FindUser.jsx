@@ -103,13 +103,17 @@ const FindUser = () => {
           {/* 👥 Users */}
           <div className="mt-6">
             {loadingUsers ? (
-              <p className="text-(--text-muted) text-sm">Loading...</p>
+              <p className="text-(--text-muted) mt-6 text-sm text-center">
+                Loading...
+              </p>
             ) : displayUsers?.length > 0 ? (
               displayUsers?.map((user) => (
                 <FindUserCard key={user?.id} user={user} />
               ))
             ) : (
-              <p className="text-(--text-muted) text-sm">No users found</p>
+              <p className="text-(--text-muted) mt-6 text-center text-sm">
+                No users found
+              </p>
             )}
           </div>
         </div>

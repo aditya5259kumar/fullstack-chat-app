@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { BsFillPinAngleFill, BsThreeDotsVertical } from "react-icons/bs";
-import { IoCheckmarkDoneSharp } from "react-icons/io5";
+import { BsCheckAll, BsCheck } from "react-icons/bs";
 import { LuUserRoundX } from "react-icons/lu";
 import { deleteConvo } from "../../redux/slices/deleteConvo";
 import { userConversation } from "../../redux/slices/userConvoSlice";
@@ -117,7 +117,12 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
               <span
                 className={`shrink-0 ${chat?.last_message_status === "seen" ? "text-(--primary)" : "text-(--text-muted)"}`}
               >
-                <IoCheckmarkDoneSharp className="text-base inline" />
+                {/* <IoCheckmarkDoneSharp className="text-base inline" /> */}
+                {chat?.last_message_status === "seen" ? (
+                  <BsCheckAll className="text-base inline" />
+                ) : (
+                  <BsCheck className="text-base inline" />
+                )}
               </span>
             )}
             {renderPreview()}
@@ -172,7 +177,8 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
           )}
         </div>
       </div>
-    </div>)
+    </div>
+  );
 };
 
 export default UserChatMsg;
