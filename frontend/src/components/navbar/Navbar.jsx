@@ -103,6 +103,7 @@ const Navbar = () => {
               <img
                 src={`http://localhost:4000/uploads/${profileData?.profile_photo}`}
                 alt="Profile"
+                loading="lazy"
                 className="w-9 h-9 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
               />
             ) : (
@@ -180,6 +181,7 @@ const Navbar = () => {
             <img
               src={`http://localhost:4000/uploads/${profileData?.profile_photo}`}
               alt="Profile"
+              loading="lazy"
               className="w-9 h-9 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
             />
           ) : (

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import {
   HiMiniEllipsisVertical,
   HiOutlineFaceSmile,
@@ -14,6 +14,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteConvo } from "../redux/slices/deleteConvo";
 import { jwtDecode } from "jwt-decode";
 
+import dark from "../assets/dark.png";
+import light from "../assets/light.jpg";
+
 import {
   getMessages,
   addMessage,
@@ -28,7 +31,9 @@ import {
 import { msgStatus } from "../redux/slices/msgStatusSlice";
 import socket from "../socket/initSocket";
 
-import MessageBubble from "../components/user_chats/MessageBubble";
+const MessageBubble = lazy(
+  () => import("../components/user_chats/MessageBubble"),
+);
 import NoChatSelected from "../components/user_chats/NoChatSelected";
 
 const UserChats = ({ chat }) => {
@@ -60,6 +65,9 @@ const UserChats = ({ chat }) => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
+  const theme = useSelector((state) => state.theme.theme);
+  // console.log("theme=============---------",theme)
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -80,7 +88,7 @@ const UserChats = ({ chat }) => {
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView();
   };
 
   useEffect(() => {
@@ -227,6 +235,7 @@ const UserChats = ({ chat }) => {
         <div className="flex items-center gap-3">
           <div className="h-screen w-full hidden md:flex flex-col">
             <NoChatSelected />
+            {/* <div className="bg-red-500 h-full w-full">TEST</div> */}
           </div>
         </div>
       </div>
@@ -238,6 +247,7 @@ const UserChats = ({ chat }) => {
       await dispatch(deleteConvo(chat.conversation_id)).unwrap();
       await dispatch(userConversation());
       setShowMenu(false);
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
@@ -259,6 +269,7 @@ const UserChats = ({ chat }) => {
               <img
                 src={`http://localhost:4000/uploads/${chat?.users?.[0]?.profile_photo}`}
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover"
+                loading="lazy"
               />
             ) : (
               <div
@@ -323,14 +334,27 @@ const UserChats = ({ chat }) => {
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto px-3 md:px-6 py-4 bg-cover bg-center bg-no-repeat">
+      <div
+        className="flex-1 overflow-y-auto px-2.5 md:px-6 py-4 pb-2 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('${theme === "dark" ? dark : light}')`,
+        }}
+      >
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <div className="w-10 h-10 border-4 border-(--primary) border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           msg.map((m, index) => (
-            <MessageBubble key={m.id || index} message={m} />
+            <Suspense
+              fallback={
+                <div className="flex items-center mb-12 justify-center">
+                  <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+                </div>
+              }
+            >
+              <MessageBubble key={m.id || index} message={m} />
+            </Suspense>
           ))
         )}
         <div ref={messagesEndRef} />
@@ -343,6 +367,7 @@ const UserChats = ({ chat }) => {
               <img
                 src={previewUrl}
                 alt="preview"
+                loading="lazy"
                 className="w-12 h-12 object-cover rounded"
               />
             ) : (
@@ -363,7 +388,7 @@ const UserChats = ({ chat }) => {
         </div>
       )}
 
-      <div className="px-4 py-3 bg-(--bg) shrink-0">
+      <div className="px-2 md:px-4 pt-0 pb-2 md:py-3 bg-(--bg) shrink-0">
         <div className="flex items-center gap-2 max-w-5xl mx-auto bg-(--surface) rounded-full px-4 py-1.5 shadow-(--shadow) border border-(--border)">
           <input
             type="file"

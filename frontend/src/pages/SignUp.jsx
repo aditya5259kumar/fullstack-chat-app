@@ -94,7 +94,7 @@ const SignUp = () => {
           <h4 className="text-3xl font-bold text-(--text)">LinkUp</h4>
         </div>
 
-        <div className="px-4 md:px-6 lg:px-8 shadow-(--shadow) bg-(--surface) rounded-md py-6 text-center">
+        <div className="px-4 md:px-6 lg:px-8 shadow-(--shadow) border border-(--border) rounded-2xl bg-(--surface) py-6 text-center">
           <h1 className="text-2xl font-semibold mb-2 text-(--text)">Sign Up</h1>
           <p className="mb-8 text-(--text-muted) text-sm">
             Get your LinkUp account now.

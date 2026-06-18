@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import {
   HiOutlineBell,
   HiOutlineLockClosed,
@@ -12,12 +12,13 @@ import {
 } from "react-icons/hi2";
 import { FiGithub, FiLinkedin, FiGlobe } from "react-icons/fi";
 
-import Navbar from "../components/navbar/Navbar";
+const Navbar = lazy(() => import("../components/navbar/Navbar"));
+const DeleteAcc = lazy(() => import("../components/profile/DeleteAcc"));
 import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router";
 import { disconnectSocket } from "../socket/initSocket";
-import DeleteAcc from "../components/profile/DeleteAcc";
+
 import { toggleTheme } from "../redux/slices/themeSlice";
 
 const Settings = () => {
@@ -45,7 +46,15 @@ const Settings = () => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-(--bg)">
-      <Navbar />
+      <Suspense
+        fallback={
+          <div className="flex items-center h-screen justify-center">
+            <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
+        <Navbar />
+      </Suspense>
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-lg mx-auto px-4 py-8">
           <h2 className="text-2xl font-bold text-(--text) mb-6">Settings</h2>
@@ -138,7 +147,17 @@ const Settings = () => {
           </div>
 
           {/* Account */}
-          {deletebox && <DeleteAcc setDeletebox={setDeletebox} />}
+          {deletebox && (
+            <Suspense
+              fallback={
+                <div className="flex items-center h-screen justify-center">
+                  <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+                </div>
+              }
+            >
+              <DeleteAcc setDeletebox={setDeletebox} />
+            </Suspense>
+          )}
           <div className="bg-(--surface) rounded-2xl shadow-(--shadow) border border-(--border) px-5 py-4">
             <p className="text-xs text-(--text-muted) font-semibold uppercase tracking-wider mb-3">
               Account

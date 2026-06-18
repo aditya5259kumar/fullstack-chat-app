@@ -1,7 +1,10 @@
+import { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
-import Navbar from "../components/navbar/Navbar";
-import AllChats from "./AllChats";
-import UserChats from "./UserChats";
+
+const Navbar = lazy(() => import("../components/navbar/Navbar"));
+const AllChats = lazy(() => import("./AllChats"));
+const UserChats = lazy(() => import("./UserChats"));
+
 import { useParams, useNavigate } from "react-router";
 
 const Home = () => {
@@ -22,42 +25,47 @@ const Home = () => {
   }
 
   return (
-    // <div className="flex h-screen overflow-hidden bg-gray-50 min-w-0">
-    //   <div
-    //     className={`${isMobileChatOpen ? "hidden md:block" : "block"} shrink-0`}
-    //   >
-    //     <Navbar/>
-    //   </div>
-
-    //   {/* Chat List - hidden on mobile when chat open */}
-    //   <div
-    //     className={`${isMobileChatOpen ? "hidden md:flex" : "flex flex-1"} flex-col min-w-0 ring-5 ring-gray-50 border border-gray-50`}
-    //   >
-    //     <AllChats
-    //       activeChatId={activeChat?.conversation_id}
-    //       isMobileView={!isMobileChatOpen}
-    //     />
-    //   </div>
-
-    //   {/* Chat Window */}
-    //   <div
-    //     className={`flex-1 min-w-0 ${isMobileChatOpen ? "flex" : "hidden md:flex"} flex-col`}
-    //   >
-    //     <UserChats chat={activeChat} onBack={handleBack} />
-    //   </div>
-    // </div>
-
     <div className="flex h-screen overflow-hidden bg-(--bg) min-w-0">
-      <div className={`${isMobileChatOpen ? "hidden md:block" : "block"} shrink-0`}>
-        <Navbar />
+      <div
+        className={`${isMobileChatOpen ? "hidden md:block" : "block"} shrink-0`}
+      >
+        <Suspense
+          fallback={
+            <div className="flex items-center h-screen justify-center">
+              <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
+          <Navbar />
+        </Suspense>
       </div>
 
-      <div className={`${isMobileChatOpen ? "hidden md:flex" : "flex flex-1"} flex-col min-w-0`}>
-        <AllChats activeChatId={chatId} isMobileView={!isMobileChatOpen} />
+      <div
+        className={`${isMobileChatOpen ? "hidden md:flex" : "flex flex-1"} flex-col min-w-0`}
+      >
+        <Suspense
+          fallback={
+            <div className="flex justify-center h-screen items-center">
+              <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
+          <AllChats activeChatId={chatId} isMobileView={!isMobileChatOpen} />
+        </Suspense>
       </div>
 
-      <div className={`flex-1 min-w-0 ${isMobileChatOpen ? "flex" : "hidden md:flex"} flex-col`}>
-        <UserChats chat={activeChat} onBack={handleBack} />
+      <div
+        className={`flex-1 min-w-0 ${isMobileChatOpen ? "flex" : "hidden md:flex"} flex-col`}
+      >
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center h-screen">
+              <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
+          <UserChats chat={activeChat} onBack={handleBack} />
+        </Suspense>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import {
   HiPencil,
   HiCamera,
@@ -6,7 +6,7 @@ import {
   HiOutlineEnvelope,
   HiOutlineCalendar,
 } from "react-icons/hi2";
-import Navbar from "../components/navbar/Navbar";
+const Navbar = lazy(() => import("../components/navbar/Navbar"));
 import { useDispatch, useSelector } from "react-redux";
 import { userProfile } from "../redux/slices/userProfileSlice";
 import { useParams } from "react-router";
@@ -53,21 +53,27 @@ const Profile = () => {
   const formatted_joinDate = formatDate(profileData?.created_at);
 
   if (loading) {
-  return (
-    <div className="flex h-screen overflow-hidden bg-(--bg)">
-      <Navbar />
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-(--text-muted)">
-          Loading profile...
+    return (
+      <div className="flex h-screen overflow-hidden bg-(--bg)">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-(--text-muted)">Loading profile...</div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-(--bg)">
-      <Navbar />
+      <Suspense
+        fallback={
+          <div className="flex items-center h-screen justify-center">
+            <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
+        <Navbar />
+      </Suspense>
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-lg mx-auto px-4 py-8">
           <h2 className="text-2xl font-bold text-(--text) mb-6">Profile</h2>
@@ -78,6 +84,7 @@ const Profile = () => {
                 <img
                   src={`http://localhost:4000/uploads/${profileData.profile_photo}`}
                   alt="Profile"
+                  loading="lazy"
                   className="w-28 h-28 rounded-full object-cover ring-4 ring-(--primary)/20 shadow-md"
                 />
               ) : (

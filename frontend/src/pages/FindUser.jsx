@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../components/navbar/Navbar";
+import React, { useEffect, useState, lazy, Suspense } from "react";
+
+const Navbar = lazy(() => import("../components/navbar/Navbar"));
+const FindUserCard = lazy(
+  () => import("../components/create_convo/FindUserCard"),
+);
+
 import { HiOutlineMagnifyingGlass, HiXMark } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,7 +12,6 @@ import {
   searchUsers,
   resetSearch,
 } from "../redux/slices/searchUserSlice";
-import FindUserCard from "../components/create_convo/FindUserCard";
 
 const FindUser = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,7 +66,15 @@ const FindUser = () => {
 
   return (
     <div className="flex h-screen bg-(--bg)">
-      <Navbar />
+      <Suspense
+        fallback={
+          <div className="flex justify-center">
+            <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
+        <Navbar />
+      </Suspense>
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-lg mx-auto px-4 py-8">
@@ -101,17 +113,25 @@ const FindUser = () => {
           </form>
 
           {/* 👥 Users */}
-          <div className="mt-6">
+          <div className="mt-6 mb-10">
             {loadingUsers ? (
-              <p className="text-(--text-muted) mt-6 text-sm text-center">
-                Loading...
-              </p>
+              <div className="flex justify-center mt-20">
+                <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+              </div>
             ) : displayUsers?.length > 0 ? (
               displayUsers?.map((user) => (
-                <FindUserCard key={user?.id} user={user} />
+                <Suspense
+                  fallback={
+                    <div className="flex justify-center mb-12">
+                      <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  }
+                >
+                  <FindUserCard key={user?.id} user={user} />
+                </Suspense>
               ))
             ) : (
-              <p className="text-(--text-muted) mt-6 text-center text-sm">
+              <p className="text-(--text-muted) mt-20 text-center text-sm">
                 No users found
               </p>
             )}

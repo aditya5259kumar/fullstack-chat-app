@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, lazy, Suspense, useState } from "react";
 import {
   HiPencil,
   HiCamera,
@@ -6,13 +6,9 @@ import {
   HiOutlineEnvelope,
   HiOutlineCalendar,
 } from "react-icons/hi2";
-import Navbar from "../components/navbar/Navbar";
+const Navbar = lazy(() => import("../components/navbar/Navbar"));
 import { useDispatch, useSelector } from "react-redux";
 import { myProfile } from "../redux/slices/myProfileSlice";
-// import { userLogout } from "../redux/slices/authSlice";
-// import { useNavigate } from "react-router";
-// import { disconnectSocket } from "../socket/initSocket";
-import DeleteAcc from "../components/profile/DeleteAcc";
 import { updateProfile } from "../redux/slices/updateProfile";
 
 const Profile = () => {
@@ -199,18 +195,6 @@ const Profile = () => {
     setEditMode(false);
   }
 
-  // function handleLogout() {
-  //   const confirmLogout = window.confirm("Are you sure you want to logout?");
-
-  //   if (!confirmLogout) {
-  //     return;
-  //   }
-  //   dispatch(userLogout());
-  //   disconnectSocket();
-  //   localStorage.removeItem("token");
-  //   navigate("/login");
-  // }
-
   function formatDate(dateString) {
     if (!dateString) return "Invalid date";
 
@@ -237,10 +221,6 @@ const Profile = () => {
   const formatted_joinDate = formatDate(profileData?.created_at);
   const formatted_updateDate = formatDate(profileData?.updated_at);
 
-  // function handleAccDelete() {
-  //   setDeletebox(true);
-  // }
-
   // Helper function to get the image source (preview or actual profile photo)
   const getImageSource = () => {
     if (imagePreview) {
@@ -253,8 +233,16 @@ const Profile = () => {
   };
 
   return (
-   <div className="flex h-screen overflow-hidden bg-(--bg)">
-      <Navbar />
+    <div className="flex h-screen overflow-hidden bg-(--bg)">
+      <Suspense
+        fallback={
+          <div className="flex items-center h-screen justify-center">
+            <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
+        <Navbar />
+      </Suspense>
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-lg mx-auto px-4 py-8">
           <h2 className="text-2xl font-bold text-(--text) mb-6">Profile</h2>
@@ -266,6 +254,7 @@ const Profile = () => {
                   <img
                     src={getImageSource()}
                     alt="Profile"
+                    loading="lazy"
                     className="w-28 h-28 rounded-full object-cover ring-4 ring-(--primary)/20 shadow-md"
                   />
                 ) : (
@@ -285,7 +274,7 @@ const Profile = () => {
 
                     <label
                       htmlFor="profileImage"
-                      className="absolute bottom-1 right-1 w-8 h-8 bg-(--primary) rounded-full flex items-center justify-center shadow-md hover:bg-(--primary-hover) transition-colors cursor-pointer"
+                      className="absolute bottom-1 right-1 w-8 h-8 bg-(--success) rounded-full flex items-center justify-center shadow-md hover:bg-(--success)/90 transition-colors cursor-pointer"
                     >
                       <HiCamera className="text-white text-sm" />
                     </label>
@@ -347,7 +336,9 @@ const Profile = () => {
                     />
 
                     {errors.bio && (
-                      <p className="text-(--error) text-xs mt-1">{errors.bio}</p>
+                      <p className="text-(--error) text-xs mt-1">
+                        {errors.bio}
+                      </p>
                     )}
                   </div>
                 ) : (
@@ -438,7 +429,7 @@ const Profile = () => {
                 {generalError}
               </div>
             )}
-            <div className="justify-end flex space-x-2 mb-6">
+            <div className="justify-end flex space-x-2 mb-16">
               {editMode && (
                 <button
                   type="button"
@@ -463,27 +454,6 @@ const Profile = () => {
               </button>
             </div>
           </form>
-
-          {/* {deletebox && <DeleteAcc setDeletebox={setDeletebox} />}
-          <div className="bg-(--surface) rounded-2xl shadow-(--shadow) border border-(--border) px-5 py-4">
-            <p className="text-xs text-(--text-muted) font-semibold uppercase tracking-wider mb-3">
-              Account
-            </p> */}
-            {/* <button
-              type="button"
-              onClick={handleAccDelete}
-              className="w-full text-left text-sm text-(--error) py-2 hover:text-(--error) font-medium hover:bg-(--surface-2) px-2 rounded transition-colors"
-            >
-              Delete Account
-            </button> */}
-            {/* <button
-              type="button"
-              onClick={handleLogout}
-              className="w-full text-left text-sm text-(--error) py-2 hover:text-(--error) font-medium hover:bg-(--surface-2) px-2 rounded transition-colors"
-            >
-              Log Out
-            </button> */}
-          {/* </div> */}
         </div>
       </div>
     </div>

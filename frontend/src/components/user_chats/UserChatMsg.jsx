@@ -22,7 +22,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
 
   const navigate = useNavigate();
 
-  console.log("chat======================", chat);
+  // console.log("chat======================", chat);
 
   const formatDateTime = (dateString) => {
     if (!dateString) return "";
@@ -60,6 +60,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
       await dispatch(userConversation());
 
       setShowMenu(false);
+    navigate("/");
 
       // console.log("Conversation deleted");
     } catch (error) {
@@ -78,8 +79,8 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
           : "📷 Photo";
       }
       return chat?.last_message_content?.trim()
-        ? `📎 ${chat.last_message_content}`
-        : `📎 ${chat?.last_message_file_name || "File"}`;
+        ? `📁 ${chat.last_message_content}`
+        : `📁 ${chat?.last_message_file_name || "File"}`;
     }
     return chat?.last_message_preview;
   };
@@ -97,6 +98,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
             <img
               src={`http://localhost:4000/uploads/${chat?.users?.[0]?.profile_photo}`}
               alt={chat?.users?.[0]?.username}
+              loading="lazy"
               className="w-12 h-12 rounded-full object-cover"
             />
           ) : (
@@ -119,6 +121,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
           <p className="text-(--text-muted) text-sm truncate min-w-0">
             {isSentByMe && unreadCount === 0 && (
               <span
+                // className={`shrink-0 ${chat?.last_message_status === "seen" ? "text-(--primary)" : "text-(--text-muted)"}`}
                 className={`shrink-0 ${chat?.last_message_status === "seen" ? "text-(--primary)" : "text-(--text-muted)"}`}
               >
                 {/* <IoCheckmarkDoneSharp className="text-base inline" /> */}

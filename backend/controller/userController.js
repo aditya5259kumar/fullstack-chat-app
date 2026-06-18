@@ -246,18 +246,29 @@ const userController = {
         having: sequelize.literal("COUNT(DISTINCT user_id) = 2"),
       });
 
+      // console.log("existingConversation==============", existingConversation);
+
       let conversation;
 
       if (existingConversation.length > 0) {
-        // Conversation exists
         conversation = existingConversation[0].conversation_id;
+
+        await participantsModel.update(
+          {
+            deleted_at: null,
+          },
+          {
+            where: {
+              conversation_id: conversation,
+              user_id: currentUserId,
+            },
+          },
+        );
       } else {
-        // Step 2: Create new conversation
         const newConversation = await conversationsModel.create({
           type: "private",
         });
 
-        // Step 3: Add participants
         await participantsModel.bulkCreate([
           {
             conversation_id: newConversation.id,
@@ -688,7 +699,7 @@ const userController = {
     }
   },
 
-  //--------delete user conversation ---------
+  //--------delete conversation---------
   deleteConversation: async (req, res) => {
     const transaction = await sequelize.transaction();
 
@@ -696,11 +707,9 @@ const userController = {
       const { conversationId } = req.params;
       const userId = req.user.id;
 
-      // 1. Soft delete current user
+      // 1. Soft delete current user's participant row
       const [updatedRows] = await participantsModel.update(
-        {
-          deleted_at: new Date(),
-        },
+        { deleted_at: new Date() },
         {
           where: {
             conversation_id: conversationId,
@@ -715,17 +724,27 @@ const userController = {
         throw new Error("Nothing updated. Check userId or conversationId.");
       }
 
-      // 2. Check remaining active participants
-      const remaining = await participantsModel.count({
-        where: {
-          conversation_id: conversationId,
-          deleted_at: null,
-        },
+      // 2. Get all participants, including their linked user (if it still exists)
+      const allParticipants = await participantsModel.findAll({
+        where: { conversation_id: conversationId },
+        include: [
+          {
+            model: userModel,
+            as: "user",
+            required: false, // LEFT JOIN — keep the row even if user is gone
+          },
+        ],
         transaction,
       });
 
-      // 3. Hard delete if no one left
-      if (remaining === 0) {
+      // 3. "Effectively gone" = soft-deleted by themselves, OR their account
+      // no longer exists (permanently deleted account).
+      const everyoneEffectivelyGone = allParticipants.every(
+        (p) => p.deleted_at !== null || p.user === null,
+      );
+
+      // 4. Hard delete if no one with a real, active presence remains
+      if (everyoneEffectivelyGone) {
         await messagesModel.destroy({
           where: { conversation_id: conversationId },
           transaction,
@@ -745,10 +764,9 @@ const userController = {
       await transaction.commit();
 
       return res.status(200).json({
-        message:
-          remaining === 0
-            ? "Conversation permanently deleted"
-            : "Conversation removed from inbox",
+        message: everyoneEffectivelyGone
+          ? "Conversation permanently deleted"
+          : "Conversation removed from inbox",
       });
     } catch (error) {
       await transaction.rollback();
