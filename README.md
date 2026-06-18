@@ -15,16 +15,16 @@ Will be added soon...
 ## Screenshots
 
 ### Inbox Page
-![Inbox](./images/inbox.png)
+![Inbox](./images/inbox.jpg)
 
 ### Find Users Page
-![Find Users](./images/find-users.png)
+![Find Users](./images/find-users.jpg)
 
 ### User Profile
-![User Profile](./images/profile.png)
+![User Profile](./images/profile.jpg)
 
 ### Mobile Responsive View
-![Mobile View](./images/mobile.png)
+![Mobile View](./images/mobile.jpg)
 
 ---
 
