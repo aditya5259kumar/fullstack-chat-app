@@ -20,11 +20,12 @@ Will be added soon...
 ### Find Users Page
 ![Find Users](./images/find-users.jpg)
 
-### User Profile
-![User Profile](./images/profile.jpg)
+### User Profile & Mobile View
 
-### Mobile Responsive View
-![Mobile View](./images/mobile.jpg)
+<p align="center">
+  <img src="./images/profile.jpg" alt="User Profile" width="450"/>
+  <img src="./images/mobile.jpg" alt="Mobile View" width="220"/>
+</p>
 
 ---
 
