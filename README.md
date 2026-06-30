@@ -8,7 +8,7 @@ LinkUp enables users to communicate instantly through private one-to-one messagi
 
 ## Live Demo
 
-Will be added soon...
+https://fullstack-chat-app-seven-lac.vercel.app/
 
 ---
 
