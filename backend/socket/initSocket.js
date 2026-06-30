@@ -10,7 +10,10 @@ export const getUserSockets = (userId) => {
 export const initSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: process.env.CLIENT_URL,
+      origin: [
+        process.env.CLIENT_URL,
+        "https://fullstack-chat-app-seven-lac.vercel.app",
+      ],
       methods: ["GET", "POST"],
     },
   });

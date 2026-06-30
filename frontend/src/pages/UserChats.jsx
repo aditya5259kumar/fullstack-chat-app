@@ -255,7 +255,7 @@ const UserChats = ({ chat }) => {
 
   return (
     <div className="flex flex-col h-screen w-full bg-(--bg) relative overflow-hidden border-l border-(--border)">
-      <header className="flex items-center justify-between px-4 py-3 bg-(--surface) border-b border-(--border) shrink-0 z-10">
+      <header className=" absolute top-0 left-0 right-0 flex items-center justify-between px-4 py-3 bg-(--surface) border-b border-(--border) shrink-0 z-10">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/")}
@@ -335,7 +335,7 @@ const UserChats = ({ chat }) => {
       </header>
 
       <div
-        className="flex-1 overflow-y-auto px-2.5 md:px-6 py-4 pb-2 bg-cover bg-center bg-no-repeat"
+        className="py-20 flex-1 overflow-y-auto px-2.5 md:px-6 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url('${theme === "dark" ? dark : light}')`,
         }}
@@ -388,7 +388,7 @@ const UserChats = ({ chat }) => {
         </div>
       )}
 
-      <div className="px-2 md:px-4 pt-0 pb-2 md:py-3 bg-(--bg) shrink-0">
+      <div className="px-2 absolute bottom-0 left-0 right-0 md:px-4 pt-0 pb-2 md:py-3 bg-(--bg) shrink-0">
         <div className="flex items-center gap-2 max-w-5xl mx-auto bg-(--surface) rounded-full px-4 py-1.5 shadow-(--shadow) border border-(--border)">
           <input
             type="file"

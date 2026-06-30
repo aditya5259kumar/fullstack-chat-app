@@ -60,7 +60,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
       await dispatch(userConversation());
 
       setShowMenu(false);
-    navigate("/");
+      navigate("/");
 
       // console.log("Conversation deleted");
     } catch (error) {
@@ -138,14 +138,14 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
       </div>
 
       <div className="flex items-center gap-2">
-        <div className=" flex items-end flex-col gap-1.5 ml-2 shrink-0">
+        <div className=" flex items-end pr-2 md:pr-0 flex-col gap-1.5 ml-2 shrink-0">
           <p
             className={`text-xs whitespace-nowrap font-medium ${unreadCount > 0 ? "text-(--primary)" : "text-(--text-muted)"}`}
           >
             {formatDateTime(chat?.last_message_time)}
           </p>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center  gap-1.5">
             {unreadCount > 0 && (
               <span className="text-white text-[11px] font-bold min-w-5 h-5 px-1.5 bg-(--primary) rounded-full flex items-center justify-center">
                 {unreadCount > 99 ? "99+" : unreadCount}
@@ -161,13 +161,13 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
         >
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-1.5 rounded-full hover:bg-(--surface-2) text-(--text-muted) transition-colors"
+            className="p-1.5 hidden md:inline-block rounded-full hover:bg-(--surface-2) text-(--text-muted) transition-colors"
           >
             <BsThreeDotsVertical className="text-sm" />
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 mt-1 w-36 bg-(--surface) shadow-(--shadow-lg) rounded-xl py-1.5 z-50 border border-(--border)">
+            <div className="absolute right-1 mt-1  hidden md:inline-block w-36 bg-(--surface) shadow-(--shadow-lg) rounded-xl py-1.5 z-50 border border-(--border)">
               <button
                 onClick={viewProfileHandler}
                 className="block w-full text-left px-4 py-2 text-sm text-(--text) hover:bg-(--surface-2)"
