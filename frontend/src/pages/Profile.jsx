@@ -227,7 +227,7 @@ const Profile = () => {
       return imagePreview; // Show preview if available
     }
     if (profileData?.profile_photo) {
-      return `http://localhost:4000/uploads/${profileData.profile_photo}`;
+      return `https://fullstack-chat-app-h4rd.onrender.com/uploads/${profileData.profile_photo}`;
     }
     return null;
   };

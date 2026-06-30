@@ -12,7 +12,7 @@ const MessageBubble = ({ message }) => {
 
   const isImage = message?.file_type?.startsWith("image/");
   const fileUrl = message?.file_url
-    ? `http://localhost:4000${message.file_url}`
+    ? `https://fullstack-chat-app-h4rd.onrender.com${message.file_url}`
     : null;
 
   const formatDateTime = (dateString) => {

@@ -8,7 +8,7 @@ export const deleteConvo = createAsyncThunk(
       const token = localStorage.getItem("token");
 
       const response = await axios.delete(
-        `http://localhost:4000/api/user/delete-conversation/${id}`,
+        `https://fullstack-chat-app-h4rd.onrender.com/api/user/delete-conversation/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

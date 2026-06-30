@@ -267,7 +267,7 @@ const UserChats = ({ chat }) => {
           <div className="relative">
             {other_user?.profile_photo ? (
               <img
-                src={`http://localhost:4000/uploads/${chat?.users?.[0]?.profile_photo}`}
+                src={`https://fullstack-chat-app-h4rd.onrender.com/uploads/${chat?.users?.[0]?.profile_photo}`}
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover"
                 loading="lazy"
               />

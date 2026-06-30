@@ -8,7 +8,7 @@ export const deleteAccount = createAsyncThunk(
       const token = localStorage.getItem("token");
 
       const response = await axios.delete(
-        "http://localhost:4000/api/user/delete-account",
+        "https://fullstack-chat-app-h4rd.onrender.com/api/user/delete-account",
         {
           headers: {
             Authorization: `Bearer ${token}`,

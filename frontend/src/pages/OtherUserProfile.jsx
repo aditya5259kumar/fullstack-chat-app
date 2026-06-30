@@ -82,7 +82,7 @@ const Profile = () => {
             <div className="relative">
               {profileData?.profile_photo ? (
                 <img
-                  src={`http://localhost:4000/uploads/${profileData.profile_photo}`}
+                  src={`https://fullstack-chat-app-h4rd.onrender.com/uploads/${profileData.profile_photo}`}
                   alt="Profile"
                   loading="lazy"
                   className="w-28 h-28 rounded-full object-cover ring-4 ring-(--primary)/20 shadow-md"

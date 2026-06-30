@@ -101,7 +101,7 @@ const Navbar = () => {
           <NavLink to="/profile" title="Profile / Logout">
             {profileData?.profile_photo ? (
               <img
-                src={`http://localhost:4000/uploads/${profileData?.profile_photo}`}
+                src={`https://fullstack-chat-app-h4rd.onrender.com/uploads/${profileData?.profile_photo}`}
                 alt="Profile"
                 loading="lazy"
                 className="w-9 h-9 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
@@ -179,7 +179,7 @@ const Navbar = () => {
         <NavLink to="/profile" title="Profile / Logout">
           {profileData?.profile_photo ? (
             <img
-              src={`http://localhost:4000/uploads/${profileData?.profile_photo}`}
+              src={`https://fullstack-chat-app-h4rd.onrender.com/uploads/${profileData?.profile_photo}`}
               alt="Profile"
               loading="lazy"
               className="w-9 h-9 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity"

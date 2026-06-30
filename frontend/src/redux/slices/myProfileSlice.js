@@ -5,7 +5,7 @@ export const myProfile = createAsyncThunk("myProfile", async (_, thunkAPI) => {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await axios.get("http://localhost:4000/api/user/profile", {
+    const response = await axios.get("https://fullstack-chat-app-h4rd.onrender.com/api/user/profile", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

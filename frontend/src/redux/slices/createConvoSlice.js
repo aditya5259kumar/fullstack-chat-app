@@ -8,7 +8,7 @@ export const createConvo = createAsyncThunk(
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `http://localhost:4000/api/user/find-convo/${id}`,
+        `https://fullstack-chat-app-h4rd.onrender.com/api/user/find-convo/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

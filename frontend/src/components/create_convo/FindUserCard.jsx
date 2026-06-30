@@ -35,7 +35,7 @@ const FindUserCard = ({ user }) => {
         <div className="relative">
           {user.profile_photo ? (
             <img
-              src={`http://localhost:4000/uploads/${user?.profile_photo}`}
+              src={`https://fullstack-chat-app-h4rd.onrender.com/uploads/${user?.profile_photo}`}
               alt={user?.name}
               loading="lazy"
               className="h-14 w-14 rounded-full object-cover ring-2 ring-(--surface) shadow-sm"

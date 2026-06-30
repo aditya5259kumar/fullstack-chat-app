@@ -6,7 +6,7 @@ export const allUsers = createAsyncThunk("users/all", async (_, thunkAPI) => {
   try {
     const token = localStorage.getItem("token");
 
-    const res = await axios.get("http://localhost:4000/api/user/users", {
+    const res = await axios.get("https://fullstack-chat-app-h4rd.onrender.com/api/user/users", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -24,7 +24,7 @@ export const searchUsers = createAsyncThunk(
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        `http://localhost:4000/api/user/search?query=${query}`,
+        `https://fullstack-chat-app-h4rd.onrender.com/api/user/search?query=${query}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },

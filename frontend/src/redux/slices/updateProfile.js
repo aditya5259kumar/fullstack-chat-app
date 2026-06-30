@@ -8,7 +8,7 @@ export const updateProfile = createAsyncThunk(
       const token = localStorage.getItem("token");
 
       const response = await axios.patch(
-        "http://localhost:4000/api/user/update-profile",
+        "https://fullstack-chat-app-h4rd.onrender.com/api/user/update-profile",
         formData,
         {
           headers: {

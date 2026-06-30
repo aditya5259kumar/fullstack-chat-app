@@ -8,7 +8,7 @@ export const msgStatus = createAsyncThunk(
       const token = localStorage.getItem("token");
 
       const response = await axios.put(
-        `http://localhost:4000/api/user/seen/${convoId}`,
+        `https://fullstack-chat-app-h4rd.onrender.com/api/user/seen/${convoId}`,
         {},
         {
           headers: {

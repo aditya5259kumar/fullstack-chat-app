@@ -8,7 +8,7 @@ export const userConversation = createAsyncThunk(
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `http://localhost:4000/api/user/conversations?search=${search}`,
+        `https://fullstack-chat-app-h4rd.onrender.com/api/user/conversations?search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

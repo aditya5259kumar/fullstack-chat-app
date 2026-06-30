@@ -7,7 +7,7 @@ export const userSignUp = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/auth/signup",
+        "https://fullstack-chat-app-h4rd.onrender.com/api/auth/signup",
         userData,
       );
 
@@ -34,7 +34,7 @@ export const userLogin = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/auth/login",
+        "https://fullstack-chat-app-h4rd.onrender.com/api/auth/login",
         userData,
       );
 

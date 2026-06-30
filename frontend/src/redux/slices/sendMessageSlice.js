@@ -19,7 +19,7 @@ export const sendMsg = createAsyncThunk(
       }
 
       const response = await axios.post(
-        "http://localhost:4000/api/user/send-message",
+        "https://fullstack-chat-app-h4rd.onrender.com/api/user/send-message",
         formData,
         {
           headers: {

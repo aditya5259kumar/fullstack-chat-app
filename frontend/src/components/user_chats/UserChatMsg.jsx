@@ -96,7 +96,7 @@ const UserChatMsg = ({ chat, isActive = false, onClick }) => {
         <div className="relative shrink-0">
           {chat?.users?.[0]?.profile_photo ? (
             <img
-              src={`http://localhost:4000/uploads/${chat?.users?.[0]?.profile_photo}`}
+              src={`https://fullstack-chat-app-h4rd.onrender.com/uploads/${chat?.users?.[0]?.profile_photo}`}
               alt={chat?.users?.[0]?.username}
               loading="lazy"
               className="w-12 h-12 rounded-full object-cover"
