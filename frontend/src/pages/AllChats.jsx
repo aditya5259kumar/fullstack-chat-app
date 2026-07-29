@@ -97,6 +97,8 @@ const AllChats = ({ activeChatId }) => {
       ),
   );
 
+  // console.log(filteredChats);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -151,6 +153,7 @@ const AllChats = ({ activeChatId }) => {
         ) : (
           filteredChats.map((chat) => (
             <Suspense
+              key={chat?.conversation_id}
               fallback={
                 <div className="flex justify-center mt-8">
                   <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
@@ -158,7 +161,6 @@ const AllChats = ({ activeChatId }) => {
               }
             >
               <UserChatMsg
-                key={chat?.conversation_id}
                 chat={chat}
                 isActive={activeChatId === chat?.conversation_id}
                 onClick={() => handleChatSelect(chat?.conversation_id)}

@@ -11,11 +11,11 @@ export const userSignUp = createAsyncThunk(
         userData,
       );
 
-      console.log("response.data=========", response.data);
+      // console.log("response.data=========", response.data);
 
       const token = response.data.token;
 
-      console.log("token=========", token);
+      // console.log("token=========", token);
 
       localStorage.setItem("token", token);
 
@@ -42,7 +42,7 @@ export const userLogin = createAsyncThunk(
 
       // const token = response.data.token;
 
-      console.log("token=========", response.data.token);
+      // console.log("token=========", response.data.token);
 
       localStorage.setItem("token", response.data.token);
 

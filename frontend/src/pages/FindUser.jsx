@@ -121,13 +121,14 @@ const FindUser = () => {
             ) : displayUsers?.length > 0 ? (
               displayUsers?.map((user) => (
                 <Suspense
+                  key={user?.id}
                   fallback={
                     <div className="flex justify-center mb-12">
                       <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
                     </div>
                   }
                 >
-                  <FindUserCard key={user?.id} user={user} />
+                  <FindUserCard user={user} />
                 </Suspense>
               ))
             ) : (

@@ -347,13 +347,14 @@ const UserChats = ({ chat }) => {
         ) : (
           msg.map((m, index) => (
             <Suspense
+              key={m.id || index}
               fallback={
                 <div className="flex items-center mb-12 justify-center">
                   <div className="w-5 h-5 border-2 border-(--primary) border-t-transparent rounded-full animate-spin" />
                 </div>
               }
             >
-              <MessageBubble key={m.id || index} message={m} />
+              <MessageBubble message={m} />
             </Suspense>
           ))
         )}
