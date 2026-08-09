@@ -121,6 +121,14 @@ Enjoy your journey with us 😄
       });
     }
   },
+
+  //--------health route---------
+  healthRoute: (req, res) => {
+    res.status(200).json({
+      success: true,
+      message: "backend is running",
+    });
+  },
 };
 
 export default authController;

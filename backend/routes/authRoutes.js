@@ -9,4 +9,7 @@ router.post("/signup", authController.signUp);
 // logIn
 router.post("/login", authController.logIn);
 
+// healthRoute
+router.get("/health", authController.healthRoute);
+
 export default router;
